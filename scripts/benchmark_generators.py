@@ -1,6 +1,6 @@
 """Compare coefficient-generation effort for RE, EDBF, and ABC.
 
-This script reports attempts per accepted coefficient vector.  ABC always needs
+This script reports attempts per accepted coefficient vector. ABC always needs
 one attempt; the rejection methods become less efficient as M grows.
 """
 
@@ -14,7 +14,7 @@ import numpy as np
 from boundevo.coefficients import generate_coefficients
 
 
-def benchmark(method: str, m: int, repeats: int, seed: int) -> tuple[float, float:
+def benchmark(method: str, m: int, repeats: int, seed: int) -> tuple[float, float]:
     rng = np.random.default_rng(seed)
     attempts = 0
     start = time.perf_counter()
