@@ -1,0 +1,18 @@
+{
+  "function_ids": "paper",
+  "sweep_function_ids": [1, 10, 20, 30],
+  "parent_counts": "paper",
+  "dimension": 10,
+  "methods": ["re", "edbf", "abc"],
+  "repeats": 1,
+  "base_seed": 42,
+  "max_evaluations": 100000,
+  "history_interval": 100,
+  "efficiency_min_m": 1,
+  "efficiency_max_m": 20,
+  "efficiency_trials": 1000000,
+  "efficiency_batch_size": 100000,
+  "run_root": "results/runs",
+  "report_title": "BoundEvo Experiment Report",
+  "statistical_analysis": true
+}

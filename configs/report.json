@@ -1,5 +1,6 @@
 {
   "summary": "results/cec2017_summary.csv",
+  "history": "results/cec2017_history.csv",
   "sweep": "results/parent_sweep_summary.csv",
   "efficiency": "results/coefficient_efficiency.csv",
   "manifests": [

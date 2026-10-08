@@ -6,8 +6,10 @@
   "repeats": 1,
   "base_seed": 42,
   "max_evaluations": 100000,
+  "history_interval": 100,
   "output": "results/parent_sweep_trials.csv",
   "summary": "results/parent_sweep_summary.csv",
+  "history": "results/parent_sweep_history.csv",
   "tables": "results/parent_sweep_tables.md",
   "manifest": "results/parent_sweep_manifest.json"
 }

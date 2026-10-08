@@ -5,7 +5,9 @@
   "repeats": 1,
   "base_seed": 42,
   "max_evaluations": 100000,
+  "history_interval": 100,
   "output": "results/cec2017_trials.csv",
   "summary": "results/cec2017_summary.csv",
+  "history": "results/cec2017_history.csv",
   "manifest": "results/cec2017_manifest.json"
 }
