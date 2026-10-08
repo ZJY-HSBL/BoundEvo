@@ -10,8 +10,8 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 
 from .cec2017 import (
-    CEC2017Case,
     PAPER_FUNCTION_IDS,
+    CEC2017Case,
     make_cec2017_case,
     validate_function_ids,
 )
