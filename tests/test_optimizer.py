@@ -28,7 +28,7 @@ def test_optimizer_improves_sphere() -> None:
 
 
 def test_constrained_problem_finds_feasible_solution() -> None:
-    # Minimize x^2 but require x >= 1.  Constrained optimum is x=1.
+    # Minimize x^2 but require x >= 1. Constrained optimum is x=1.
     problem = OptimizationProblem(
         lambda x: float(x[0] ** 2),
         [-5.0],
@@ -47,3 +47,27 @@ def test_constrained_problem_finds_feasible_solution() -> None:
     assert result.violation <= 1e-10
     assert result.x[0] >= 1.0 - 1e-8
     assert result.objective < 1.2
+
+
+def test_history_interval_samples_and_keeps_final_state() -> None:
+    problem = OptimizationProblem(
+        lambda x: float(np.dot(x, x)),
+        np.full(3, -5.0),
+        np.full(3, 5.0),
+    )
+    result = BoundEvo(
+        BoundEvoConfig(
+            population_size=20,
+            parent_count=6,
+            elite_parent_count=2,
+            max_evaluations=160,
+            seed=5,
+        )
+    ).minimize(problem, history_interval=11)
+
+    assert result.history[0].generation == 0
+    assert result.history[-1].evaluations == result.evaluations
+    assert all(
+        state.generation % 11 == 0 or state is result.history[-1]
+        for state in result.history
+    )
