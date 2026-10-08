@@ -143,3 +143,50 @@ jobs:
       - run: python -m pip install --upgrade pip
       - run: pip install build
       - run: python -m build
+
+
+  pipeline-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --upgrade pip
+      - run: pip install -e ".[cec2017]"
+      - name: Create compact pipeline config
+        run: |
+          cat > /tmp/pipeline.json <<'JSON'
+          {
+            "function_ids": [1],
+            "sweep_function_ids": [1],
+            "parent_counts": [5],
+            "dimension": 10,
+            "methods": ["abc"],
+            "repeats": 1,
+            "base_seed": 42,
+            "max_evaluations": 160,
+            "history_interval": 10,
+            "efficiency_min_m": 1,
+            "efficiency_max_m": 3,
+            "efficiency_trials": 1000,
+            "efficiency_batch_size": 500,
+            "run_root": "/tmp/boundevo-runs",
+            "report_title": "CI Pipeline Report",
+            "statistical_analysis": false
+          }
+          JSON
+      - name: Run managed pipeline
+        run: >-
+          boundevo pipeline
+          --config /tmp/pipeline.json
+          --run-id ci-pipeline
+      - name: Verify managed run bundle
+        run: |
+          test -s /tmp/boundevo-runs/ci-pipeline/manifest.json
+          test -s /tmp/boundevo-runs/ci-pipeline/benchmark/history.csv
+          test -s /tmp/boundevo-runs/ci-pipeline/sweep/history.csv
+          test -s /tmp/boundevo-runs/ci-pipeline/efficiency/efficiency.csv
+          test -s /tmp/boundevo-runs/ci-pipeline/report/report.html
+          grep -q "Convergence history" /tmp/boundevo-runs/ci-pipeline/report/report.html
+          grep -q "Parent-count sensitivity" /tmp/boundevo-runs/ci-pipeline/report/report.html
