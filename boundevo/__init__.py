@@ -30,4 +30,4 @@ __all__ = [
     "random_exhaustive_coefficients",
 ]
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

@@ -122,10 +122,36 @@ Offspring are projected back into the variable bounds when an affine recombinati
 ```text
 boundevo/       Core optimizer, coefficient generators, benchmark functions
 examples/       Unconstrained and constrained usage examples
-scripts/        Coefficient-generation benchmark
- tests/         Unit and integration tests
+scripts/        Generator and CEC2017 experiment runners
+tests/         Unit and integration tests
  docs/          Algorithm notes and reproduction decisions
 ```
+
+## CEC2017 experiment suite
+
+Version 0.2 adds a reproducible CEC2017 experiment layer. The default paper-aligned function set contains 29 problems: F1 and F3 through F30. The main configuration helper uses `N=100, M=15, K=5, L=1`, while benchmark dimensionality remains an explicit experiment parameter.
+
+Install the optional benchmark dependency:
+
+```bash
+pip install -e ".[cec2017]"
+```
+
+Run a small smoke matrix first:
+
+```bash
+python scripts/run_cec2017.py --functions 1,10,20,30 --methods abc --dimension 10 --evaluations 5000
+```
+
+Run the full 29-function comparison:
+
+```bash
+python scripts/run_cec2017.py --dimension 10 --repeats 30
+```
+
+The runner writes raw trial data and grouped statistics to `results/cec2017_trials.csv` and `results/cec2017_summary.csv`. Optional plotting is available with `pip install -e ".[plot]"` followed by `python scripts/plot_cec2017.py`.
+
+See [`docs/reproduction.md`](docs/reproduction.md) for the source-aligned settings and the implementation choices that are intentionally kept explicit.
 
 ## License
 

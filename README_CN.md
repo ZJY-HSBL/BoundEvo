@@ -118,6 +118,32 @@ python scripts/benchmark_generators.py --min-m 2 --max-m 20 --repeats 10000
 pytest
 ```
 
+## CEC2017 实验复现
+
+v0.2 已加入完整的 CEC2017 实验层。默认实验集合为 29 个问题，即 `F1` 与 `F3-F30`。主实验配置封装为 `N=100, M=15, K=5, L=1`，而测试维度作为显式参数保留，避免把源材料未明确给出的维度静默写死。
+
+安装 CEC2017 可选依赖：
+
+```bash
+pip install -e ".[cec2017]"
+```
+
+建议先运行小规模验证：
+
+```bash
+python scripts/run_cec2017.py --functions 1,10,20,30 --methods abc --dimension 10 --evaluations 5000
+```
+
+再运行完整 29 函数对比：
+
+```bash
+python scripts/run_cec2017.py --dimension 10 --repeats 30
+```
+
+程序会自动生成 `results/cec2017_trials.csv` 与 `results/cec2017_summary.csv`，分别保存逐次运行结果和按函数/方法汇总的统计结果。需要绘图时安装 `pip install -e ".[plot]"`，然后运行 `python scripts/plot_cec2017.py`。
+
+实验设置来源与实现选择的边界说明见 [`docs/reproduction.md`](docs/reproduction.md)。
+
 ## License
 
 MIT License。
