@@ -47,6 +47,24 @@ class ParentSweepTrial:
 
 
 @dataclass(frozen=True, slots=True)
+class ParentSweepHistory:
+    function_id: int
+    function_name: str
+    dimension: int
+    parent_count: int
+    method: str
+    repeat: int
+    seed: int
+    generation: int
+    evaluations: int
+    best_objective: float
+    best_error: float
+    best_violation: float
+    worst_objective: float
+    worst_violation: float
+
+
+@dataclass(frozen=True, slots=True)
 class ParentSweepSummary:
     function_id: int
     dimension: int
@@ -88,6 +106,37 @@ def sweep_config(
     )
 
 
+def _append_sweep_history(
+    target: list[ParentSweepHistory],
+    *,
+    case: CEC2017Case,
+    parent_count: int,
+    method: Method,
+    repeat: int,
+    seed: int,
+    states,
+) -> None:
+    for state in states:
+        target.append(
+            ParentSweepHistory(
+                function_id=case.function_id,
+                function_name=case.name,
+                dimension=case.dimension,
+                parent_count=parent_count,
+                method=method,
+                repeat=repeat,
+                seed=seed,
+                generation=state.generation,
+                evaluations=state.evaluations,
+                best_objective=state.best_objective,
+                best_error=max(0.0, state.best_objective - case.optimum),
+                best_violation=state.best_violation,
+                worst_objective=state.worst_objective,
+                worst_violation=state.worst_violation,
+            )
+        )
+
+
 def run_parent_sweep_case(
     case: CEC2017Case,
     *,
@@ -96,6 +145,8 @@ def run_parent_sweep_case(
     repeat: int,
     seed: int,
     max_evaluations: int = 100_000,
+    history_records: list[ParentSweepHistory] | None = None,
+    history_interval: int = 1,
 ) -> ParentSweepTrial:
     cfg = sweep_config(
         parent_count,
@@ -104,9 +155,19 @@ def run_parent_sweep_case(
         seed=seed,
     )
     start = time.perf_counter()
-    result = BoundEvo(cfg).minimize(case.problem)
+    result = BoundEvo(cfg).minimize(case.problem, history_interval=history_interval)
     elapsed = time.perf_counter() - start
     error = max(0.0, result.objective - case.optimum)
+    if history_records is not None:
+        _append_sweep_history(
+            history_records,
+            case=case,
+            parent_count=parent_count,
+            method=method,
+            repeat=repeat,
+            seed=seed,
+            states=result.history,
+        )
     return ParentSweepTrial(
         function_id=case.function_id,
         function_name=case.name,
@@ -135,6 +196,8 @@ def run_parent_count_sweep(
     repeats: int = 1,
     base_seed: int = 42,
     max_evaluations: int = 100_000,
+    history_records: list[ParentSweepHistory] | None = None,
+    history_interval: int = 100,
 ) -> list[ParentSweepTrial]:
     ids = validate_function_ids(function_ids)
     counts = tuple(int(value) for value in parent_counts)
@@ -146,6 +209,8 @@ def run_parent_count_sweep(
         raise ValueError("repeats must be at least 1")
     if not methods:
         raise ValueError("at least one coefficient method is required")
+    if history_interval < 1:
+        raise ValueError("history_interval must be at least 1")
 
     records: list[ParentSweepTrial] = []
     for fid in ids:
@@ -168,6 +233,8 @@ def run_parent_count_sweep(
                             repeat=repeat,
                             seed=seed,
                             max_evaluations=max_evaluations,
+                            history_records=history_records,
+                            history_interval=history_interval,
                         )
                     )
     return records
@@ -217,6 +284,13 @@ def summarize_parent_sweep(
 def write_parent_sweep_trials_csv(
     path: str | Path,
     rows: Sequence[ParentSweepTrial],
+) -> None:
+    _write_dataclasses(path, rows)
+
+
+def write_parent_sweep_history_csv(
+    path: str | Path,
+    rows: Sequence[ParentSweepHistory],
 ) -> None:
     _write_dataclasses(path, rows)
 
