@@ -4,25 +4,94 @@ on:
   push:
     tags:
       - "v*"
+  create:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version, for example v0.3.0"
+        required: true
+        type: string
 
 permissions:
   contents: write
 
 jobs:
   publish:
+    if: >-
+      (github.event_name == 'push' && github.ref_type == 'tag' && startsWith(github.ref_name, 'v')) ||
+      (github.event_name == 'create' && github.ref_type == 'branch' && startsWith(github.ref_name, 'release/v')) ||
+      github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: Resolve release version
+        id: version
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "create" ]; then
+            VERSION="${GITHUB_REF_NAME#release/}"
+          elif [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+            VERSION="$INPUT_VERSION"
+          else
+            VERSION="$GITHUB_REF_NAME"
+          fi
+          case "$VERSION" in
+            v*) ;;
+            *) echo "release version must start with v"; exit 1 ;;
+          esac
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Validate version and release notes
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          PACKAGE_VERSION="$(python - <<'PY'
+          import tomllib
+          with open("pyproject.toml", "rb") as handle:
+              print(tomllib.load(handle)["project"]["version"])
+          PY
+          )"
+          test "v$PACKAGE_VERSION" = "$VERSION"
+          test -s "docs/releases/$VERSION.md"
+
+      - name: Create tag when launched from a release branch or manual dispatch
+        if: github.event_name != 'push'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          if ! git ls-remote --exit-code --tags origin "refs/tags/$VERSION" >/dev/null 2>&1; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag "$VERSION" "$GITHUB_SHA"
+            git push origin "$VERSION"
+          fi
+
       - run: python -m pip install --upgrade pip build
       - run: python -m build
+
       - name: Publish GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: >-
-          gh release create "$GITHUB_REF_NAME"
-          dist/*
-          --title "BoundEvo $GITHUB_REF_NAME"
-          --notes-file "docs/releases/$GITHUB_REF_NAME.md"
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          if gh release view "$VERSION" >/dev/null 2>&1; then
+            echo "Release $VERSION already exists; skipping creation."
+          else
+            gh release create "$VERSION" dist/*               --title "BoundEvo $VERSION"               --notes-file "docs/releases/$VERSION.md"
+          fi
+
+      - name: Remove temporary release branch
+        if: github.event_name == 'create'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api --method DELETE             "repos/$GITHUB_REPOSITORY/git/refs/heads/$GITHUB_REF_NAME" || true
