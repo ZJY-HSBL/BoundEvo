@@ -50,6 +50,7 @@ class PipelineConfig:
     efficiency_batch_size: int = 100_000
     run_root: Path = Path("results/runs")
     report_title: str = "BoundEvo Experiment Report"
+    statistical_analysis: bool = True
 
     def validate(self) -> None:
         if self.dimension < 2:
@@ -60,7 +61,7 @@ class PipelineConfig:
             raise ValueError("max_evaluations must be at least the population size 100")
         if self.history_interval < 1:
             raise ValueError("history_interval must be at least 1")
-        if len(self.methods) < 3:
+        if self.statistical_analysis and len(self.methods) < 3:
             raise ValueError("pipeline statistical analysis requires at least three methods")
         if self.efficiency_min_m < 1 or self.efficiency_max_m < self.efficiency_min_m:
             raise ValueError("invalid efficiency parent-count range")
@@ -229,26 +230,33 @@ def run_pipeline(
 
     analysis_path = analysis_dir / "statistical_analysis.md"
     analysis_manifest_path = analysis_dir / "manifest.json"
-    observations = load_summary_metric(benchmark_summary_path, metric="mean_error")
-    analysis_report = render_analysis_report(
-        observations,
-        metric="mean_error",
-        reference="abc",
-        methods=cfg.methods,
-    )
-    write_analysis_report(analysis_path, analysis_report)
-    _stage_manifest(
-        run,
-        path=analysis_manifest_path,
-        command="pipeline:analysis",
-        config={
-            "summary": benchmark_summary_path,
-            "metric": "mean_error",
-            "reference": "abc",
-            "methods": cfg.methods,
-        },
-        outputs={"analysis": analysis_path},
-    )
+    report_manifests = [
+        benchmark_manifest_path,
+        sweep_manifest_path,
+        efficiency_manifest_path,
+    ]
+    if cfg.statistical_analysis:
+        observations = load_summary_metric(benchmark_summary_path, metric="mean_error")
+        analysis_report = render_analysis_report(
+            observations,
+            metric="mean_error",
+            reference="abc",
+            methods=cfg.methods,
+        )
+        write_analysis_report(analysis_path, analysis_report)
+        _stage_manifest(
+            run,
+            path=analysis_manifest_path,
+            command="pipeline:analysis",
+            config={
+                "summary": benchmark_summary_path,
+                "metric": "mean_error",
+                "reference": "abc",
+                "methods": cfg.methods,
+            },
+            outputs={"analysis": analysis_path},
+        )
+        report_manifests.append(analysis_manifest_path)
 
     report_path = report_dir / "report.html"
     report_manifest_path = report_dir / "manifest.json"
@@ -257,12 +265,7 @@ def run_pipeline(
         history=benchmark_history_path,
         sweep=sweep_summary_path,
         efficiency=efficiency_path,
-        manifests=(
-            benchmark_manifest_path,
-            sweep_manifest_path,
-            efficiency_manifest_path,
-            analysis_manifest_path,
-        ),
+        manifests=report_manifests,
         title=f"{cfg.report_title} — {run.run_id}",
     )
     write_html_report(report_path, html_report)
@@ -299,6 +302,7 @@ def run_pipeline(
             "efficiency_max_m": cfg.efficiency_max_m,
             "efficiency_trials": cfg.efficiency_trials,
             "efficiency_batch_size": cfg.efficiency_batch_size,
+            "statistical_analysis": cfg.statistical_analysis,
         },
         outputs={
             "benchmark": benchmark_dir,
