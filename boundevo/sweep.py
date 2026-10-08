@@ -10,7 +10,7 @@ from __future__ import annotations
 import statistics
 import time
 from collections.abc import Iterable, Sequence
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from pathlib import Path
 
 from .cec2017 import CEC2017Case, make_cec2017_case, validate_function_ids
@@ -242,9 +242,11 @@ def render_source_style_tables(rows: Sequence[ParentSweepSummary]) -> str:
     sections = [
         "# Parent-count sweep tables",
         "",
-        "Metrics follow the source comparison: best objective, elapsed time, and "
-        "function evaluations. With repeated trials, elapsed time and evaluations "
-        "are reported as means.",
+        (
+            "Metrics follow the source comparison: best objective, elapsed time, and "
+            "function evaluations. With repeated trials, elapsed time and evaluations "
+            "are reported as means."
+        ),
         "",
     ]
     for function_id in sorted(grouped):
