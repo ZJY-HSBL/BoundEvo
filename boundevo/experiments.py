@@ -39,6 +39,23 @@ class TrialRecord:
 
 
 @dataclass(frozen=True, slots=True)
+class HistoryRecord:
+    function_id: int
+    function_name: str
+    dimension: int
+    method: str
+    repeat: int
+    seed: int
+    generation: int
+    evaluations: int
+    best_objective: float
+    best_error: float
+    best_violation: float
+    worst_objective: float
+    worst_violation: float
+
+
+@dataclass(frozen=True, slots=True)
 class SummaryRecord:
     function_id: int
     dimension: int
@@ -93,6 +110,35 @@ def _config_for_run(
     )
 
 
+def _append_history(
+    target: list[HistoryRecord],
+    *,
+    case: CEC2017Case,
+    method: Method,
+    repeat: int,
+    seed: int,
+    states,
+) -> None:
+    for state in states:
+        target.append(
+            HistoryRecord(
+                function_id=case.function_id,
+                function_name=case.name,
+                dimension=case.dimension,
+                method=method,
+                repeat=repeat,
+                seed=seed,
+                generation=state.generation,
+                evaluations=state.evaluations,
+                best_objective=state.best_objective,
+                best_error=max(0.0, state.best_objective - case.optimum),
+                best_violation=state.best_violation,
+                worst_objective=state.worst_objective,
+                worst_violation=state.worst_violation,
+            )
+        )
+
+
 def run_case(
     case: CEC2017Case,
     *,
@@ -100,14 +146,25 @@ def run_case(
     repeat: int,
     seed: int,
     config: BoundEvoConfig | None = None,
+    history_records: list[HistoryRecord] | None = None,
+    history_interval: int = 1,
 ) -> TrialRecord:
     base = config or paper_config(method=method, seed=seed)
     cfg = _config_for_run(base, method=method, seed=seed)
 
     start = time.perf_counter()
-    result = BoundEvo(cfg).minimize(case.problem)
+    result = BoundEvo(cfg).minimize(case.problem, history_interval=history_interval)
     elapsed = time.perf_counter() - start
     error = max(0.0, result.objective - case.optimum)
+    if history_records is not None:
+        _append_history(
+            history_records,
+            case=case,
+            method=method,
+            repeat=repeat,
+            seed=seed,
+            states=result.history,
+        )
     return TrialRecord(
         function_id=case.function_id,
         function_name=case.name,
@@ -135,12 +192,16 @@ def run_cec2017_suite(
     repeats: int = 1,
     base_seed: int = 42,
     max_evaluations: int = 100_000,
+    history_records: list[HistoryRecord] | None = None,
+    history_interval: int = 100,
 ) -> list[TrialRecord]:
     ids = validate_function_ids(function_ids)
     if repeats < 1:
         raise ValueError("repeats must be at least 1")
     if not methods:
         raise ValueError("at least one coefficient method is required")
+    if history_interval < 1:
+        raise ValueError("history_interval must be at least 1")
 
     records: list[TrialRecord] = []
     for fid in ids:
@@ -159,6 +220,8 @@ def run_cec2017_suite(
                             max_evaluations=max_evaluations,
                             seed=seed,
                         ),
+                        history_records=history_records,
+                        history_interval=history_interval,
                     )
                 )
     return records
@@ -211,6 +274,10 @@ def _write_dataclasses(path: str | Path, rows: Sequence[object]) -> None:
 
 
 def write_trials_csv(path: str | Path, records: Sequence[TrialRecord]) -> None:
+    _write_dataclasses(path, records)
+
+
+def write_history_csv(path: str | Path, records: Sequence[HistoryRecord]) -> None:
     _write_dataclasses(path, records)
 
 
