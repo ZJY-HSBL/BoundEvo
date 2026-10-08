@@ -8,10 +8,10 @@ A compact, reproducible Python implementation of real-coded multi-parent evoluti
 
 [![CI](https://github.com/ZJY-HSBL/BoundEvo/actions/workflows/ci.yml/badge.svg)](https://github.com/ZJY-HSBL/BoundEvo/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
-![Release](https://img.shields.io/badge/release-v0.3.0-2F6FEB)
+![Release](https://img.shields.io/badge/release-v0.4.0-2F6FEB)
 ![License](https://img.shields.io/badge/license-MIT-3DA639)
 
-[中文说明](README_CN.md) · [Algorithm](docs/algorithm.md) · [Reproduction](docs/reproduction.md) · [Research Workflow](docs/research_workflow.md) · [v0.3.0 Notes](docs/releases/v0.3.0.md)
+[中文说明](README_CN.md) · [Algorithm](docs/algorithm.md) · [Reproduction](docs/reproduction.md) · [Research Workflow](docs/research_workflow.md) · [v0.4.0 Notes](docs/releases/v0.4.0.md)
 
 </div>
 
@@ -176,7 +176,7 @@ When affine recombination leaves the variable box, offspring are projected back 
 
 ## Release
 
-[v0.3.0](https://github.com/ZJY-HSBL/BoundEvo/releases/tag/v0.3.0) is the current published release. The main branch is now developing the 0.4 line; see [CHANGELOG.md](CHANGELOG.md).
+[v0.4.0](https://github.com/ZJY-HSBL/BoundEvo/releases/tag/v0.4.0) is the current published release. See [CHANGELOG.md](CHANGELOG.md) for version history.
 
 ## License
 

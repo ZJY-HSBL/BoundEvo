@@ -2,7 +2,7 @@
 
 All notable changes to BoundEvo are documented here.
 
-## [Unreleased]
+## [0.4.0] - 2026-10-08
 
 ### Added
 
@@ -18,7 +18,7 @@ All notable changes to BoundEvo are documented here.
 
 ### Changed
 
-- Development version advanced to `0.4.0.dev0`.
+- Package version advanced to `0.4.0`.
 - Existing CLI commands now write manifests by default.
 
 ## [0.3.0] - 2026-10-08

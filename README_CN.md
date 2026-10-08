@@ -8,10 +8,10 @@
 
 [![CI](https://github.com/ZJY-HSBL/BoundEvo/actions/workflows/ci.yml/badge.svg)](https://github.com/ZJY-HSBL/BoundEvo/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
-![Release](https://img.shields.io/badge/release-v0.3.0-2F6FEB)
+![Release](https://img.shields.io/badge/release-v0.4.0-2F6FEB)
 ![License](https://img.shields.io/badge/license-MIT-3DA639)
 
-[English](README.md) · [算法说明](docs/algorithm.md) · [实验复现](docs/reproduction.md) · [研究工作流](docs/research_workflow.md) · [v0.3.0 说明](docs/releases/v0.3.0.md)
+[English](README.md) · [算法说明](docs/algorithm.md) · [实验复现](docs/reproduction.md) · [研究工作流](docs/research_workflow.md) · [v0.4.0 说明](docs/releases/v0.4.0.md)
 
 </div>
 
@@ -176,7 +176,7 @@ boundevo report --config configs/report.json
 
 ## Release
 
-[v0.3.0](https://github.com/ZJY-HSBL/BoundEvo/releases/tag/v0.3.0) 已正式发布。当前 main 分支进入 0.4 开发阶段，具体变更见 [CHANGELOG.md](CHANGELOG.md)。
+[v0.4.0](https://github.com/ZJY-HSBL/BoundEvo/releases/tag/v0.4.0) 为当前正式版本。完整版本记录见 [CHANGELOG.md](CHANGELOG.md)。
 
 ## License
 
