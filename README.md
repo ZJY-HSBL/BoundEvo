@@ -153,6 +153,34 @@ The runner writes raw trial data and grouped statistics to `results/cec2017_tria
 
 See [`docs/reproduction.md`](docs/reproduction.md) for the source-aligned settings and the implementation choices that are intentionally kept explicit.
 
+## Parent-count sweep and efficiency reproduction
+
+Version 0.3 adds the source-aligned `M=10..16` sweep on CEC2017 F1, F10, F20, and F30. The generated tables report the three indicators used in the source comparison: best objective, runtime, and function-evaluation count.
+
+```bash
+python scripts/run_parent_sweep.py \
+  --functions paper \
+  --parents 10-16 \
+  --methods re edbf abc \
+  --dimension 10 \
+  --evaluations 100000
+```
+
+Outputs are written to `results/parent_sweep_trials.csv`, `results/parent_sweep_summary.csv`, and `results/parent_sweep_tables.md`. The plotting command creates separate objective-error, runtime, and evaluation-count figures for every selected benchmark:
+
+```bash
+python scripts/plot_parent_sweep.py
+```
+
+The coefficient-generation experiment corresponding to the source's M-versus-efficiency figure is also available. It uses vectorized Monte Carlo sampling and defaults to one million proposals per M:
+
+```bash
+python scripts/reproduce_efficiency_figure.py --trials 1000000
+python scripts/plot_efficiency_figure.py
+```
+
+See [`docs/parent_sweep.md`](docs/parent_sweep.md) for the exact reproduction matrix and interpretation.
+
 ## License
 
 MIT License.

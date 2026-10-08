@@ -43,3 +43,30 @@ jobs:
         run: |
           test -s /tmp/cec2017_trials.csv
           test -s /tmp/cec2017_summary.csv
+      - name: Run parent-count sweep smoke experiment
+        run: >-
+          python scripts/run_parent_sweep.py
+          --functions 1
+          --parents 10-11
+          --methods abc
+          --dimension 10
+          --evaluations 500
+          --repeats 1
+          --output /tmp/parent_sweep_trials.csv
+          --summary /tmp/parent_sweep_summary.csv
+          --tables /tmp/parent_sweep_tables.md
+      - name: Verify sweep result files
+        run: |
+          test -s /tmp/parent_sweep_trials.csv
+          test -s /tmp/parent_sweep_summary.csv
+          test -s /tmp/parent_sweep_tables.md
+      - name: Run coefficient-efficiency smoke experiment
+        run: >-
+          python scripts/reproduce_efficiency_figure.py
+          --min-m 1
+          --max-m 5
+          --trials 10000
+          --batch-size 2000
+          --output /tmp/coefficient_efficiency.csv
+      - name: Verify efficiency result file
+        run: test -s /tmp/coefficient_efficiency.csv

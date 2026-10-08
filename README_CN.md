@@ -144,6 +144,40 @@ python scripts/run_cec2017.py --dimension 10 --repeats 30
 
 实验设置来源与实现选择的边界说明见 [`docs/reproduction.md`](docs/reproduction.md)。
 
+## M=10~16 消融与生成效率复现
+
+v0.3 新增与源材料实验结构一致的多父体规模消融：在 CEC2017 的 `F1`、`F10`、`F20`、`F30` 上依次测试 `M=10~16`。输出表格直接围绕源材料采用的 3 个比较指标：最优目标值、程序运行时间和函数评价次数。
+
+```bash
+python scripts/run_parent_sweep.py \
+  --functions paper \
+  --parents 10-16 \
+  --methods re edbf abc \
+  --dimension 10 \
+  --evaluations 100000
+```
+
+结果自动写入：
+
+- `results/parent_sweep_trials.csv`
+- `results/parent_sweep_summary.csv`
+- `results/parent_sweep_tables.md`
+
+绘图命令：
+
+```bash
+python scripts/plot_parent_sweep.py
+```
+
+另外加入了系数向量生成效率实验，对应源材料中 `M=1~20` 的效率关系。默认每个 M 进行 100 万次候选向量实验，并采用分批向量化计算，避免逐次 Python 循环带来的额外开销：
+
+```bash
+python scripts/reproduce_efficiency_figure.py --trials 1000000
+python scripts/plot_efficiency_figure.py
+```
+
+详细实验矩阵及“源材料明确给出内容”和“本仓库实现选择”的边界说明见 [`docs/parent_sweep.md`](docs/parent_sweep.md)。
+
 ## License
 
 MIT License。
