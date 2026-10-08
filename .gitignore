@@ -13,5 +13,4 @@ htmlcov/
 .idea/
 .vscode/
 .DS_Store
-results/*.csv
-results/*.json
+results/

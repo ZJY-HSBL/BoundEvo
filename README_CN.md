@@ -82,9 +82,20 @@ boundevo sweep --config configs/parent_sweep.json
 boundevo efficiency --config configs/efficiency.json
 boundevo analyze --config configs/analysis.json
 boundevo report --config configs/report.json
+boundevo pipeline --config configs/pipeline.json
 ~~~
 
 <code>configs/</code> 中的 JSON 文件用于固定实验参数，避免每次手工输入导致配置漂移。常用参数仍可以直接通过命令行覆盖。
+
+需要一次性执行完整研究流程时，可以直接运行 <code>boundevo pipeline</code>。程序会生成唯一 Run ID，并将该次实验的主实验、M 消融、系数效率、统计检验、Manifest 和最终 HTML 报告统一保存到一个不可覆盖的目录：
+
+    results/runs/<run-id>/
+    ├── benchmark/
+    ├── sweep/
+    ├── efficiency/
+    ├── analysis/
+    ├── report/
+    └── manifest.json
 
 ## Python 快速使用
 
@@ -143,7 +154,9 @@ boundevo analyze --config configs/analysis.json
 boundevo report --config configs/report.json
 ~~~
 
-会生成 <code>results/report.html</code>。这是一个单文件、自包含的实验报告，直接用浏览器即可查看，不依赖 Python 环境。完整研究流程见 [docs/research_workflow.md](docs/research_workflow.md)。
+会生成 <code>results/report.html</code>。这是一个单文件、自包含的实验报告，直接用浏览器即可查看，不依赖 Python 环境。当前报告已经能够直接绘制采样后的收敛曲线、M 参数敏感性曲线以及系数生成效率曲线，图形以内联 SVG 写入 HTML，不需要 JavaScript 或额外绘图库才能查看。
+
+长时间实验通过 <code>history_interval</code> 控制历史采样，默认每 100 代记录一次，同时始终保留最终状态，避免把每一代都写入 CSV 导致结果文件过大。完整研究流程见 [docs/research_workflow.md](docs/research_workflow.md)。
 
 ## 实现边界
 

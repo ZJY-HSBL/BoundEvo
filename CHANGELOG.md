@@ -11,6 +11,10 @@ All notable changes to BoundEvo are documented here.
 - Standalone HTML experiment report combining benchmark rankings, operational metrics, parent-count results, coefficient-generation efficiency, and manifests.
 - `boundevo report` command and `configs/report.json` preset.
 - Research workflow documentation for a complete experiment-to-report pipeline.
+- Unique managed Run IDs and non-overwriting `results/runs/<run-id>/` experiment bundles.
+- Sampled convergence-history CSV export for benchmark and parent-count studies.
+- Inline SVG convergence, M-sensitivity, and efficiency curves in the standalone report.
+- End-to-end `boundevo pipeline` command and `configs/pipeline.json` preset.
 
 ### Changed
 

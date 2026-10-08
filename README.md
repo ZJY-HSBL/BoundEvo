@@ -82,9 +82,20 @@ boundevo sweep --config configs/parent_sweep.json
 boundevo efficiency --config configs/efficiency.json
 boundevo analyze --config configs/analysis.json
 boundevo report --config configs/report.json
+boundevo pipeline --config configs/pipeline.json
 ~~~
 
 The JSON files under <code>configs/</code> are reproducible presets. Command-line overrides are available for common runtime parameters such as dimension, repeats, evaluation budget, seed, and output paths.
+
+For a complete managed run, use <code>boundevo pipeline</code>. It generates a unique Run ID and stores the benchmark, parent-count sweep, efficiency study, statistics, manifests, and final HTML report under one non-overwriting directory:
+
+    results/runs/<run-id>/
+    ├── benchmark/
+    ├── sweep/
+    ├── efficiency/
+    ├── analysis/
+    ├── report/
+    └── manifest.json
 
 ## Quick Python usage
 
@@ -143,7 +154,9 @@ After the experiments and analysis finish:
 boundevo report --config configs/report.json
 ~~~
 
-This creates <code>results/report.html</code>, a self-contained report that can be opened directly in a browser without a Python environment. The complete pipeline is documented in [docs/research_workflow.md](docs/research_workflow.md).
+This creates <code>results/report.html</code>, a self-contained report that can be opened directly in a browser without a Python environment. The report now includes inline SVG convergence curves from sampled optimizer history, M-sensitivity curves from the parent-count sweep, and the coefficient-generation efficiency curve. No JavaScript or plotting runtime is required to view the report.
+
+For long runs, <code>history_interval</code> controls history sampling. The default value of 100 keeps the final state while avoiding one CSV row per generation. The complete pipeline is documented in [docs/research_workflow.md](docs/research_workflow.md).
 
 ## Implementation notes
 
