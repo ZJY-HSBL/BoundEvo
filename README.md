@@ -8,10 +8,10 @@ A compact, reproducible Python implementation of real-coded multi-parent evoluti
 
 [![CI](https://github.com/ZJY-HSBL/BoundEvo/actions/workflows/ci.yml/badge.svg)](https://github.com/ZJY-HSBL/BoundEvo/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
-![Version](https://img.shields.io/badge/version-0.3.0-2F6FEB)
+![Release](https://img.shields.io/badge/release-v0.3.0-2F6FEB)
 ![License](https://img.shields.io/badge/license-MIT-3DA639)
 
-[中文说明](README_CN.md) · [Algorithm](docs/algorithm.md) · [Reproduction](docs/reproduction.md) · [Parent Sweep](docs/parent_sweep.md) · [v0.3.0 Notes](docs/releases/v0.3.0.md)
+[中文说明](README_CN.md) · [Algorithm](docs/algorithm.md) · [Reproduction](docs/reproduction.md) · [Research Workflow](docs/research_workflow.md) · [v0.3.0 Notes](docs/releases/v0.3.0.md)
 
 </div>
 
@@ -43,7 +43,8 @@ The repository keeps three coefficient generators under the same evolutionary en
 | Parent-count study | M=10..16 on F1, F10, F20, F30 |
 | Efficiency study | M=1..20 coefficient-generation efficiency |
 | Statistics | Mean rank, Win/Tie/Loss, Wilcoxon + Holm, Friedman |
-| Outputs | CSV, Markdown tables, PNG plots |
+| Reproducibility | JSON run manifests with resolved configuration and environment |
+| Reporting | CSV, Markdown tables, PNG plots, standalone HTML report |
 | Validation | Python 3.10/3.11/3.12 CI and CEC2017 smoke tests |
 
 ## Installation
@@ -72,7 +73,7 @@ pytest
 
 ## Unified CLI
 
-Version 0.3 provides one command for the complete experiment workflow.
+The command-line interface covers the complete experiment-to-report workflow.
 
 ~~~bash
 boundevo --version
@@ -80,6 +81,7 @@ boundevo benchmark --config configs/cec2017.json
 boundevo sweep --config configs/parent_sweep.json
 boundevo efficiency --config configs/efficiency.json
 boundevo analyze --config configs/analysis.json
+boundevo report --config configs/report.json
 ~~~
 
 The JSON files under <code>configs/</code> are reproducible presets. Command-line overrides are available for common runtime parameters such as dimension, repeats, evaluation budget, seed, and output paths.
@@ -129,15 +131,19 @@ After producing <code>results/cec2017_summary.csv</code>:
 boundevo analyze --config configs/analysis.json
 ~~~
 
-The generated Markdown report contains:
+The generated Markdown report contains average ranks, Win/Tie/Loss counts, two-sided paired Wilcoxon signed-rank tests, Holm-adjusted p-values, and a Friedman omnibus test. The default metric is <code>mean_error</code>, with lower values treated as better.
 
-- average ranks across complete benchmark cases;
-- Win/Tie/Loss counts against the selected reference method;
-- two-sided paired Wilcoxon signed-rank tests;
-- Holm-adjusted pairwise p-values;
-- a Friedman omnibus test across all selected methods.
+## Reproducibility manifests and HTML report
 
-The default metric is <code>mean_error</code>, with lower values treated as better.
+Every main CLI stage writes a JSON manifest by default. A manifest records the fully resolved configuration, BoundEvo version, Python runtime, operating platform, relevant dependency versions, source revision when available, and output file locations.
+
+After the experiments and analysis finish:
+
+~~~bash
+boundevo report --config configs/report.json
+~~~
+
+This creates <code>results/report.html</code>, a self-contained report that can be opened directly in a browser without a Python environment. The complete pipeline is documented in [docs/research_workflow.md](docs/research_workflow.md).
 
 ## Implementation notes
 
@@ -147,17 +153,17 @@ When affine recombination leaves the variable box, offspring are projected back 
 
 ## Repository structure
 
-    boundevo/       optimizer, coefficient generators, CEC2017 adapter, statistics, CLI
+    boundevo/       optimizer, generators, CEC2017, statistics, manifests, reporting, CLI
     configs/        reproducible JSON experiment presets
-    docs/           algorithm and reproduction notes
+    docs/           algorithm, reproduction, workflow, and release notes
     examples/       Python usage examples
     scripts/        plotting and standalone experiment utilities
     tests/          unit and integration tests
-    .github/        CI workflow
+    .github/        CI and release workflows
 
 ## Release
 
-The v0.3.0 release notes are prepared in [docs/releases/v0.3.0.md](docs/releases/v0.3.0.md). Full changes are recorded in [CHANGELOG.md](CHANGELOG.md).
+[v0.3.0](https://github.com/ZJY-HSBL/BoundEvo/releases/tag/v0.3.0) is the current published release. The main branch is now developing the 0.4 line; see [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 

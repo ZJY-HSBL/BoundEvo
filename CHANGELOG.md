@@ -2,6 +2,21 @@
 
 All notable changes to BoundEvo are documented here.
 
+## [Unreleased]
+
+### Added
+
+- JSON reproducibility manifests for benchmark, sweep, efficiency, analysis, and report commands.
+- Environment capture for Python, NumPy, SciPy, opfunu, Matplotlib, platform, and source revision.
+- Standalone HTML experiment report combining benchmark rankings, operational metrics, parent-count results, coefficient-generation efficiency, and manifests.
+- `boundevo report` command and `configs/report.json` preset.
+- Research workflow documentation for a complete experiment-to-report pipeline.
+
+### Changed
+
+- Development version advanced to `0.4.0.dev0`.
+- Existing CLI commands now write manifests by default.
+
 ## [0.3.0] - 2026-10-08
 
 ### Added

@@ -1,0 +1,14 @@
+{
+  "summary": "results/cec2017_summary.csv",
+  "sweep": "results/parent_sweep_summary.csv",
+  "efficiency": "results/coefficient_efficiency.csv",
+  "manifests": [
+    "results/cec2017_manifest.json",
+    "results/parent_sweep_manifest.json",
+    "results/coefficient_efficiency_manifest.json",
+    "results/analysis_manifest.json"
+  ],
+  "title": "BoundEvo Experiment Report",
+  "output": "results/report.html",
+  "manifest": "results/report_manifest.json"
+}

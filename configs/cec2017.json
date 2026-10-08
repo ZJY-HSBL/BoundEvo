@@ -6,5 +6,6 @@
   "base_seed": 42,
   "max_evaluations": 100000,
   "output": "results/cec2017_trials.csv",
-  "summary": "results/cec2017_summary.csv"
+  "summary": "results/cec2017_summary.csv",
+  "manifest": "results/cec2017_manifest.json"
 }

@@ -12,6 +12,8 @@ from .cec2017 import PAPER_FUNCTION_IDS
 from .config import int_selection, load_json_config, string_selection
 from .efficiency import estimate_efficiency
 from .experiments import run_cec2017_suite, summarize, write_summary_csv, write_trials_csv
+from .report import render_html_report, write_html_report
+from .reproducibility import capture_manifest, write_manifest
 from .sweep import (
     PAPER_PARENT_COUNTS,
     PAPER_SWEEP_FUNCTION_IDS,
@@ -27,6 +29,20 @@ def _coalesce(cli_value, config: dict, key: str, default):
     return cli_value if cli_value is not None else config.get(key, default)
 
 
+def _write_run_manifest(
+    path: Path,
+    *,
+    command: str,
+    config: dict,
+    outputs: dict[str, Path],
+) -> None:
+    write_manifest(
+        path,
+        capture_manifest(command=command, config=config, outputs=outputs),
+    )
+    print(f"wrote run manifest to {path}")
+
+
 def _benchmark(args: argparse.Namespace) -> None:
     cfg = load_json_config(args.config)
     function_ids = int_selection(cfg.get("function_ids"), preset=PAPER_FUNCTION_IDS)
@@ -38,6 +54,9 @@ def _benchmark(args: argparse.Namespace) -> None:
     output = Path(_coalesce(args.output, cfg, "output", "results/cec2017_trials.csv"))
     summary_path = Path(
         _coalesce(args.summary, cfg, "summary", "results/cec2017_summary.csv")
+    )
+    manifest_path = Path(
+        _coalesce(args.manifest, cfg, "manifest", "results/cec2017_manifest.json")
     )
 
     records = run_cec2017_suite(
@@ -51,6 +70,19 @@ def _benchmark(args: argparse.Namespace) -> None:
     rows = summarize(records)
     write_trials_csv(output, records)
     write_summary_csv(summary_path, rows)
+    _write_run_manifest(
+        manifest_path,
+        command="benchmark",
+        config={
+            "function_ids": function_ids,
+            "dimension": dimension,
+            "methods": methods,
+            "repeats": repeats,
+            "base_seed": seed,
+            "max_evaluations": evaluations,
+        },
+        outputs={"trials": output, "summary": summary_path},
+    )
     print(f"wrote {len(records)} trials to {output}")
     print(f"wrote {len(rows)} summary rows to {summary_path}")
 
@@ -77,6 +109,9 @@ def _sweep(args: argparse.Namespace) -> None:
     tables = Path(
         _coalesce(args.tables, cfg, "tables", "results/parent_sweep_tables.md")
     )
+    manifest_path = Path(
+        _coalesce(args.manifest, cfg, "manifest", "results/parent_sweep_manifest.json")
+    )
 
     records = run_parent_count_sweep(
         function_ids=function_ids,
@@ -91,6 +126,20 @@ def _sweep(args: argparse.Namespace) -> None:
     write_parent_sweep_trials_csv(output, records)
     write_parent_sweep_summary_csv(summary_path, rows)
     write_source_style_tables(tables, rows)
+    _write_run_manifest(
+        manifest_path,
+        command="sweep",
+        config={
+            "function_ids": function_ids,
+            "parent_counts": parent_counts,
+            "dimension": dimension,
+            "methods": methods,
+            "repeats": repeats,
+            "base_seed": seed,
+            "max_evaluations": evaluations,
+        },
+        outputs={"trials": output, "summary": summary_path, "tables": tables},
+    )
     print(f"wrote {len(records)} trials to {output}")
     print(f"wrote {len(rows)} summary rows to {summary_path}")
     print(f"wrote source-style tables to {tables}")
@@ -106,6 +155,14 @@ def _efficiency(args: argparse.Namespace) -> None:
     methods = string_selection(cfg.get("methods"), default=("re", "edbf", "abc"))
     output = Path(
         _coalesce(args.output, cfg, "output", "results/coefficient_efficiency.csv")
+    )
+    manifest_path = Path(
+        _coalesce(
+            args.manifest,
+            cfg,
+            "manifest",
+            "results/coefficient_efficiency_manifest.json",
+        )
     )
     if min_m < 1 or max_m < min_m:
         raise ValueError("require 1 <= min_m <= max_m")
@@ -140,6 +197,19 @@ def _efficiency(args: argparse.Namespace) -> None:
             }
             for row in rows
         )
+    _write_run_manifest(
+        manifest_path,
+        command="efficiency",
+        config={
+            "min_m": min_m,
+            "max_m": max_m,
+            "methods": methods,
+            "trials": trials,
+            "batch_size": batch_size,
+            "seed": seed,
+        },
+        outputs={"efficiency": output},
+    )
     print(f"wrote {len(rows)} rows to {output}")
 
 
@@ -152,6 +222,9 @@ def _analyze(args: argparse.Namespace) -> None:
     reference = str(_coalesce(args.reference, cfg, "reference", "abc"))
     output = Path(
         _coalesce(args.output, cfg, "output", "results/statistical_analysis.md")
+    )
+    manifest_path = Path(
+        _coalesce(args.manifest, cfg, "manifest", "results/analysis_manifest.json")
     )
     methods_value = args.methods if args.methods is not None else cfg.get("methods")
     methods = None
@@ -169,8 +242,78 @@ def _analyze(args: argparse.Namespace) -> None:
     except RuntimeError as exc:
         raise SystemExit(str(exc)) from exc
     write_analysis_report(output, report)
+    _write_run_manifest(
+        manifest_path,
+        command="analyze",
+        config={
+            "summary": summary_path,
+            "metric": metric,
+            "reference": reference,
+            "methods": methods,
+        },
+        outputs={"analysis": output},
+    )
     print(report)
     print(f"wrote statistical report to {output}")
+
+
+def _report(args: argparse.Namespace) -> None:
+    cfg = load_json_config(args.config)
+    summary = Path(
+        _coalesce(args.summary, cfg, "summary", "results/cec2017_summary.csv")
+    )
+    sweep = Path(
+        _coalesce(args.sweep, cfg, "sweep", "results/parent_sweep_summary.csv")
+    )
+    efficiency = Path(
+        _coalesce(
+            args.efficiency,
+            cfg,
+            "efficiency",
+            "results/coefficient_efficiency.csv",
+        )
+    )
+    output = Path(_coalesce(args.output, cfg, "output", "results/report.html"))
+    manifest_path = Path(
+        _coalesce(args.manifest, cfg, "manifest", "results/report_manifest.json")
+    )
+    title = str(_coalesce(args.title, cfg, "title", "BoundEvo Experiment Report"))
+
+    default_manifests = [
+        "results/cec2017_manifest.json",
+        "results/parent_sweep_manifest.json",
+        "results/coefficient_efficiency_manifest.json",
+        "results/analysis_manifest.json",
+    ]
+    manifest_values = args.manifests if args.manifests is not None else cfg.get("manifests")
+    if manifest_values is None:
+        manifests = [Path(value) for value in default_manifests]
+    elif isinstance(manifest_values, str):
+        manifests = [Path(manifest_values)]
+    else:
+        manifests = [Path(value) for value in manifest_values]
+
+    report = render_html_report(
+        summary=summary,
+        sweep=sweep,
+        efficiency=efficiency,
+        manifests=manifests,
+        title=title,
+    )
+    write_html_report(output, report)
+    _write_run_manifest(
+        manifest_path,
+        command="report",
+        config={
+            "summary": summary,
+            "sweep": sweep,
+            "efficiency": efficiency,
+            "manifests": manifests,
+            "title": title,
+        },
+        outputs={"report": output},
+    )
+    print(f"wrote standalone HTML report to {output}")
 
 
 def _add_common_run_overrides(parser: argparse.ArgumentParser) -> None:
@@ -181,6 +324,7 @@ def _add_common_run_overrides(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--seed", type=int)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--summary", type=Path)
+    parser.add_argument("--manifest", type=Path)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -211,6 +355,7 @@ def build_parser() -> argparse.ArgumentParser:
     efficiency.add_argument("--batch-size", type=int)
     efficiency.add_argument("--seed", type=int)
     efficiency.add_argument("--output", type=Path)
+    efficiency.add_argument("--manifest", type=Path)
     efficiency.set_defaults(func=_efficiency)
 
     analyze = subparsers.add_parser(
@@ -223,7 +368,22 @@ def build_parser() -> argparse.ArgumentParser:
     analyze.add_argument("--reference")
     analyze.add_argument("--methods", nargs="+")
     analyze.add_argument("--output", type=Path)
+    analyze.add_argument("--manifest", type=Path)
     analyze.set_defaults(func=_analyze)
+
+    report = subparsers.add_parser(
+        "report",
+        help="build a standalone HTML report from experiment artifacts",
+    )
+    report.add_argument("--config", type=Path)
+    report.add_argument("--summary", type=Path)
+    report.add_argument("--sweep", type=Path)
+    report.add_argument("--efficiency", type=Path)
+    report.add_argument("--manifests", nargs="*")
+    report.add_argument("--title")
+    report.add_argument("--output", type=Path)
+    report.add_argument("--manifest", type=Path)
+    report.set_defaults(func=_report)
 
     return parser
 

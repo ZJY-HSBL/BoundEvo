@@ -3,5 +3,6 @@
   "metric": "mean_error",
   "reference": "abc",
   "methods": ["re", "edbf", "abc"],
-  "output": "results/statistical_analysis.md"
+  "output": "results/statistical_analysis.md",
+  "manifest": "results/analysis_manifest.json"
 }

@@ -72,7 +72,7 @@ jobs:
       - name: Verify efficiency result file
         run: test -s /tmp/coefficient_efficiency.csv
 
-  analysis-smoke:
+  analysis-report-smoke:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -81,22 +81,31 @@ jobs:
           python-version: "3.12"
       - run: python -m pip install --upgrade pip
       - run: pip install -e ".[analysis]"
-      - name: Create synthetic benchmark summary
+      - name: Create synthetic benchmark artifacts
         run: |
           cat > /tmp/summary.csv <<'CSV'
-          function_id,dimension,method,mean_error
-          1,10,re,3.0
-          1,10,edbf,2.0
-          1,10,abc,1.0
-          3,10,re,4.0
-          3,10,edbf,3.0
-          3,10,abc,2.0
-          4,10,re,5.0
-          4,10,edbf,4.0
-          4,10,abc,3.0
-          5,10,re,6.0
-          5,10,edbf,5.0
-          5,10,abc,4.0
+          function_id,dimension,method,mean_error,mean_elapsed_seconds,mean_evaluations
+          1,10,re,3.0,0.30,3000
+          1,10,edbf,2.0,0.20,2000
+          1,10,abc,1.0,0.10,1000
+          3,10,re,4.0,0.40,4000
+          3,10,edbf,3.0,0.30,3000
+          3,10,abc,2.0,0.20,2000
+          4,10,re,5.0,0.50,5000
+          4,10,edbf,4.0,0.40,4000
+          4,10,abc,3.0,0.30,3000
+          5,10,re,6.0,0.60,6000
+          5,10,edbf,5.0,0.50,5000
+          5,10,abc,4.0,0.40,4000
+          CSV
+          cat > /tmp/efficiency.csv <<'CSV'
+          parent_count,method,trials,accepted,efficiency
+          1,re,100,100,1.0
+          1,edbf,100,100,1.0
+          1,abc,100,100,1.0
+          5,re,100,30,0.3
+          5,edbf,100,70,0.7
+          5,abc,100,100,1.0
           CSV
       - name: Run statistical analysis
         run: >-
@@ -106,7 +115,23 @@ jobs:
           --reference abc
           --methods re edbf abc
           --output /tmp/analysis.md
-      - run: test -s /tmp/analysis.md
+          --manifest /tmp/analysis_manifest.json
+      - name: Build standalone report
+        run: >-
+          boundevo report
+          --summary /tmp/summary.csv
+          --efficiency /tmp/efficiency.csv
+          --manifests /tmp/analysis_manifest.json
+          --output /tmp/report.html
+          --manifest /tmp/report_manifest.json
+      - name: Verify research artifacts
+        run: |
+          test -s /tmp/analysis.md
+          test -s /tmp/analysis_manifest.json
+          test -s /tmp/report.html
+          test -s /tmp/report_manifest.json
+          grep -q "CEC2017 benchmark ranking" /tmp/report.html
+          grep -q "Reproducibility manifests" /tmp/report.html
 
   package:
     runs-on: ubuntu-latest

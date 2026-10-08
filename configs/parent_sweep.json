@@ -8,5 +8,6 @@
   "max_evaluations": 100000,
   "output": "results/parent_sweep_trials.csv",
   "summary": "results/parent_sweep_summary.csv",
-  "tables": "results/parent_sweep_tables.md"
+  "tables": "results/parent_sweep_tables.md",
+  "manifest": "results/parent_sweep_manifest.json"
 }

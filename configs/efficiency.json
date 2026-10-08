@@ -5,5 +5,6 @@
   "trials": 1000000,
   "batch_size": 100000,
   "seed": 42,
-  "output": "results/coefficient_efficiency.csv"
+  "output": "results/coefficient_efficiency.csv",
+  "manifest": "results/coefficient_efficiency_manifest.json"
 }

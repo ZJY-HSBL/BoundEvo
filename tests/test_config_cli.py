@@ -30,6 +30,7 @@ def test_cli_subcommands_parse() -> None:
     assert parser.parse_args(["sweep"]).command == "sweep"
     assert parser.parse_args(["efficiency"]).command == "efficiency"
     assert parser.parse_args(["analyze"]).command == "analyze"
+    assert parser.parse_args(["report"]).command == "report"
 
 
 def test_integer_selection_rejects_empty() -> None:
