@@ -233,7 +233,7 @@ def main() -> None:
     args = parser.parse_args()
     try:
         args.func(args)
-    except (ValueError, OSError) as exc:
+    except (TypeError, ValueError, OSError) as exc:
         parser.error(str(exc))
 
 
