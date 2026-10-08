@@ -19,3 +19,27 @@ jobs:
       - run: pip install -e ".[dev]"
       - run: ruff check .
       - run: pytest
+
+  cec2017-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --upgrade pip
+      - run: pip install -e ".[cec2017]"
+      - name: Run CEC2017 smoke experiment
+        run: >-
+          python scripts/run_cec2017.py
+          --functions 1
+          --methods abc
+          --dimension 10
+          --evaluations 500
+          --repeats 1
+          --output /tmp/cec2017_trials.csv
+          --summary /tmp/cec2017_summary.csv
+      - name: Verify result files
+        run: |
+          test -s /tmp/cec2017_trials.csv
+          test -s /tmp/cec2017_summary.csv
