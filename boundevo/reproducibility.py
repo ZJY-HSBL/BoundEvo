@@ -21,6 +21,7 @@ class RunManifest:
     schema_version: int
     created_at_utc: str
     command: str
+    run_id: str | None
     boundevo_version: str
     python_version: str
     python_executable: str
@@ -73,6 +74,7 @@ def capture_manifest(
     command: str,
     config: dict[str, Any],
     outputs: dict[str, str | Path],
+    run_id: str | None = None,
 ) -> RunManifest:
     """Capture the resolved run configuration and execution environment."""
 
@@ -84,6 +86,7 @@ def capture_manifest(
         schema_version=1,
         created_at_utc=datetime.now(timezone.utc).isoformat(),
         command=command,
+        run_id=run_id,
         boundevo_version=__version__,
         python_version=platform.python_version(),
         python_executable=sys.executable,
