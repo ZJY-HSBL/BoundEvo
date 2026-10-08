@@ -398,6 +398,7 @@ def _pipeline(args: argparse.Namespace) -> None:
         efficiency_batch_size=int(cfg.get("efficiency_batch_size", 100_000)),
         run_root=run_root,
         report_title=str(cfg.get("report_title", "BoundEvo Experiment Report")),
+        statistical_analysis=bool(cfg.get("statistical_analysis", True)),
     )
     try:
         result = run_pipeline(pipeline_config, run_id=args.run_id)
