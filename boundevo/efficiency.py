@@ -7,7 +7,9 @@ has efficiency 1 for every valid parent count.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+import csv
+from dataclasses import asdict, dataclass
+from pathlib import Path
 
 import numpy as np
 
@@ -99,3 +101,20 @@ def estimate_efficiency(
         accepted=accepted,
         efficiency=accepted / trials,
     )
+
+
+def write_efficiency_csv(
+    path: str | Path,
+    rows: list[EfficiencyPoint],
+) -> None:
+    """Write coefficient-efficiency rows to CSV."""
+
+    if not rows:
+        raise ValueError("cannot write an empty efficiency table")
+    output = Path(path)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    payload = [asdict(row) for row in rows]
+    with output.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(payload[0].keys()))
+        writer.writeheader()
+        writer.writerows(payload)
