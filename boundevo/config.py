@@ -16,7 +16,7 @@ def load_json_config(path: str | Path | None) -> dict[str, Any]:
     with config_path.open(encoding="utf-8") as handle:
         payload = json.load(handle)
     if not isinstance(payload, dict):
-        raise ValueError(f"configuration root must be a JSON object: {config_path}")
+        raise TypeError(f"configuration root must be a JSON object: {config_path}")
     return payload
 
 
@@ -53,7 +53,7 @@ def int_selection(
         if not value:
             raise ValueError("integer selection cannot be empty")
         return tuple(int(item) for item in value)
-    raise ValueError(f"unsupported integer selection: {value!r}")
+    raise TypeError(f"unsupported integer selection: {value!r}")
 
 
 def string_selection(value: object, *, default: tuple[str, ...]) -> tuple[str, ...]:
@@ -66,7 +66,7 @@ def string_selection(value: object, *, default: tuple[str, ...]) -> tuple[str, .
     elif isinstance(value, list):
         values = tuple(str(item) for item in value)
     else:
-        raise ValueError(f"unsupported string selection: {value!r}")
+        raise TypeError(f"unsupported string selection: {value!r}")
     if not values:
         raise ValueError("string selection cannot be empty")
     return values
