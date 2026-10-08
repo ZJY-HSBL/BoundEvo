@@ -23,9 +23,18 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 
+[project.urls]
+Homepage = "https://github.com/ZJY-HSBL/BoundEvo"
+Repository = "https://github.com/ZJY-HSBL/BoundEvo"
+Issues = "https://github.com/ZJY-HSBL/BoundEvo/issues"
+
+[project.scripts]
+boundevo = "boundevo.cli:main"
+
 [project.optional-dependencies]
-dev = ["pytest>=8", "ruff>=0.6"]
+dev = ["pytest>=8", "ruff>=0.6", "build>=1.2"]
 cec2017 = ["opfunu>=1.0.1,<2", "setuptools<81"]
+analysis = ["scipy>=1.11"]
 plot = ["matplotlib>=3.8"]
 
 [tool.setuptools.packages.find]

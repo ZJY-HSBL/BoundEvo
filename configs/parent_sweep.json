@@ -1,0 +1,12 @@
+{
+  "function_ids": [1, 10, 20, 30],
+  "parent_counts": "paper",
+  "dimension": 10,
+  "methods": ["re", "edbf", "abc"],
+  "repeats": 1,
+  "base_seed": 42,
+  "max_evaluations": 100000,
+  "output": "results/parent_sweep_trials.csv",
+  "summary": "results/parent_sweep_summary.csv",
+  "tables": "results/parent_sweep_tables.md"
+}

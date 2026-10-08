@@ -1,0 +1,9 @@
+{
+  "min_m": 1,
+  "max_m": 20,
+  "methods": ["re", "edbf", "abc"],
+  "trials": 1000000,
+  "batch_size": 100000,
+  "seed": 42,
+  "output": "results/coefficient_efficiency.csv"
+}

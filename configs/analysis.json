@@ -1,0 +1,7 @@
+{
+  "summary": "results/cec2017_summary.csv",
+  "metric": "mean_error",
+  "reference": "abc",
+  "methods": ["re", "edbf", "abc"],
+  "output": "results/statistical_analysis.md"
+}

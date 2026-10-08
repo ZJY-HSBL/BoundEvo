@@ -1,56 +1,97 @@
+<div align="center">
+
 # BoundEvo
 
-**Adaptive Boundary Evolutionary Optimization｜自适应边界演化优化算法**
+**Adaptive Boundary Evolutionary Optimization｜自适应边界演化优化**
 
-BoundEvo 是一个面向实数编码、多父体重组的轻量级 Python 演化优化库。核心实现是自适应边界约束系数生成器，并同时提供随机穷举法（RE）与经验概率分布法（EDBF）用于对照实验。
+面向实数编码多父体重组的轻量级、可复现实验型 Python 演化优化库。
 
-## 核心问题
+[![CI](https://github.com/ZJY-HSBL/BoundEvo/actions/workflows/ci.yml/badge.svg)](https://github.com/ZJY-HSBL/BoundEvo/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
+![Version](https://img.shields.io/badge/version-0.3.0-2F6FEB)
+![License](https://img.shields.io/badge/license-MIT-3DA639)
 
-多父体重组系数向量需要满足：
+[English](README.md) · [算法说明](docs/algorithm.md) · [实验复现](docs/reproduction.md) · [M 消融](docs/parent_sweep.md) · [v0.3.0 说明](docs/releases/v0.3.0.md)
 
-```text
-sum(alpha) = 1
--0.5 <= alpha_i <= 1.5
-```
+</div>
 
-传统随机生成在父代数量增大时会产生大量无效系数向量。BoundEvo 根据当前已生成系数之和 `s` 动态调整下一个系数的采样区间：
+## 项目定位
 
-```text
-lower = max(-0.5 - s, -0.5)
-upper = min( 1.5 - s,  1.5)
-alpha_i ~ Uniform(lower, upper)
-```
+BoundEvo 解决多父体仿射重组中的一个核心问题：高效生成满足下列条件的系数向量。
 
-先生成前 `M-1` 个系数，再令：
+    sum(alpha) = 1
+    -0.5 <= alpha_i <= 1.5
 
-```text
-alpha_M = 1 - s
-```
+自适应边界方法根据当前累计和动态计算下一个系数的可行区间。先生成前 M-1 个系数，再通过总和约束确定最后一个系数，因此 ABC 方法不需要拒绝采样。
 
-因为每一步都保证累计和位于 `[-0.5, 1.5]`，所以最后一个系数天然满足边界约束，不需要拒绝采样。ABC 生成器因此始终一次生成成功。
+仓库在同一套演化优化框架中保留三类系数生成方法：
+
+| 方法 | 系数生成方式 | 定位 |
+|:---|:---|:---|
+| RE | 随机穷举 / 拒绝采样 | EP-GTA 风格基线 |
+| EDBF | 经验概率分布采样 | 改进基线 |
+| ABC | 自适应边界约束 | BoundEvo 默认方法 |
+
+## 当前能力
+
+| 层级 | 已实现内容 |
+|:---|:---|
+| 算法核心 | 精英保留、多父体仿射重组、有界域修复 |
+| 系数生成 | RE、EDBF、ABC |
+| Benchmark | Sphere、Rosenbrock、Rastrigin、Ackley、CEC2017 |
+| 主实验 | CEC2017 共 29 个函数：F1 与 F3-F30 |
+| M 消融 | F1、F10、F20、F30 上 M=10..16 |
+| 效率实验 | M=1..20 系数向量生成效率 |
+| 统计分析 | 平均排名、Win/Tie/Loss、Wilcoxon + Holm、Friedman |
+| 输出 | CSV、Markdown 表格、PNG 图 |
+| 验证 | Python 3.10/3.11/3.12 CI 与真实 CEC2017 smoke test |
 
 ## 安装
 
-```bash
+仅使用核心算法：
+
+~~~bash
 git clone https://github.com/ZJY-HSBL/BoundEvo.git
 cd BoundEvo
 pip install -e .
-```
+~~~
+
+完整实验环境：
+
+~~~bash
+pip install -e ".[cec2017,analysis,plot]"
+~~~
 
 开发与测试：
 
-```bash
+~~~bash
 pip install -e ".[dev]"
+ruff check .
 pytest
-```
+~~~
 
-## 快速使用
+## 统一命令行
 
-```python
+v0.3 开始将主要实验入口统一为 <code>boundevo</code>：
+
+~~~bash
+boundevo --version
+boundevo benchmark --config configs/cec2017.json
+boundevo sweep --config configs/parent_sweep.json
+boundevo efficiency --config configs/efficiency.json
+boundevo analyze --config configs/analysis.json
+~~~
+
+<code>configs/</code> 中的 JSON 文件用于固定实验参数，避免每次手工输入产生配置漂移。常用的维度、重复次数、函数评价预算、随机种子和输出路径仍可以通过命令行覆盖。
+
+## Python 快速使用
+
+~~~python
 from boundevo import BoundEvo, BoundEvoConfig
 from boundevo.benchmarks import make_box_problem
 
 problem = make_box_problem("rastrigin", dimension=10)
+
 optimizer = BoundEvo(
     BoundEvoConfig(
         population_size=100,
@@ -61,122 +102,62 @@ optimizer = BoundEvo(
         seed=42,
     )
 )
-result = optimizer.minimize(problem)
 
+result = optimizer.minimize(problem)
 print(result.objective)
 print(result.x)
-```
+~~~
 
-默认的 `N=100, M=15, K=5, L=1` 与原始实验中的主要参数设置一致。
+## 实验复现矩阵
 
-## 算法结构
+主实验按以下参数封装：
 
-每轮迭代先依据“约束违反量优先、目标函数其次”的规则排序种群，然后保留前 `K` 个精英父代，再从其余个体中随机选取 `M-K` 个父代。通过满足约束的系数向量对 `M` 个父代进行线性重组，生成 `L` 个子代，选出其中最优者，与当前最差个体比较并决定是否替换。
+    N = 100
+    M = 15
+    K = 5
+    L = 1
 
-对于越过变量上下界的子代，本实现采用投影修复，即直接裁剪回定义域。这是为了让多父体仿射重组能够稳定用于有界优化问题而加入的明确实现策略。
+M 消融固定 N=100、K=5、L=1，并在 F1、F10、F20、F30 上测试 <code>M=10..16</code>。
 
-## 三种系数生成方法
+当前提取到的实验设置文字没有明确给出 CEC2017 测试维度，因此本仓库没有把维度写成“原实验固定参数”。配置文件默认使用 10 维，只作为可直接运行的默认值，维度始终可以显式修改。
 
-```python
-import numpy as np
-from boundevo import generate_coefficients
+## 统计分析
 
-rng = np.random.default_rng(42)
-for method in ("re", "edbf", "abc"):
-    result = generate_coefficients(15, method=method, rng=rng)
-    print(method, result.attempts, result.coefficients)
-```
+生成 <code>results/cec2017_summary.csv</code> 后运行：
 
-其中：
+~~~bash
+boundevo analyze --config configs/analysis.json
+~~~
 
-- `re`：随机穷举/拒绝采样；
-- `edbf`：经验概率分布生成；
-- `abc`：自适应边界约束生成，也是 BoundEvo 默认方法。
+自动得到：
 
-运行生成效率对比：
+- 各算法跨测试问题的平均排名；
+- 以指定参考算法为基准的 Win/Tie/Loss；
+- 双侧配对 Wilcoxon 符号秩检验；
+- Holm 多重比较校正；
+- 多算法 Friedman 总体检验。
 
-```bash
-python scripts/benchmark_generators.py --min-m 2 --max-m 20 --repeats 10000
-```
+默认使用 <code>mean_error</code>，并按照“数值越小越好”处理。
 
-## 关于流程图中的索引
+## 实现边界
 
-源材料中的 ABC 流程图在循环判断处印为 `i == M-1`，紧接着却直接生成 `alpha_M = 1-s`。如果完全按字面执行，会少定义一个系数，与前文定义的 M 维系数向量矛盾。因此本仓库没有静默照抄该处，而采用数学上自洽的实现：随机生成前 `M-1` 个系数，再由和约束确定第 `M` 个系数。详细说明见 [`docs/algorithm.md`](docs/algorithm.md)。
+源材料的 ABC 流程图在最后一个系数的下标处存在歧义。若完全按字面执行，会出现一个系数未定义。BoundEvo 采用与 M 维系数向量及总和约束一致的解释：先生成 M-1 个系数，再由总和约束计算第 M 个系数。
 
-## 测试
+多父体仿射重组产生越界子代时，本仓库采用投影裁剪回变量定义域。这属于明确记录的工程实现选择，不将其静默描述为源方法本身。
 
-当前测试覆盖：
+## 仓库结构
 
-- ABC 在不同父代规模下始终一次生成合格系数向量；
-- 系数和为 1 且每一项位于 `[-0.5, 1.5]`；
-- RE / EDBF 生成合法性；
-- 约束优先比较逻辑；
-- Sphere 连续优化；
-- 简单不等式约束优化。
+    boundevo/       优化器、系数生成、CEC2017 适配、统计分析、CLI
+    configs/        可复现实验 JSON 配置
+    docs/           算法与实验说明
+    examples/       Python 使用示例
+    scripts/        绘图和独立实验工具
+    tests/          单元测试与集成测试
+    .github/        CI 工作流
 
-```bash
-pytest
-```
+## Release
 
-## CEC2017 实验复现
-
-v0.2 已加入完整的 CEC2017 实验层。默认实验集合为 29 个问题，即 `F1` 与 `F3-F30`。主实验配置封装为 `N=100, M=15, K=5, L=1`，而测试维度作为显式参数保留，避免把源材料未明确给出的维度静默写死。
-
-安装 CEC2017 可选依赖：
-
-```bash
-pip install -e ".[cec2017]"
-```
-
-建议先运行小规模验证：
-
-```bash
-python scripts/run_cec2017.py --functions 1,10,20,30 --methods abc --dimension 10 --evaluations 5000
-```
-
-再运行完整 29 函数对比：
-
-```bash
-python scripts/run_cec2017.py --dimension 10 --repeats 30
-```
-
-程序会自动生成 `results/cec2017_trials.csv` 与 `results/cec2017_summary.csv`，分别保存逐次运行结果和按函数/方法汇总的统计结果。需要绘图时安装 `pip install -e ".[plot]"`，然后运行 `python scripts/plot_cec2017.py`。
-
-实验设置来源与实现选择的边界说明见 [`docs/reproduction.md`](docs/reproduction.md)。
-
-## M=10~16 消融与生成效率复现
-
-v0.3 新增与源材料实验结构一致的多父体规模消融：在 CEC2017 的 `F1`、`F10`、`F20`、`F30` 上依次测试 `M=10~16`。输出表格直接围绕源材料采用的 3 个比较指标：最优目标值、程序运行时间和函数评价次数。
-
-```bash
-python scripts/run_parent_sweep.py \
-  --functions paper \
-  --parents 10-16 \
-  --methods re edbf abc \
-  --dimension 10 \
-  --evaluations 100000
-```
-
-结果自动写入：
-
-- `results/parent_sweep_trials.csv`
-- `results/parent_sweep_summary.csv`
-- `results/parent_sweep_tables.md`
-
-绘图命令：
-
-```bash
-python scripts/plot_parent_sweep.py
-```
-
-另外加入了系数向量生成效率实验，对应源材料中 `M=1~20` 的效率关系。默认每个 M 进行 100 万次候选向量实验，并采用分批向量化计算，避免逐次 Python 循环带来的额外开销：
-
-```bash
-python scripts/reproduce_efficiency_figure.py --trials 1000000
-python scripts/plot_efficiency_figure.py
-```
-
-详细实验矩阵及“源材料明确给出内容”和“本仓库实现选择”的边界说明见 [`docs/parent_sweep.md`](docs/parent_sweep.md)。
+v0.3.0 发布说明已整理到 [docs/releases/v0.3.0.md](docs/releases/v0.3.0.md)，完整变更见 [CHANGELOG.md](CHANGELOG.md)。
 
 ## License
 

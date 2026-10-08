@@ -17,6 +17,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: python -m pip install --upgrade pip
       - run: pip install -e ".[dev]"
+      - run: boundevo --version
       - run: ruff check .
       - run: pytest
 
@@ -70,3 +71,50 @@ jobs:
           --output /tmp/coefficient_efficiency.csv
       - name: Verify efficiency result file
         run: test -s /tmp/coefficient_efficiency.csv
+
+  analysis-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --upgrade pip
+      - run: pip install -e ".[analysis]"
+      - name: Create synthetic benchmark summary
+        run: |
+          cat > /tmp/summary.csv <<'CSV'
+          function_id,dimension,method,mean_error
+          1,10,re,3.0
+          1,10,edbf,2.0
+          1,10,abc,1.0
+          3,10,re,4.0
+          3,10,edbf,3.0
+          3,10,abc,2.0
+          4,10,re,5.0
+          4,10,edbf,4.0
+          4,10,abc,3.0
+          5,10,re,6.0
+          5,10,edbf,5.0
+          5,10,abc,4.0
+          CSV
+      - name: Run statistical analysis
+        run: >-
+          boundevo analyze
+          --summary /tmp/summary.csv
+          --metric mean_error
+          --reference abc
+          --methods re edbf abc
+          --output /tmp/analysis.md
+      - run: test -s /tmp/analysis.md
+
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --upgrade pip
+      - run: pip install build
+      - run: python -m build

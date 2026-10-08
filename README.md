@@ -1,62 +1,97 @@
+<div align="center">
+
 # BoundEvo
 
-**Adaptive Boundary Evolutionary Optimization** — a compact Python implementation of an elite-preserving, real-coded multi-parent genetic optimizer with efficient adaptive-boundary coefficient generation.
+**Adaptive Boundary Evolutionary Optimization**
 
-[中文说明](README_CN.md)
+A compact, reproducible Python implementation of real-coded multi-parent evolutionary optimization with adaptive-boundary coefficient generation.
 
-## Why BoundEvo
+[![CI](https://github.com/ZJY-HSBL/BoundEvo/actions/workflows/ci.yml/badge.svg)](https://github.com/ZJY-HSBL/BoundEvo/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
+![Version](https://img.shields.io/badge/version-0.3.0-2F6FEB)
+![License](https://img.shields.io/badge/license-MIT-3DA639)
 
-For multi-parent affine recombination, coefficients must satisfy
+[中文说明](README_CN.md) · [Algorithm](docs/algorithm.md) · [Reproduction](docs/reproduction.md) · [Parent Sweep](docs/parent_sweep.md) · [v0.3.0 Notes](docs/releases/v0.3.0.md)
 
-```text
-sum(alpha) = 1
--0.5 <= alpha_i <= 1.5
-```
+</div>
 
-Naive random generation increasingly wastes samples as the number of parents grows. BoundEvo's adaptive-boundary generator uses the running coefficient sum to shrink or expand the next sampling interval, so every generated vector is valid in a single attempt.
+## Overview
 
-The repository also includes RE and EDBF generators for direct comparison.
+BoundEvo focuses on a bottleneck in multi-parent affine recombination: efficiently generating coefficient vectors satisfying
 
-## Core idea
+    sum(alpha) = 1
+    -0.5 <= alpha_i <= 1.5
 
-With running sum `s`, the next coefficient is sampled from
+The adaptive-boundary generator uses the running coefficient sum to determine the next feasible interval. After generating the first M-1 coefficients, the final coefficient is fixed by the sum constraint. This avoids rejection sampling for the adaptive-boundary method.
 
-```text
-lower = max(-0.5 - s, -0.5)
-upper = min( 1.5 - s,  1.5)
-alpha_i ~ Uniform(lower, upper)
-```
+The repository keeps three coefficient generators under the same evolutionary engine:
 
-After the first `M-1` values are generated, the last coefficient is
+| Method | Generator | Role |
+|:---|:---|:---|
+| RE | random exhaustive / rejection sampling | EP-GTA-style baseline |
+| EDBF | empirical-distribution sampling | improved baseline |
+| ABC | adaptive-boundary constraint | BoundEvo default |
 
-```text
-alpha_M = 1 - s
-```
+## What is included
 
-The adaptive interval keeps `s` inside `[-0.5, 1.5]`, therefore the final coefficient is automatically valid.
+| Layer | Capability |
+|:---|:---|
+| Core | Elite preservation, multi-parent affine recombination, bounded-domain repair |
+| Coefficients | RE, EDBF, ABC |
+| Benchmarks | Sphere, Rosenbrock, Rastrigin, Ackley, CEC2017 |
+| Main experiment | 29 CEC2017 functions: F1 and F3-F30 |
+| Parent-count study | M=10..16 on F1, F10, F20, F30 |
+| Efficiency study | M=1..20 coefficient-generation efficiency |
+| Statistics | Mean rank, Win/Tie/Loss, Wilcoxon + Holm, Friedman |
+| Outputs | CSV, Markdown tables, PNG plots |
+| Validation | Python 3.10/3.11/3.12 CI and CEC2017 smoke tests |
 
 ## Installation
 
-```bash
+Core package:
+
+~~~bash
 git clone https://github.com/ZJY-HSBL/BoundEvo.git
 cd BoundEvo
 pip install -e .
-```
+~~~
 
-For development:
+Full experiment environment:
 
-```bash
+~~~bash
+pip install -e ".[cec2017,analysis,plot]"
+~~~
+
+Development:
+
+~~~bash
 pip install -e ".[dev]"
+ruff check .
 pytest
-```
+~~~
 
-## Quick start
+## Unified CLI
 
-```python
+Version 0.3 provides one command for the complete experiment workflow.
+
+~~~bash
+boundevo --version
+boundevo benchmark --config configs/cec2017.json
+boundevo sweep --config configs/parent_sweep.json
+boundevo efficiency --config configs/efficiency.json
+boundevo analyze --config configs/analysis.json
+~~~
+
+The JSON files under <code>configs/</code> are reproducible presets. Command-line overrides are available for common runtime parameters such as dimension, repeats, evaluation budget, seed, and output paths.
+
+## Quick Python usage
+
+~~~python
 from boundevo import BoundEvo, BoundEvoConfig
 from boundevo.benchmarks import make_box_problem
 
 problem = make_box_problem("rastrigin", dimension=10)
+
 optimizer = BoundEvo(
     BoundEvoConfig(
         population_size=100,
@@ -71,115 +106,58 @@ optimizer = BoundEvo(
 result = optimizer.minimize(problem)
 print(result.objective)
 print(result.x)
-```
+~~~
 
-The default `N=100, M=15, K=5, L=1` configuration follows the main experimental setting described in the source material.
+## Reproduction matrix
 
-## Constrained optimization
+The source-aligned main configuration is:
 
-Inequality constraints use the form `g(x) <= 0`. Candidates are ranked first by total positive constraint violation and then by objective value.
+    N = 100
+    M = 15
+    K = 5
+    L = 1
 
-```python
-import numpy as np
-from boundevo import BoundEvo, OptimizationProblem
+The parent-count study varies <code>M=10..16</code> on F1, F10, F20, and F30 while keeping N=100, K=5, and L=1.
 
-problem = OptimizationProblem(
-    objective=lambda x: float(x[0] ** 2),
-    lower=np.array([-5.0]),
-    upper=np.array([5.0]),
-    constraints=[lambda x: float(1.0 - x[0])],  # x >= 1
-)
+The extracted experiment-setting text does not state benchmark dimensionality. BoundEvo therefore keeps dimension explicit. The supplied presets use dimension 10 as a runnable default, not as a claim about the source experiment.
 
-result = BoundEvo().minimize(problem)
-```
+## Statistical analysis
 
-## Coefficient generators
+After producing <code>results/cec2017_summary.csv</code>:
 
-```python
-import numpy as np
-from boundevo import generate_coefficients
+~~~bash
+boundevo analyze --config configs/analysis.json
+~~~
 
-rng = np.random.default_rng(42)
-for method in ("re", "edbf", "abc"):
-    result = generate_coefficients(15, method=method, rng=rng)
-    print(method, result.attempts, result.coefficients.sum())
-```
+The generated Markdown report contains:
 
-Run the generator benchmark with:
+- average ranks across complete benchmark cases;
+- Win/Tie/Loss counts against the selected reference method;
+- two-sided paired Wilcoxon signed-rank tests;
+- Holm-adjusted pairwise p-values;
+- a Friedman omnibus test across all selected methods.
 
-```bash
-python scripts/benchmark_generators.py --min-m 2 --max-m 20 --repeats 10000
-```
+The default metric is <code>mean_error</code>, with lower values treated as better.
 
 ## Implementation notes
 
-The published ABC flowchart contains an indexing ambiguity: its decision node is printed around `i == M-1`, while the next box directly computes `alpha_M = 1-s`. A literal reading would leave one coefficient undefined. BoundEvo uses the mathematically consistent interpretation required by the stated M-dimensional coefficient vector: generate `M-1` coefficients, then compute the M-th from the sum constraint. See [`docs/algorithm.md`](docs/algorithm.md).
+The source ABC flowchart contains an indexing ambiguity around the final coefficient. A literal reading would leave one coefficient undefined. BoundEvo uses the mathematically consistent M-dimensional interpretation: generate M-1 coefficients under adaptive bounds, then compute the M-th coefficient from the sum constraint.
 
-Offspring are projected back into the variable bounds when an affine recombination leaves the search box. This repair rule is an explicit implementation choice.
+When affine recombination leaves the variable box, offspring are projected back into the domain. This is an explicit implementation choice and is documented rather than silently treated as part of the source method.
 
-## Project layout
+## Repository structure
 
-```text
-boundevo/       Core optimizer, coefficient generators, benchmark functions
-examples/       Unconstrained and constrained usage examples
-scripts/        Generator and CEC2017 experiment runners
-tests/         Unit and integration tests
- docs/          Algorithm notes and reproduction decisions
-```
+    boundevo/       optimizer, coefficient generators, CEC2017 adapter, statistics, CLI
+    configs/        reproducible JSON experiment presets
+    docs/           algorithm and reproduction notes
+    examples/       Python usage examples
+    scripts/        plotting and standalone experiment utilities
+    tests/          unit and integration tests
+    .github/        CI workflow
 
-## CEC2017 experiment suite
+## Release
 
-Version 0.2 adds a reproducible CEC2017 experiment layer. The default paper-aligned function set contains 29 problems: F1 and F3 through F30. The main configuration helper uses `N=100, M=15, K=5, L=1`, while benchmark dimensionality remains an explicit experiment parameter.
-
-Install the optional benchmark dependency:
-
-```bash
-pip install -e ".[cec2017]"
-```
-
-Run a small smoke matrix first:
-
-```bash
-python scripts/run_cec2017.py --functions 1,10,20,30 --methods abc --dimension 10 --evaluations 5000
-```
-
-Run the full 29-function comparison:
-
-```bash
-python scripts/run_cec2017.py --dimension 10 --repeats 30
-```
-
-The runner writes raw trial data and grouped statistics to `results/cec2017_trials.csv` and `results/cec2017_summary.csv`. Optional plotting is available with `pip install -e ".[plot]"` followed by `python scripts/plot_cec2017.py`.
-
-See [`docs/reproduction.md`](docs/reproduction.md) for the source-aligned settings and the implementation choices that are intentionally kept explicit.
-
-## Parent-count sweep and efficiency reproduction
-
-Version 0.3 adds the source-aligned `M=10..16` sweep on CEC2017 F1, F10, F20, and F30. The generated tables report the three indicators used in the source comparison: best objective, runtime, and function-evaluation count.
-
-```bash
-python scripts/run_parent_sweep.py \
-  --functions paper \
-  --parents 10-16 \
-  --methods re edbf abc \
-  --dimension 10 \
-  --evaluations 100000
-```
-
-Outputs are written to `results/parent_sweep_trials.csv`, `results/parent_sweep_summary.csv`, and `results/parent_sweep_tables.md`. The plotting command creates separate objective-error, runtime, and evaluation-count figures for every selected benchmark:
-
-```bash
-python scripts/plot_parent_sweep.py
-```
-
-The coefficient-generation experiment corresponding to the source's M-versus-efficiency figure is also available. It uses vectorized Monte Carlo sampling and defaults to one million proposals per M:
-
-```bash
-python scripts/reproduce_efficiency_figure.py --trials 1000000
-python scripts/plot_efficiency_figure.py
-```
-
-See [`docs/parent_sweep.md`](docs/parent_sweep.md) for the exact reproduction matrix and interpretation.
+The v0.3.0 release notes are prepared in [docs/releases/v0.3.0.md](docs/releases/v0.3.0.md). Full changes are recorded in [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 

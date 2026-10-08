@@ -1,0 +1,10 @@
+{
+  "function_ids": "paper",
+  "dimension": 10,
+  "methods": ["re", "edbf", "abc"],
+  "repeats": 1,
+  "base_seed": 42,
+  "max_evaluations": 100000,
+  "output": "results/cec2017_trials.csv",
+  "summary": "results/cec2017_summary.csv"
+}
