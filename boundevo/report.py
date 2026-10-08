@@ -173,8 +173,10 @@ def _svg_line_chart(
 
     parts = [
         f'<svg class="chart" viewBox="0 0 {width} {height}" role="img">',
-        f'<line x1="{left}" y1="{top + plot_height}" x2="{left + plot_width}" '
-        f'y2="{top + plot_height}" class="axis"/>',
+        (
+            f'<line x1="{left}" y1="{top + plot_height}" x2="{left + plot_width}" '
+            f'y2="{top + plot_height}" class="axis"/>'
+        ),
         f'<line x1="{left}" y1="{top}" x2="{left}" y2="{top + plot_height}" class="axis"/>',
     ]
 
@@ -187,12 +189,18 @@ def _svg_line_chart(
         y_value = 10**y_transformed if log_y else y_transformed
         parts.extend(
             [
-                f'<line x1="{left}" y1="{y:.2f}" x2="{left + plot_width}" '
-                f'y2="{y:.2f}" class="grid"/>',
-                f'<text x="{x:.2f}" y="{top + plot_height + 22}" '
-                f'class="tick" text-anchor="middle">{html.escape(_fmt(x_value))}</text>',
-                f'<text x="{left - 10}" y="{y + 4:.2f}" class="tick" '
-                f'text-anchor="end">{html.escape(_fmt(y_value))}</text>',
+                (
+                    f'<line x1="{left}" y1="{y:.2f}" x2="{left + plot_width}" '
+                    f'y2="{y:.2f}" class="grid"/>'
+                ),
+                (
+                    f'<text x="{x:.2f}" y="{top + plot_height + 22}" '
+                    f'class="tick" text-anchor="middle">{html.escape(_fmt(x_value))}</text>'
+                ),
+                (
+                    f'<text x="{left - 10}" y="{y + 4:.2f}" class="tick" '
+                    f'text-anchor="end">{html.escape(_fmt(y_value))}</text>'
+                ),
             ]
         )
 
@@ -208,20 +216,29 @@ def _svg_line_chart(
         ly = legend_y + index * 20
         parts.extend(
             [
-                f'<line x1="{legend_x}" y1="{ly}" x2="{legend_x + 22}" y2="{ly}" '
-                f'stroke="{color}" stroke-width="3"/>',
-                f'<text x="{legend_x + 28}" y="{ly + 4}" class="legend">'
-                f"{html.escape(label)}</text>",
+                (
+                    f'<line x1="{legend_x}" y1="{ly}" x2="{legend_x + 22}" y2="{ly}" '
+                    f'stroke="{color}" stroke-width="3"/>'
+                ),
+                (
+                    f'<text x="{legend_x + 28}" y="{ly + 4}" class="legend">'
+                    f"{html.escape(label)}</text>"
+                ),
             ]
         )
 
     parts.extend(
         [
-            f'<text x="{left + plot_width / 2:.2f}" y="{height - 12}" '
-            f'class="axis-label" text-anchor="middle">{html.escape(x_label)}</text>',
-            f'<text x="18" y="{top + plot_height / 2:.2f}" class="axis-label" '
-            f'text-anchor="middle" transform="rotate(-90 18 {top + plot_height / 2:.2f})">'
-            f"{html.escape(y_label)}</text>",
+            (
+                f'<text x="{left + plot_width / 2:.2f}" y="{height - 12}" '
+                f'class="axis-label" text-anchor="middle">{html.escape(x_label)}</text>'
+            ),
+            (
+                f'<text x="18" y="{top + plot_height / 2:.2f}" class="axis-label" '
+                f'text-anchor="middle" '
+                f'transform="rotate(-90 18 {top + plot_height / 2:.2f})">'
+                f"{html.escape(y_label)}</text>"
+            ),
             "</svg>",
         ]
     )
