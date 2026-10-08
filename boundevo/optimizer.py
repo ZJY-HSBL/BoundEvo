@@ -79,8 +79,11 @@ class BoundEvo:
         problem: OptimizationProblem,
         *,
         callback: Callback | None = None,
+        history_interval: int = 1,
     ) -> OptimizationResult:
         cfg = self.config
+        if history_interval < 1:
+            raise ValueError("history_interval must be at least 1")
         rng = np.random.default_rng(cfg.seed)
 
         population = problem.sample_uniform(rng, cfg.population_size)
@@ -105,12 +108,16 @@ class BoundEvo:
                 worst_objective=worst.objective,
                 worst_violation=worst.violation,
             )
-            history.append(state)
+            record_state = generation % history_interval == 0
+            if record_state:
+                history.append(state)
             if callback is not None:
                 callback(state)
 
             converged = self._population_converged(best, worst, cfg.convergence_atol)
             if converged or evaluations >= cfg.max_evaluations:
+                if not record_state:
+                    history.append(state)
                 return OptimizationResult(
                     x=best.x.copy(),
                     objective=best.objective,
