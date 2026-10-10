@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 
 from boundevo import BoundEvo, BoundEvoConfig, OptimizationProblem
 
@@ -71,3 +72,21 @@ def test_history_interval_samples_and_keeps_final_state() -> None:
         state.generation % 11 == 0 or state is result.history[-1]
         for state in result.history
     )
+
+
+@pytest.mark.parametrize("method", ["invalid", "", "ABC"])
+def test_config_rejects_unsupported_coefficient_method(method: str) -> None:
+    with pytest.raises(ValueError, match="coefficient_method"):
+        BoundEvo(BoundEvoConfig(coefficient_method=method))  # type: ignore[arg-type]
+
+
+@pytest.mark.parametrize("tolerance", [float("nan"), float("inf"), float("-inf"), -1e-6])
+def test_config_rejects_nonfinite_or_negative_convergence_tolerance(tolerance: float) -> None:
+    with pytest.raises(ValueError, match="convergence_atol"):
+        BoundEvo(BoundEvoConfig(convergence_atol=tolerance))
+
+
+def test_config_accepts_valid_methods_and_finite_tolerance() -> None:
+    for method in ("abc", "re", "edbf"):
+        optimizer = BoundEvo(BoundEvoConfig(coefficient_method=method, convergence_atol=0.0))
+        assert optimizer.config.coefficient_method == method
