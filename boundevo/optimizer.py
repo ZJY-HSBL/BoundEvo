@@ -36,8 +36,10 @@ class BoundEvoConfig:
             raise ValueError("offspring_count must be at least 1")
         if self.max_evaluations < self.population_size:
             raise ValueError("max_evaluations must cover the initial population")
-        if self.convergence_atol < 0:
-            raise ValueError("convergence_atol must be non-negative")
+        if self.coefficient_method not in {"abc", "re", "edbf"}:
+            raise ValueError("coefficient_method must be one of: abc, re, edbf")
+        if not np.isfinite(self.convergence_atol) or self.convergence_atol < 0:
+            raise ValueError("convergence_atol must be finite and non-negative")
 
 
 @dataclass(frozen=True, slots=True)
