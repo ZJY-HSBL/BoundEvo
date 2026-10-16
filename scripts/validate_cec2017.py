@@ -151,22 +151,22 @@ def make_report(summary: list[dict], config: dict, data: list[dict]) -> str:
         "",
         "## Interpretation and limitations",
         "",
-        "The ABC generator must use exactly one coefficient-vector proposal, whereas "
+        ("The ABC generator must use exactly one coefficient-vector proposal, whereas "
         "RE and EDBF require rejection sampling. This guarantees a generation-"
-        "attempt advantage, not necessarily a lower final objective error.",
+        "attempt advantage, not necessarily a lower final objective error."),
         "",
-        "With only a handful of repeats and a limited evaluation budget, differences "
+        ("With only a handful of repeats and a limited evaluation budget, differences "
         "can be sampling noise. A proper paper-level replication requires the "
         "original function dimension and stopping rule, substantially longer runs, "
-        "more seeds, confirmed baseline implementations, and uncertainty analysis.",
+        "more seeds, confirmed baseline implementations, and uncertainty analysis."),
         "",
-        "The three methods use identical starting seeds, but their random-number "
+        ("The three methods use identical starting seeds, but their random-number "
         "streams diverge after initialization because each generator consumes "
         "different numbers of draws. CPU load, interpreter overhead, and "
-        "implementation differences also affect wall-clock runtime.",
+        "implementation differences also affect wall-clock runtime."),
         "",
-        "See validation_trials.csv, validation_summary.csv, and environment.json "
-        "for the machine-readable data.",
+        ("See validation_trials.csv, validation_summary.csv, and environment.json "
+        "for the machine-readable data."),
         "",
     ]
     return "\n".join(lines)
