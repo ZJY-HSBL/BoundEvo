@@ -83,7 +83,9 @@ def make_report(summary: list[dict], config: dict, data: list[dict]) -> str:
         "- Optimizer: population N=100; parent count M=15; elite parents K=5; offspring L=1.",
         "- Same RNG seed for all methods in a function/repetition pair.",
         "- Offspring outside the search box are clipped by the existing optimizer.",
-        "- Error = max(0, obtained objective - benchmark known optimum); lower is better.",
+        "- Error = obtained objective - benchmark known optimum; lower is better.",
+        "- A trial whose objective is below the declared benchmark optimum is rejected.",
+        "- F10 and F30 are excluded from this pilot due to observed opfunu numerical inconsistencies.",
         "- Runtime is measured wall-clock time on a shared GitHub Actions runner.",
         "- This is a limited-budget pilot and is NOT a full reproduction of the paper.",
         "",
@@ -203,7 +205,7 @@ def make_plot(summary: list[dict], destination: Path, methods: list[str]) -> Non
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--functions", nargs="+", type=int, default=[1, 5, 10, 20])
+    parser.add_argument("--functions", nargs="+", type=int, default=[1, 3, 5, 20])
     parser.add_argument("--methods", nargs="+", choices=["abc", "edbf", "re"], default=["abc", "edbf", "re"])
     parser.add_argument("--dimension", type=int, default=10)
     parser.add_argument("--repeats", type=int, default=5)
@@ -242,7 +244,15 @@ def main() -> None:
                     ),
                     history_interval=100,
                 )
+                signed_gap = record.objective - case.optimum
+                tolerance = max(1e-8, abs(case.optimum) * 1e-10)
+                if signed_gap < -tolerance:
+                    raise RuntimeError(
+                        f"Invalid benchmark optimum for F{fid}, method={method}: "
+                        f"objective {record.objective:.9g} < optimum {case.optimum:.9g}"
+                    )
                 row = asdict(record)
+                row["objective_minus_optimum"] = signed_gap
                 offspring = record.evaluations - 100
                 row["attempts_per_offspring"] = (
                     record.coefficient_attempts / offspring if offspring > 0 else 0.0
@@ -277,6 +287,10 @@ def main() -> None:
         "matplotlib_version": installed_version("matplotlib"),
         "trials_completed": len(rows),
         "experiment_kind": "pilot, limited budget, not full replication",
+        "excluded_due_to_benchmark_issues": {
+            "F10": "some opfunu 1.0.1 evaluations fell below the stated global optimum",
+            "F30": "opfunu 1.0.1 returned non-finite values at the preflight test point",
+        },
     }
     (output / "environment.json").write_text(
         json.dumps(environment, indent=2, ensure_ascii=False) + "\n",
