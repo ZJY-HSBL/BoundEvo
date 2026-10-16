@@ -24,6 +24,7 @@ def _create_run(
     budget: int = 500,
     platform: str = "Linux",
     source_revision: str = "same-revision",
+    base_seed: int = 42,
 ) -> Path:
     directory = root / run_id
     (directory / "benchmark").mkdir(parents=True)
@@ -42,6 +43,7 @@ def _create_run(
             "function_ids": [1, 3],
             "max_evaluations": budget,
             "repeats": 2,
+            "base_seed": base_seed,
         },
     }
     (directory / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
@@ -145,12 +147,15 @@ def test_mixed_budgets_and_platforms_warn(tmp_path: Path) -> None:
         budget=800,
         platform="Windows",
         source_revision="different-revision",
+        base_seed=77,
     )
     result = compare_runs(tmp_path)
     joined = " ".join(result.warnings)
     assert "Evaluation budgets differ" in joined
     assert "Runtime comparisons" in joined
     assert "Source revisions differ" in joined
+    assert "Base seeds differ" in joined
+    assert "not hardware-normalized" in joined
 
 
 def test_duplicate_or_invalid_summary_rows_are_rejected(tmp_path: Path) -> None:
