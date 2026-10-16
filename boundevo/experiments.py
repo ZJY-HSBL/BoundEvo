@@ -155,7 +155,15 @@ def run_case(
     start = time.perf_counter()
     result = BoundEvo(cfg).minimize(case.problem, history_interval=history_interval)
     elapsed = time.perf_counter() - start
-    error = max(0.0, result.objective - case.optimum)
+    gap = result.objective - case.optimum
+    tolerance = max(1e-8, abs(case.optimum) * 1e-10)
+    if gap < -tolerance:
+        raise RuntimeError(
+            f"CEC2017 F{case.function_id} returned objective {result.objective:.9g} "
+            f"below its declared optimum {case.optimum:.9g}; "
+            "check the benchmark backend before reporting objective error"
+        )
+    error = max(0.0, gap)
     if history_records is not None:
         _append_history(
             history_records,
