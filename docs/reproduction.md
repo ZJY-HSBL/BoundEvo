@@ -23,7 +23,28 @@ CEC2017 functions, shifts, rotations, bounds, and known optima are supplied by t
 
 The optimizer uses the same parent-selection and population-update logic for RE, EDBF, and ABC, changing only the coefficient generator.
 
-## Run the 29-function matrix
+## Numerical integrity warning (October 2026)
+
+The upstream `opfunu==1.0.1` library renumbers the CEC2017 functions
+F1 and F3..F30 to classes F1..F29. The adapter now maps the official IDs
+and explicitly supplies corresponding shifts, rotations, and objective biases.
+
+**Mapping correctness is not sufficient to guarantee numerical correctness.**
+A live pilot detected results below the benchmark's claimed F10 global optimum
+and nonfinite values on F30 at a preflight point. Both are excluded from the
+validated pilot. These findings are tracked in
+[issue #3](https://github.com/ZJY-HSBL/BoundEvo/issues/3).
+
+The actual validated 60-trial pilot covers F1, F3, F5, and F20, with five
+matched initial seeds per method and 1500 evaluations per trial. See
+[validation_readme.md](experiments/cec2017-pilot-2026-10-17/validation_readme.md)
+and the accompanying raw CSVs.
+
+Until the remaining benchmark functions are verified against an authoritative
+CEC2017 reference implementation, do **not** represent the full 29-function
+experiment as a numerical reproduction of the source paper.
+
+## Run the 29-function matrix (experimental, not yet validated)
 
 ```bash
 pip install -e ".[cec2017]"
@@ -50,11 +71,11 @@ python scripts/plot_cec2017.py
 
 ## Smoke run
 
-Before launching the full matrix:
+A numerically verified pilot subset is preferred before attempting the full matrix:
 
 ```bash
 python scripts/run_cec2017.py \
-  --functions 1,10,20,30 \
+  --functions 1,3,5,20 \
   --methods abc \
   --dimension 10 \
   --evaluations 5000
