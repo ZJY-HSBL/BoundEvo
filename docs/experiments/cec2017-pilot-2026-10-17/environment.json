@@ -1,8 +1,8 @@
 {
   "functions": [
     1,
+    3,
     5,
-    10,
     20
   ],
   "methods": [
@@ -15,10 +15,10 @@
   "evaluations": 1500,
   "seed": 20261017,
   "output_dir": "docs/experiments/cec2017-pilot-2026-10-17",
-  "utc_started": "2026-10-16T16:30:51.261595+00:00",
-  "utc_finished": "2026-10-16T16:32:54.883525+00:00",
-  "total_runtime_seconds": 123.621923811,
-  "git_sha": "803cd16daeec629484650d9c00bdee62dd82c18c",
+  "utc_started": "2026-10-16T16:34:18.567156+00:00",
+  "utc_finished": "2026-10-16T16:35:34.576825+00:00",
+  "total_runtime_seconds": 76.009663598,
+  "git_sha": "55689ad0a74bb326678f4e0ef8ee05d2a1c150a4",
   "python": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]",
   "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
   "numpy_version": "2.5.4",
@@ -26,5 +26,9 @@
   "scipy_version": null,
   "matplotlib_version": "3.11.2",
   "trials_completed": 60,
-  "experiment_kind": "pilot, limited budget, not full replication"
+  "experiment_kind": "pilot, limited budget, not full replication",
+  "excluded_due_to_benchmark_issues": {
+    "F10": "some opfunu 1.0.1 evaluations fell below the stated global optimum",
+    "F30": "opfunu 1.0.1 returned non-finite values at the preflight test point"
+  }
 }

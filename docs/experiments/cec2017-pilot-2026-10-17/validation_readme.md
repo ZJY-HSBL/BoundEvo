@@ -3,14 +3,16 @@
 ## Experiment protocol
 
 - Benchmark: CEC2017 through opfunu, D=10.
-- Functions: F1, F5, F10, F20.
+- Functions: F1, F3, F5, F20.
 - Methods: abc, edbf, re.
 - Repetitions: 5 per function and method.
 - Maximum function evaluations: 1500 per trial (initial 100 included).
 - Optimizer: population N=100; parent count M=15; elite parents K=5; offspring L=1.
 - Same RNG seed for all methods in a function/repetition pair.
 - Offspring outside the search box are clipped by the existing optimizer.
-- Error = max(0, obtained objective - benchmark known optimum); lower is better.
+- Error = obtained objective - benchmark known optimum; lower is better.
+- A trial whose objective is below the declared benchmark optimum is rejected.
+- F10 and F30 are excluded from this pilot due to observed opfunu numerical inconsistencies.
 - Runtime is measured wall-clock time on a shared GitHub Actions runner.
 - This is a limited-budget pilot and is NOT a full reproduction of the paper.
 
@@ -18,27 +20,27 @@
 
 | Function | Method | Mean error | SD | Mean runtime (s) | Mean evaluations | Mean attempts / child |
 |:---|:---|---:|---:|---:|---:|---:|
-| F1 | ABC | 1.18838e+08 | 7.19e+07 | 0.309 | 1500 | 1.000 |
-| F1 | EDBF | 3.94723e+09 | 2.14e+09 | 2.652 | 1500 | 4.957 |
-| F1 | RE | 2.2794e+09 | 5.05e+08 | 2.855 | 1500 | 209.205 |
-| F5 | ABC | 331.258 | 62.5 | 0.316 | 1500 | 1.000 |
-| F5 | EDBF | 5587.19 | 1.6e+03 | 2.643 | 1500 | 4.956 |
-| F5 | RE | 3672.93 | 915 | 2.888 | 1500 | 210.373 |
-| F10 | ABC | 101.027 | 207 | 0.389 | 1500 | 1.000 |
-| F10 | EDBF | 359.534 | 343 | 2.758 | 1500 | 5.013 |
-| F10 | RE | 19.9414 | 44.6 | 3.003 | 1500 | 212.082 |
-| F20 | ABC | 200.924 | 88.1 | 0.611 | 1500 | 1.000 |
-| F20 | EDBF | 699.225 | 261 | 2.938 | 1500 | 4.970 |
-| F20 | RE | 419.052 | 129 | 3.213 | 1500 | 211.781 |
+| F1 | ABC | 1.18838e+08 | 7.19e+07 | 0.172 | 1500 | 1.000 |
+| F1 | EDBF | 3.94723e+09 | 2.14e+09 | 1.559 | 1500 | 4.957 |
+| F1 | RE | 2.2794e+09 | 5.05e+08 | 1.863 | 1500 | 209.205 |
+| F3 | ABC | 666.692 | 226 | 0.176 | 1500 | 1.000 |
+| F3 | EDBF | 18447.5 | 5.4e+03 | 1.554 | 1500 | 4.975 |
+| F3 | RE | 9957.88 | 4.27e+03 | 1.921 | 1500 | 214.364 |
+| F5 | ABC | 331.258 | 62.5 | 0.173 | 1500 | 1.000 |
+| F5 | EDBF | 5587.19 | 1.6e+03 | 1.567 | 1500 | 4.956 |
+| F5 | RE | 3672.93 | 915 | 1.881 | 1500 | 210.373 |
+| F20 | ABC | 200.924 | 88.1 | 0.364 | 1500 | 1.000 |
+| F20 | EDBF | 699.225 | 261 | 1.754 | 1500 | 4.970 |
+| F20 | RE | 419.052 | 129 | 2.086 | 1500 | 211.781 |
 
 ## Per-function error leaders
 
 - F1: abc (mean error 1.18838e+08).
+- F3: abc (mean error 666.692).
 - F5: abc (mean error 331.258).
-- F10: re (mean error 19.9414).
 - F20: abc (mean error 200.924).
 
-Functions with lowest observed mean error (ties counted for all leaders): abc=3, edbf=0, re=1.
+Functions with lowest observed mean error (ties counted for all leaders): abc=4, edbf=0, re=0.
 
 ## Validation checks
 
