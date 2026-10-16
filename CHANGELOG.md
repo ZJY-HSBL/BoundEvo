@@ -6,6 +6,16 @@ All notable changes to BoundEvo are documented here.
 
 Development continues toward v0.5.0.
 
+### Added
+
+- Read-only Run Registry for complete, incomplete, and malformed experiment bundles.
+- `boundevo runs` command with compact and JSON output.
+- Aligned cross-run comparison based on matching CEC function, dimension, and method.
+- Per-criterion leaders for mean objective error, runtime, and function evaluations.
+- Three-objective Pareto-front identification without unsupported overall ranking.
+- `boundevo compare` command with explicit optional partial-case comparison.
+- Documentation and integration tests covering comparability and validity.
+
 ## [0.4.0] - 2026-10-08
 
 ### Added

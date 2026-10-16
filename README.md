@@ -11,7 +11,7 @@ A compact, reproducible Python implementation of real-coded multi-parent evoluti
 ![Release](https://img.shields.io/badge/release-v0.4.0-2F6FEB)
 ![License](https://img.shields.io/badge/license-MIT-3DA639)
 
-[中文说明](README_CN.md) · [Algorithm](docs/algorithm.md) · [Reproduction](docs/reproduction.md) · [Research Workflow](docs/research_workflow.md) · [v0.4.0 Notes](docs/releases/v0.4.0.md)
+[中文说明](README_CN.md) · [Algorithm](docs/algorithm.md) · [Reproduction](docs/reproduction.md) · [Research Workflow](docs/research_workflow.md) · [Run Registry](docs/run_registry.md) · [v0.4.0 Notes](docs/releases/v0.4.0.md)
 
 </div>
 
@@ -45,6 +45,7 @@ The repository keeps three coefficient generators under the same evolutionary en
 | Statistics | Mean rank, Win/Tie/Loss, Wilcoxon + Holm, Friedman |
 | Reproducibility | JSON run manifests with resolved configuration and environment |
 | Reporting | CSV, Markdown tables, PNG plots, standalone HTML report |
+| Run comparison | Read-only registry, aligned benchmarks, three-objective Pareto front |
 | Validation | Python 3.10/3.11/3.12 CI and CEC2017 smoke tests |
 
 ## Installation
@@ -83,6 +84,8 @@ boundevo efficiency --config configs/efficiency.json
 boundevo analyze --config configs/analysis.json
 boundevo report --config configs/report.json
 boundevo pipeline --config configs/pipeline.json
+boundevo runs --root results/runs
+boundevo compare --root results/runs
 ~~~
 
 The JSON files under <code>configs/</code> are reproducible presets. Command-line overrides are available for common runtime parameters such as dimension, repeats, evaluation budget, seed, and output paths.
@@ -96,6 +99,19 @@ For a complete managed run, use <code>boundevo pipeline</code>. It generates a u
     ├── analysis/
     ├── report/
     └── manifest.json
+
+## Cross-run comparison
+
+Use `boundevo runs` to inspect completed, incomplete, and invalid experiment bundles. `boundevo compare` compares matched `(function, dimension, method)` benchmark cases and identifies the best run **per criterion** (error, runtime, evaluation count), plus the nondominated Pareto front. Case mismatches are rejected unless you explicitly pass `--allow-partial`.
+
+```bash
+boundevo compare --root results/runs \\
+  --run-id experiment-001 \\
+  --run-id experiment-002 \\
+  --output results/comparison.md
+```
+
+A Pareto-front run is not automatically the best overall. The comparison reports potential confounders, including differing evaluation budgets, hardware, revisions, and repeat counts. See [Run Registry documentation](docs/run_registry.md).
 
 ## Quick Python usage
 

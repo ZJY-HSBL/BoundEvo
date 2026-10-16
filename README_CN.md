@@ -11,7 +11,7 @@
 ![Release](https://img.shields.io/badge/release-v0.4.0-2F6FEB)
 ![License](https://img.shields.io/badge/license-MIT-3DA639)
 
-[English](README.md) · [算法说明](docs/algorithm.md) · [实验复现](docs/reproduction.md) · [研究工作流](docs/research_workflow.md) · [v0.4.0 说明](docs/releases/v0.4.0.md)
+[English](README.md) · [算法说明](docs/algorithm.md) · [实验复现](docs/reproduction.md) · [研究工作流](docs/research_workflow.md) · [实验索引与对比](docs/run_registry.md) · [v0.4.0 说明](docs/releases/v0.4.0.md)
 
 </div>
 
@@ -45,6 +45,7 @@ BoundEvo 解决多父体仿射重组中的一个核心问题：高效生成满�
 | 统计分析 | 平均排名、Win/Tie/Loss、Wilcoxon + Holm、Friedman |
 | 可复现性 | 自动记录完整配置、运行环境和源码版本的 JSON Manifest |
 | 输出 | CSV、Markdown、PNG、自包含 HTML 实验报告 |
+| 跨实验比较 | Run Registry、测试项对齐、三目标 Pareto 前沿 |
 | 验证 | Python 3.10/3.11/3.12 CI 与真实 CEC2017 smoke test |
 
 ## 安装
@@ -83,6 +84,8 @@ boundevo efficiency --config configs/efficiency.json
 boundevo analyze --config configs/analysis.json
 boundevo report --config configs/report.json
 boundevo pipeline --config configs/pipeline.json
+boundevo runs --root results/runs
+boundevo compare --root results/runs
 ~~~
 
 <code>configs/</code> 中的 JSON 文件用于固定实验参数，避免每次手工输入导致配置漂移。常用参数仍可以直接通过命令行覆盖。
@@ -96,6 +99,19 @@ boundevo pipeline --config configs/pipeline.json
     ├── analysis/
     ├── report/
     └── manifest.json
+
+## 历史实验检索与比较
+
+`boundevo runs` 可查看已完成、未完成及文件异常的实验目录；`boundevo compare` 只按相同的 `(测试函数、维度、算法)` 条目对齐计算，分别选出目标误差、运行时间、评价次数三个指标的领先实验，并给出非支配 Pareto 前沿。如果测试项不一致，默认拒绝比较，只有显式指定 `--allow-partial` 才按交集分析。
+
+```bash
+boundevo compare --root results/runs \\
+  --run-id experiment-001 \\
+  --run-id experiment-002 \\
+  --output results/comparison.md
+```
+
+**Pareto 非支配不等于综合最优**。不同硬件、计算预算、代码版本及重复次数均可能影响比较结果，具体规则见[实验索引与对比文档](docs/run_registry.md)。
 
 ## Python 快速使用
 
