@@ -137,6 +137,14 @@ print(result.objective)
 print(result.x)
 ~~~
 
+## Actual pilot results (October 2026)
+
+A real 60-trial CEC2017 pilot has been executed on F1, F3, F5, and F20 at D=10, 1500 evaluations per trial, with 5 matched initial seeds per method. The three compared coefficient generators are ABC, EDBF, and RE.
+
+[Experimental protocol, numerical results, and caveats](docs/experiments/cec2017-pilot-2026-10-17/validation_readme.md) · [Raw trial CSV](docs/experiments/cec2017-pilot-2026-10-17/validation_trials.csv) · [Summary CSV](docs/experiments/cec2017-pilot-2026-10-17/validation_summary.csv)
+
+**Benchmark integrity warning:** opfunu 1.0.1 produced outcomes below its reported F10 optimum and nonfinite output for F30 at a tested point. F10 and F30 are excluded from the validated pilot. The adapter supports official CEC2017 IDs through a renumbering map, but the full 29-function numerical implementation has NOT been validated. Do not cite the full matrix as reproduced. See [issue #3](https://github.com/ZJY-HSBL/BoundEvo/issues/3).
+
 ## Reproduction matrix
 
 The source-aligned main configuration is:
