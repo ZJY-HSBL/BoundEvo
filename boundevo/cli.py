@@ -21,10 +21,10 @@ from .experiments import (
     write_trials_csv,
 )
 from .pipeline import PipelineConfig, run_pipeline
+from .registry import scan_runs
 from .report import render_html_report, write_html_report
 from .reproducibility import capture_manifest, write_manifest
 from .runs import generate_run_id
-from .registry import scan_runs
 from .sweep import (
     PAPER_PARENT_COUNTS,
     PAPER_SWEEP_FUNCTION_IDS,
