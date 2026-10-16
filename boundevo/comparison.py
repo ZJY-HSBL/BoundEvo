@@ -114,9 +114,20 @@ def compare_runs(
             "different stopping opportunities."
         )
     platforms = {entry.platform for entry in chosen}
+    warnings.append(
+        "Runtime measurements are not hardware-normalized; identical platform "
+        "strings do not establish identical machines or system load."
+    )
     if len(platforms) > 1 or None in platforms:
         warnings.append(
-            "Runtime comparisons may be confounded by different or unknown platforms."
+            "Runtime comparisons may additionally be confounded by different "
+            "or unknown platforms."
+        )
+    seeds = {entry.base_seed for entry in chosen}
+    if len(seeds) > 1:
+        warnings.append(
+            "Base seeds differ: stochastic outcomes may reflect different "
+            "random initializations."
         )
     revisions = {entry.source_revision for entry in chosen}
     if len(revisions) > 1:
