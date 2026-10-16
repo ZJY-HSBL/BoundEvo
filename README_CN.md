@@ -137,6 +137,14 @@ print(result.objective)
 print(result.x)
 ~~~
 
+## 真实数值验证（2026 年 10 月）
+
+已在 GitHub Actions 上完成一轮 60 组真实试验：CEC2017 F1、F3、F5、F20，10 维，每组最多 1500 次函数评价；ABC、EDBF、RE 各重复 5 次，相同函数及重复编号使用相同初始种子。
+
+[完整实验记录与结论](docs/experiments/cec2017-pilot-2026-10-17/validation_readme.md) · [原始 CSV](docs/experiments/cec2017-pilot-2026-10-17/validation_trials.csv) · [汇总 CSV](docs/experiments/cec2017-pilot-2026-10-17/validation_summary.csv)
+
+**基准实现完整性警告：**实测 opfunu 1.0.1 的 F10 曾出现低于声明最优值的目标值，F30 在一个测试点出现非有限输出。本轮不采用这两个函数，当前也不能宣称已经完成全部 29 个函数的正式数值复现。相关问题见 [Issue #3](https://github.com/ZJY-HSBL/BoundEvo/issues/3)。
+
 ## 实验复现矩阵
 
 主实验按以下参数封装：
