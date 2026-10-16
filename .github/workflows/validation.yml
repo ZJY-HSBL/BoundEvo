@@ -1,0 +1,68 @@
+name: CEC2017 Pilot Validation
+
+on:
+  push:
+    paths:
+      - "scripts/validate_cec2017.py"
+      - ".github/workflows/validation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[cec2017,plot]"
+      - name: Pilot experiment (4 CEC functions, 3 methods, 5 matched seeds)
+        run: >-
+          python -u scripts/validate_cec2017.py
+          --functions 1 10 20 30
+          --methods abc edbf re
+          --dimension 10
+          --repeats 5
+          --evaluations 1500
+          --seed 20261017
+          --output-dir docs/experiments/cec2017-pilot-2026-10-17
+      - name: Verify all observations and consistency
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+          root = Path("docs/experiments/cec2017-pilot-2026-10-17")
+          with (root / "validation_trials.csv").open(newline="") as handle:
+              rows = list(csv.DictReader(handle))
+          assert len(rows) == 4 * 3 * 5, f"Expected 60 completed trials, got {len(rows)}"
+          assert all(int(row["evaluations"]) <= 1500 for row in rows)
+          assert all(float(row["attempts_per_offspring"]) >= 1 for row in rows)
+          assert len({row["function_id"] for row in rows}) == 4
+          for row in rows:
+              if row["method"] == "abc":
+                  assert abs(float(row["attempts_per_offspring"]) - 1.0) < 1e-9
+          environment = json.loads((root / "environment.json").read_text())
+          assert environment["trials_completed"] == 60
+          assert (root / "error_comparison.png").stat().st_size > 2000
+          PY
+      - name: Upload experiment archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: boundevo-cec2017-pilot-2026-10-17
+          path: docs/experiments/cec2017-pilot-2026-10-17/
+          retention-days: 90
+      - name: Commit curated real experiment data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/experiments/cec2017-pilot-2026-10-17/
+          git commit -m "data: publish CEC2017 paired-seed validation pilot"
+          git push origin HEAD:main
