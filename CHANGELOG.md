@@ -2,6 +2,10 @@
 
 All notable changes to BoundEvo are documented here.
 
+## [Unreleased]
+
+Development toward v0.6.0.
+
 ## [0.5.0] - 2026-10-16
 
 ### Added
