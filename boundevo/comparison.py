@@ -12,7 +12,7 @@ import statistics
 from dataclasses import dataclass
 from pathlib import Path
 
-from .registry import RunEntry, read_benchmark_metrics, scan_runs
+from .registry import read_benchmark_metrics, scan_runs
 
 
 @dataclass(frozen=True, slots=True)
