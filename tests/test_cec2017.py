@@ -13,7 +13,9 @@ def test_paper_function_set_contains_29_functions_without_f2() -> None:
 
 def test_function_class_name() -> None:
     assert _benchmark_class_name(1) == "F12017"
-    assert _benchmark_class_name(30) == "F302017"
+    assert _benchmark_class_name(3) == "F22017"
+    assert _benchmark_class_name(10) == "F92017"
+    assert _benchmark_class_name(30) == "F292017"
     with pytest.raises(ValueError):
         _benchmark_class_name(0)
 
@@ -24,6 +26,21 @@ def test_validate_function_ids() -> None:
         validate_function_ids([])
     with pytest.raises(ValueError):
         validate_function_ids([31])
+    with pytest.raises(ValueError):
+        validate_function_ids([2])
+
+
+def test_official_opfunu_mapping_and_bias() -> None:
+    pytest.importorskip("opfunu")
+    from boundevo.cec2017 import make_cec2017_case
+
+    for fid in (1, 3, 10, 20, 30):
+        case = make_cec2017_case(fid, 10)
+        assert case.function_id == fid
+        assert case.name.startswith(f"F{fid}:")
+        assert case.optimum == pytest.approx(100.0 * fid)
+        assert case.problem.dimension == 10
+        assert case.problem.evaluate(case.problem.lower * 0.0).objective >= 0
 
 
 def test_paper_config() -> None:
