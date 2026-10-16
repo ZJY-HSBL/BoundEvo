@@ -190,3 +190,47 @@ jobs:
           test -s /tmp/boundevo-runs/ci-pipeline/report/report.html
           grep -q "Convergence history" /tmp/boundevo-runs/ci-pipeline/report/report.html
           grep -q "Parent-count sensitivity" /tmp/boundevo-runs/ci-pipeline/report/report.html
+
+      - name: Create second comparison run
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          import shutil
+          from pathlib import Path
+
+          source = Path("/tmp/boundevo-runs/ci-pipeline")
+          target = Path("/tmp/boundevo-runs/ci-pipeline-b")
+          shutil.copytree(source, target)
+          manifest = target / "manifest.json"
+          data = json.loads(manifest.read_text(encoding="utf-8"))
+          data["run_id"] = "ci-pipeline-b"
+          manifest.write_text(json.dumps(data), encoding="utf-8")
+
+          summary = target / "benchmark" / "summary.csv"
+          with summary.open(newline="", encoding="utf-8") as handle:
+              reader = csv.DictReader(handle)
+              fieldnames = reader.fieldnames
+              rows = list(reader)
+          for row in rows:
+              row["mean_error"] = str(float(row["mean_error"]) + 1.0)
+              row["mean_elapsed_seconds"] = str(
+                  float(row["mean_elapsed_seconds"]) * 0.5
+              )
+          with summary.open("w", newline="", encoding="utf-8") as handle:
+              writer = csv.DictWriter(handle, fieldnames=fieldnames)
+              writer.writeheader()
+              writer.writerows(rows)
+          PY
+      - name: Test run discovery and comparison
+        run: |
+          boundevo runs --root /tmp/boundevo-runs --json > /tmp/run-index.json
+          boundevo compare \
+            --root /tmp/boundevo-runs \
+            --run-id ci-pipeline \
+            --run-id ci-pipeline-b \
+            --output /tmp/run-comparison.md
+          test -s /tmp/run-index.json
+          test -s /tmp/run-comparison.md
+          grep -q "Criterion-specific leaders" /tmp/run-comparison.md
+          grep -q "Nondominated runs" /tmp/run-comparison.md
