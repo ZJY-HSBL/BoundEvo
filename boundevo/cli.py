@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 
 from . import __version__
 from .analysis import load_summary_metric, render_analysis_report, write_analysis_report
 from .cec2017 import PAPER_FUNCTION_IDS
+from .comparison import compare_runs, render_comparison_markdown, write_comparison_report
 from .config import int_selection, load_json_config, string_selection
 from .efficiency import estimate_efficiency, write_efficiency_csv
 from .experiments import (
@@ -22,6 +24,7 @@ from .pipeline import PipelineConfig, run_pipeline
 from .report import render_html_report, write_html_report
 from .reproducibility import capture_manifest, write_manifest
 from .runs import generate_run_id
+from .registry import scan_runs
 from .sweep import (
     PAPER_PARENT_COUNTS,
     PAPER_SWEEP_FUNCTION_IDS,
@@ -409,6 +412,48 @@ def _pipeline(args: argparse.Namespace) -> None:
     print(f"report: {result.report}")
 
 
+
+def _runs(args: argparse.Namespace) -> None:
+    entries = scan_runs(args.root)
+    if args.only_complete:
+        entries = [entry for entry in entries if entry.status == "complete"]
+    if args.json:
+        payload = json.dumps(
+            [entry.to_dict() for entry in entries],
+            indent=2,
+            ensure_ascii=False,
+        )
+        print(payload)
+    else:
+        print("RUN ID | STATUS | D | METHODS | BUDGET | REPEATS")
+        for entry in entries:
+            methods = ",".join(entry.methods) if entry.methods else "-"
+            dimension = entry.dimension if entry.dimension is not None else "-"
+            budget = entry.evaluation_budget if entry.evaluation_budget is not None else "-"
+            repeats = entry.repeats if entry.repeats is not None else "-"
+            print(
+                f"{entry.run_id} | {entry.status} | {dimension} | "
+                f"{methods} | {budget} | {repeats}"
+            )
+            if args.verbose and entry.issues:
+                for issue in entry.issues:
+                    print(f"  issue: {issue}")
+        print(f"{len(entries)} run(s)")
+
+
+def _compare(args: argparse.Namespace) -> None:
+    comparison = compare_runs(
+        args.root,
+        run_ids=tuple(args.run_id) if args.run_id else None,
+        allow_partial=args.allow_partial,
+    )
+    report = render_comparison_markdown(comparison)
+    print(report)
+    if args.output is not None:
+        write_comparison_report(args.output, comparison)
+        print(f"wrote cross-run comparison to {args.output}")
+
+
 def _add_common_run_overrides(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--config", type=Path)
     parser.add_argument("--dimension", type=int)
@@ -498,6 +543,23 @@ def build_parser() -> argparse.ArgumentParser:
     pipeline.add_argument("--history-interval", type=int)
     pipeline.add_argument("--seed", type=int)
     pipeline.set_defaults(func=_pipeline)
+
+    runs = subparsers.add_parser("runs", help="list managed experiment runs")
+    runs.add_argument("--root", type=Path, default=Path("results/runs"))
+    runs.add_argument("--json", action="store_true")
+    runs.add_argument("--only-complete", action="store_true")
+    runs.add_argument("--verbose", action="store_true")
+    runs.set_defaults(func=_runs)
+
+    compare = subparsers.add_parser(
+        "compare",
+        help="compare completed runs using aligned cases and Pareto analysis",
+    )
+    compare.add_argument("--root", type=Path, default=Path("results/runs"))
+    compare.add_argument("--run-id", action="append", help="repeat to select specific runs")
+    compare.add_argument("--allow-partial", action="store_true")
+    compare.add_argument("--output", type=Path)
+    compare.set_defaults(func=_compare)
 
     return parser
 
