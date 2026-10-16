@@ -26,6 +26,7 @@ class RunEntry:
     function_ids: tuple[int, ...]
     evaluation_budget: int | None
     repeats: int | None
+    base_seed: int | None
     platform: str | None
     source_revision: str | None
     issues: tuple[str, ...]
@@ -119,6 +120,7 @@ def scan_runs(root: str | Path = "results/runs") -> list[RunEntry]:
                 function_ids=_integer_tuple(config.get("function_ids")),
                 evaluation_budget=_integer(config.get("max_evaluations")),
                 repeats=_integer(config.get("repeats")),
+                base_seed=_integer(config.get("base_seed")),
                 platform=payload.get("platform"),
                 source_revision=payload.get("source_revision"),
                 issues=tuple(issues),
