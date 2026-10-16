@@ -81,9 +81,9 @@ def scan_runs(root: str | Path = "results/runs") -> list[RunEntry]:
                 with manifest_path.open(encoding="utf-8") as handle:
                     raw = json.load(handle)
                 if not isinstance(raw, dict):
-                    raise ValueError("root manifest must be an object")
+                    raise TypeError("root manifest must be an object")
                 payload = raw
-            except (ValueError, OSError) as exc:
+            except (TypeError, ValueError, OSError) as exc:
                 issues.append(f"invalid root manifest: {exc}")
 
         if payload and payload.get("run_id") != directory.name:
@@ -97,8 +97,7 @@ def scan_runs(root: str | Path = "results/runs") -> list[RunEntry]:
             issues.append("report/report.html is missing")
 
         invalid = any(
-            issue.startswith("invalid root manifest")
-            or issue.startswith("manifest run_id does not match")
+            issue.startswith(("invalid root manifest", "manifest run_id does not match"))
             for issue in issues
         )
         status = "invalid" if invalid else ("complete" if not issues else "incomplete")
