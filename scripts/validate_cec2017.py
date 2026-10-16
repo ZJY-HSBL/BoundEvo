@@ -203,7 +203,7 @@ def make_plot(summary: list[dict], destination: Path, methods: list[str]) -> Non
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--functions", nargs="+", type=int, default=[1, 10, 20, 30])
+    parser.add_argument("--functions", nargs="+", type=int, default=[1, 5, 10, 20])
     parser.add_argument("--methods", nargs="+", choices=["abc", "edbf", "re"], default=["abc", "edbf", "re"])
     parser.add_argument("--dimension", type=int, default=10)
     parser.add_argument("--repeats", type=int, default=5)
