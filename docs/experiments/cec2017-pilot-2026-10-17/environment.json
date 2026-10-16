@@ -1,0 +1,30 @@
+{
+  "functions": [
+    1,
+    5,
+    10,
+    20
+  ],
+  "methods": [
+    "abc",
+    "edbf",
+    "re"
+  ],
+  "dimension": 10,
+  "repeats": 5,
+  "evaluations": 1500,
+  "seed": 20261017,
+  "output_dir": "docs/experiments/cec2017-pilot-2026-10-17",
+  "utc_started": "2026-10-16T16:30:51.261595+00:00",
+  "utc_finished": "2026-10-16T16:32:54.883525+00:00",
+  "total_runtime_seconds": 123.621923811,
+  "git_sha": "803cd16daeec629484650d9c00bdee62dd82c18c",
+  "python": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]",
+  "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "numpy_version": "2.5.4",
+  "opfunu_version": "1.0.1",
+  "scipy_version": null,
+  "matplotlib_version": "3.11.2",
+  "trials_completed": 60,
+  "experiment_kind": "pilot, limited budget, not full replication"
+}
