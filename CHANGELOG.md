@@ -6,6 +6,14 @@ All notable changes to BoundEvo are documented here.
 
 Development toward v0.6.0.
 
+### Experimental validation
+
+- Completed 60 actual paired-seed CEC2017 pilot trials on F1, F3, F5, F20 (D=10, 1500 FEs, 5 repeats for each of ABC/EDBF/RE).
+- Published immutable raw and summary CSVs, chart, and runner environment snapshot under docs/experiments/.
+- Fixed official CEC2017 ID mapping to opfunu's renumbered classes.
+- Added a fail-fast check against objective values below the reported optimum.
+- Identified numerical integrity problems with opfunu F10 and F30; full 29-function benchmark validation remains open (issue #3).
+
 ## [0.5.0] - 2026-10-16
 
 ### Added
