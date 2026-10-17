@@ -15,6 +15,37 @@
 
 </div>
 
+<!-- BENCHMARK_RESULTS_START -->
+## 真实 CEC2017 实验结果（30 维）
+
+**以下均为真实运行数据，而非模拟结果。** D=30，每次 3,000 次函数评价，每种方法 10 个配对初始种子，共 120 次独立优化试验。同一函数及重复编号下，ABC、EDBF、RE 具有相同的初始化种群。
+
+![CEC2017 30D normalized objective error](docs/figures/cec2017-30d-relative-error.svg)
+
+![CEC2017 30D runtime comparison](docs/figures/cec2017-30d-runtime.svg)
+
+**最终平均目标误差（越低越好）**
+
+| 测试函数 | ABC | EDBF | RE |
+|:---|---:|---:|---:|
+| F1 | **1.747e+11** | 7.536e+11 | 4.038e+11 |
+| F3 | **84,611.2** | 294,908.6 | 241,204.0 |
+| F10 | 8,157.7 | **8,047.6** | 8,174.2 |
+| F30 | **4.884e+06** | 1.262e+09 | 3.776e+08 |
+
+实验来源：[120 次原始记录](docs/experiments/cec2017-reference-30d-2026-10-17/trials.csv) · [均值/标准差](docs/experiments/cec2017-reference-30d-2026-10-17/summary.csv) · [配对检验](docs/experiments/cec2017-reference-30d-2026-10-17/paired_sign_tests.csv) · [环境记录](docs/experiments/cec2017-reference-30d-2026-10-17/environment.json) · [中文分析报告](docs/experiments/cec2017-reference-30d-2026-10-17/statistical_analysis_CN.md)
+
+**解释边界：**ABC 在 F1、F3、F30 的平均误差最低，**F10 则由 EDBF 略优**。这只能说明当前所测函数与预算下的表现，不能推导出对全部函数的普遍优势。独立 Python 后端并非原始官方 C 程序；58/58 项仅为有限采样点的数值预检，且每次 3,000 次评价不等于论文级完整复现。
+
+<details><summary>更早的 10 维探索性实验（使用另一后端，数据不得混合统计）</summary>
+
+![Earlier 10D pilot](docs/experiments/cec2017-pilot-2026-10-17/error_comparison.png)
+
+[10 维原始数据](docs/experiments/cec2017-pilot-2026-10-17/validation_trials.csv) · [试验说明](docs/experiments/cec2017-pilot-2026-10-17/validation_readme.md)
+
+</details>
+<!-- BENCHMARK_RESULTS_END -->
+
 ## 项目定位
 
 BoundEvo 解决多父体仿射重组中的一个核心问题：高效生成满足下列条件的系数向量。

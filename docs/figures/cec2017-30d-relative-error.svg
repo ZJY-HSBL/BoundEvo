@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 610" width="1100" height="610" role="img" aria-label="CEC2017 | Objective error relative to RE">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="24" y="24" width="1052" height="562" rx="18" fill="#ffffff" stroke="#dde4ee"/>
+<text x="72" y="78" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#0f172a">CEC2017 | Objective error relative to RE</text>
+<text x="72" y="108" font-family="Arial, sans-serif" font-size="15" fill="#64748b">D=30  |  10 runs/method  |  3,000 evaluations/run  |  lower is better</text>
+<circle cx="685" cy="153" r="7" fill="#2563eb"/>
+<text x="700" y="158" font-family="Arial, sans-serif" font-size="16" fill="#334155">ABC</text>
+<circle cx="807" cy="153" r="7" fill="#ea580c"/>
+<text x="822" y="158" font-family="Arial, sans-serif" font-size="16" fill="#334155">EDBF</text>
+<circle cx="929" cy="153" r="7" fill="#64748b"/>
+<text x="944" y="158" font-family="Arial, sans-serif" font-size="16" fill="#334155">RE</text>
+<line x1="142" y1="478.82" x2="1006" y2="478.82" stroke="#e2e8f0" stroke-width="1" />
+<text x="120" y="483.82" text-anchor="end" font-family="Arial,sans-serif" font-size="14" fill="#475569">0.01x</text>
+<line x1="142" y1="387.91" x2="1006" y2="387.91" stroke="#e2e8f0" stroke-width="1" />
+<text x="120" y="392.91" text-anchor="end" font-family="Arial,sans-serif" font-size="14" fill="#475569">0.1x</text>
+<line x1="142" y1="297.00" x2="1006" y2="297.00" stroke="#94a3b8" stroke-width="2"  stroke-dasharray="6 5"/>
+<text x="120" y="302.00" text-anchor="end" font-family="Arial,sans-serif" font-size="14" fill="#475569">1x</text>
+<line x1="142" y1="206.09" x2="1006" y2="206.09" stroke="#e2e8f0" stroke-width="1" />
+<text x="120" y="211.09" text-anchor="end" font-family="Arial,sans-serif" font-size="14" fill="#475569">10x</text>
+<line x1="142" y1="197" x2="142" y2="497" stroke="#94a3b8"/>
+<text x="250.00" y="533" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" font-weight="600" fill="#334155">F1</text>
+<line x1="215.00" y1="330.08" x2="215.00" y2="297.00" stroke="#2563eb" stroke-width="1.5" opacity="0.26"/>
+<circle cx="215.00" cy="330.08" r="10" fill="#2563eb" stroke="white" stroke-width="2"/>
+<title>F1, ABC, ratio=0.43267</title>
+<line x1="250.00" y1="272.36" x2="250.00" y2="297.00" stroke="#ea580c" stroke-width="1.5" opacity="0.26"/>
+<circle cx="250.00" cy="272.36" r="10" fill="#ea580c" stroke="white" stroke-width="2"/>
+<title>F1, EDBF, ratio=1.8665</title>
+<line x1="285.00" y1="297.00" x2="285.00" y2="297.00" stroke="#64748b" stroke-width="1.5" opacity="0.26"/>
+<circle cx="285.00" cy="297.00" r="10" fill="#64748b" stroke="white" stroke-width="2"/>
+<title>F1, RE, ratio=1</title>
+<text x="466.00" y="533" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" font-weight="600" fill="#334155">F3</text>
+<line x1="431.00" y1="338.36" x2="431.00" y2="297.00" stroke="#2563eb" stroke-width="1.5" opacity="0.26"/>
+<circle cx="431.00" cy="338.36" r="10" fill="#2563eb" stroke="white" stroke-width="2"/>
+<title>F3, ABC, ratio=0.35079</title>
+<line x1="466.00" y1="289.06" x2="466.00" y2="297.00" stroke="#ea580c" stroke-width="1.5" opacity="0.26"/>
+<circle cx="466.00" cy="289.06" r="10" fill="#ea580c" stroke="white" stroke-width="2"/>
+<title>F3, EDBF, ratio=1.2227</title>
+<line x1="501.00" y1="297.00" x2="501.00" y2="297.00" stroke="#64748b" stroke-width="1.5" opacity="0.26"/>
+<circle cx="501.00" cy="297.00" r="10" fill="#64748b" stroke="white" stroke-width="2"/>
+<title>F3, RE, ratio=1</title>
+<text x="682.00" y="533" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" font-weight="600" fill="#334155">F10</text>
+<line x1="647.00" y1="297.08" x2="647.00" y2="297.00" stroke="#2563eb" stroke-width="1.5" opacity="0.26"/>
+<circle cx="647.00" cy="297.08" r="10" fill="#2563eb" stroke="white" stroke-width="2"/>
+<title>F10, ABC, ratio=0.99798</title>
+<line x1="682.00" y1="297.62" x2="682.00" y2="297.00" stroke="#ea580c" stroke-width="1.5" opacity="0.26"/>
+<circle cx="682.00" cy="297.62" r="10" fill="#ea580c" stroke="white" stroke-width="2"/>
+<title>F10, EDBF, ratio=0.98451</title>
+<line x1="717.00" y1="297.00" x2="717.00" y2="297.00" stroke="#64748b" stroke-width="1.5" opacity="0.26"/>
+<circle cx="717.00" cy="297.00" r="10" fill="#64748b" stroke="white" stroke-width="2"/>
+<title>F10, RE, ratio=1</title>
+<text x="898.00" y="533" text-anchor="middle" font-family="Arial,sans-serif" font-size="19" font-weight="600" fill="#334155">F30</text>
+<line x1="863.00" y1="468.65" x2="863.00" y2="297.00" stroke="#2563eb" stroke-width="1.5" opacity="0.26"/>
+<circle cx="863.00" cy="468.65" r="10" fill="#2563eb" stroke="white" stroke-width="2"/>
+<title>F30, ABC, ratio=0.012937</title>
+<line x1="898.00" y1="249.37" x2="898.00" y2="297.00" stroke="#ea580c" stroke-width="1.5" opacity="0.26"/>
+<circle cx="898.00" cy="249.37" r="10" fill="#ea580c" stroke="white" stroke-width="2"/>
+<title>F30, EDBF, ratio=3.3414</title>
+<line x1="933.00" y1="297.00" x2="933.00" y2="297.00" stroke="#64748b" stroke-width="1.5" opacity="0.26"/>
+<circle cx="933.00" cy="297.00" r="10" fill="#64748b" stroke="white" stroke-width="2"/>
+<title>F30, RE, ratio=1</title>
+<text x="142" y="559" font-family="Arial,sans-serif" font-size="14" fill="#64748b">Ratio = method mean error / RE mean error; 1x = RE reference; log scale</text>
+</svg>

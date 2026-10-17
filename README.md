@@ -15,6 +15,37 @@ A compact, reproducible Python implementation of real-coded multi-parent evoluti
 
 </div>
 
+<!-- BENCHMARK_RESULTS_START -->
+## Measured CEC2017 results — 30D
+
+**Real runs, not simulated:** D=30, 3,000 function evaluations per run, 10 paired initial seeds per method, 120 independent optimization trials. ABC, EDBF, and RE share the same initial population for each function/repetition pair.
+
+![CEC2017 30D normalized objective error](docs/figures/cec2017-30d-relative-error.svg)
+
+![CEC2017 30D runtime comparison](docs/figures/cec2017-30d-runtime.svg)
+
+**Mean final objective error (lower is better)**
+
+| Function | ABC | EDBF | RE |
+|:---|---:|---:|---:|
+| F1 | **1.747e+11** | 7.536e+11 | 4.038e+11 |
+| F3 | **84,611.2** | 294,908.6 | 241,204.0 |
+| F10 | 8,157.7 | **8,047.6** | 8,174.2 |
+| F30 | **4.884e+06** | 1.262e+09 | 3.776e+08 |
+
+Source: [raw trials](docs/experiments/cec2017-reference-30d-2026-10-17/trials.csv) · [mean and SD](docs/experiments/cec2017-reference-30d-2026-10-17/summary.csv) · [paired tests](docs/experiments/cec2017-reference-30d-2026-10-17/paired_sign_tests.csv) · [environment](docs/experiments/cec2017-reference-30d-2026-10-17/environment.json) · [full analysis](docs/experiments/cec2017-reference-30d-2026-10-17/statistical_analysis_CN.md)
+
+**Interpretation:** ABC has the lowest mean error on F1, F3, and F30; **EDBF is slightly better on F10**. These exploratory results do not establish universal superiority. The C-derived Python benchmark is an independent reference, not the original official C binary. The 58/58 finite/optimum preflight checks were sampled-point checks, not exhaustive validation. The 3,000-evaluation budget is much smaller than a full paper-level experiment.
+
+<details><summary>Earlier 10D exploratory pilot (different backend; do not pool results)</summary>
+
+![Earlier 10D pilot](docs/experiments/cec2017-pilot-2026-10-17/error_comparison.png)
+
+[Pilot raw CSV](docs/experiments/cec2017-pilot-2026-10-17/validation_trials.csv) · [pilot report](docs/experiments/cec2017-pilot-2026-10-17/validation_readme.md)
+
+</details>
+<!-- BENCHMARK_RESULTS_END -->
+
 ## Overview
 
 BoundEvo focuses on a bottleneck in multi-parent affine recombination: efficiently generating coefficient vectors satisfying
