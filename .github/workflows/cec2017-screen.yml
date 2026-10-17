@@ -1,0 +1,83 @@
+name: CEC2017 Complete Function Screening
+
+on:
+  push:
+    paths:
+      - ".github/workflows/cec2017-screen.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  screening:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install BoundEvo with pinned independent benchmark
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+          python -m pip install "git+https://github.com/tilleyd/cec2017-py.git@424a9fa2757914c3e4cfdd8f59a268b1aeb3197f"
+      - name: Screen all 29 official CEC2017 functions
+        run: |
+          python -u scripts/validate_reference_cec2017.py \
+            --functions 1 $(seq 3 30) \
+            --dimension 30 \
+            --dimensions-preflight 10 30 \
+            --repeats 3 \
+            --evaluations 1200 \
+            --seed 20261017 \
+            --output-dir docs/experiments/cec2017-screen-30d-2026-10-17
+      - name: Verify every function, seed, and method was actually evaluated
+        run: |
+          python - <<'PY'
+          import csv
+          import math
+          from collections import defaultdict
+          from pathlib import Path
+
+          root = Path("docs/experiments/cec2017-screen-30d-2026-10-17")
+          with (root / "trials.csv").open(newline="", encoding="utf-8") as handle:
+              trials = list(csv.DictReader(handle))
+          assert len(trials) == 29 * 3 * 3, len(trials)
+          assert {int(r["function_id"]) for r in trials} == ({1} | set(range(3,31)))
+          groups = defaultdict(list)
+          for row in trials:
+              assert int(row["dimension"]) == 30
+              assert int(row["evaluations"]) == 1200
+              assert math.isfinite(float(row["error"]))
+              assert float(row["error"]) >= -1e-7
+              groups[(row["function_id"], row["repeat"])].append(row)
+          assert len(groups) == 29 * 3
+          for key, items in groups.items():
+              assert len(items) == 3, key
+              assert {i["method"] for i in items} == {"abc", "edbf", "re"}, key
+              assert len({i["seed"] for i in items}) == 1, key
+          with (root / "backend_preflight.csv").open(newline="") as handle:
+              checks = list(csv.DictReader(handle))
+          assert len(checks) == 58
+          assert all(row["status"] == "pass" for row in checks)
+          print("Verified 261 actual trials, 87 paired method groups, 58 preflight cases")
+          PY
+      - name: Upload raw screening archive
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: boundevo-cec2017-complete-screening-30d
+          path: docs/experiments/cec2017-screen-30d-2026-10-17/
+          if-no-files-found: warn
+          retention-days: 90
+      - name: Publish verified exploratory data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/experiments/cec2017-screen-30d-2026-10-17/
+          git commit -m "data: publish 29-function CEC2017 30D screening results"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
