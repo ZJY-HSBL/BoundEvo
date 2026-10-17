@@ -502,11 +502,13 @@ def screening_markdown(folder: Path, environment: dict, data: list[dict], lang: 
             (
                 f"[Full screening CSV]({root}/trials.csv) · "
                 f"[per-function means]({root}/summary.csv) · "
-                f"[environment]({root}/environment.json)"
+                f"[environment]({root}/environment.json) · "
+                f"[Chinese analysis]({root}/statistical_analysis_CN.md)"
                 if en else
                 f"[261 条原始记录]({root}/trials.csv) · "
                 f"[逐函数均值]({root}/summary.csv) · "
-                f"[实验环境]({root}/environment.json)"
+                f"[实验环境]({root}/environment.json) · "
+                f"[中文结果分析]({root}/statistical_analysis_CN.md)"
             ),
             "",
             (
