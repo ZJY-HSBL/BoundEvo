@@ -68,6 +68,7 @@ jobs:
           merge-multiple: true
           path: /tmp/seed-holdout/
       - name: Validate seeds, calculate bootstrap CI and exact sign tests
+        # The merger and README visualization are versioned with this workflow.
         run: |
           python scripts/aggregate_seed_holdout.py \
             --input-dir /tmp/seed-holdout \
