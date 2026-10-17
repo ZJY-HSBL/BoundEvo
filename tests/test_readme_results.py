@@ -98,3 +98,19 @@ def test_longbudget_section_preserves_separate_budgets() -> None:
     assert "Holm 校正 p" in cn
     assert "0.015625" in cn
     assert "not" not in cn
+
+
+def test_budget_sensitivity_chart_is_valid_svg_with_matched_3k_10k() -> None:
+    environment = {"functions": [10, 20, 22, 30], "dimension": 30, "repeats": 10, "evaluations": 10000}
+    earlier = {"functions": [1, 3, 10, 30], "dimension": 30, "repeats": 10, "evaluations": 3000}
+    after = []
+    before = []
+    for fid in environment["functions"]:
+        for method, value in (("abc", 1.0), ("edbf", 2.0), ("re", 3.0)):
+            after.append({"function_id": fid, "method": method, "mean_error": value})
+            if fid in (10, 30):
+                before.append({"function_id": fid, "method": method, "mean_error": value * 2})
+    figure = _SCRIPT.budget_progress_svg(before, after, earlier, environment)
+    assert ElementTree.fromstring(figure).tag.endswith("svg")
+    assert "F10" in figure and "F30" in figure
+    assert "3,000" in figure and "10k" in figure
