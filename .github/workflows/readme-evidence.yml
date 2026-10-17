@@ -83,6 +83,7 @@ jobs:
               for filename in (
                   "cec2017-30d-fullsuite-10k-winners.svg",
                   "cec2017-30d-fullsuite-10k-convergence.svg",
+                  "cec2017-30d-leader-transitions.svg",
               ):
                   fig = root / filename
                   assert fig.stat().st_size > 2000
@@ -95,6 +96,7 @@ jobs:
                   text = Path(name).read_text(encoding="utf-8")
                   assert "cec2017-30d-fullsuite-10k-convergence.svg" in text
                   assert "cec2017-30d-fullsuite-10k-winners.svg" in text
+                  assert "cec2017-30d-leader-transitions.svg" in text
                   assert "cec2017-fullsuite-30d-10k-2026-10-17/trials.csv" in text
               print("Verified real full-suite 10k-FE leaderboard and convergence data")
           PY
