@@ -4,6 +4,8 @@ Reject missing trials, duplicates, unpaired initial seeds, invalid checkpoints,
 backend mismatches, and nonfinite errors. Report only fully verified cohorts.
 """
 
+# ruff: noqa: ISC004
+
 from __future__ import annotations
 
 import argparse
@@ -15,8 +17,8 @@ import platform
 import statistics
 import sys
 from collections import defaultdict
+from itertools import pairwise
 from datetime import datetime, timezone
-from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 
 import numpy as np
@@ -136,7 +138,7 @@ def aggregate(source: Path, shard_count: int, repeats: int, evaluations: int):
             raise ValueError(f"missing/invalid initial or final convergence snapshots: {key}")
         objectives = [float(row["best_objective"]) for row in rows]
         tolerance = 1e-7
-        if any(later > earlier + tolerance for earlier, later in zip(objectives, objectives[1:])):
+        if any(later > earlier + tolerance for earlier, later in pairwise(objectives)):
             raise ValueError(f"best objective worsened in convergence history: {key}")
         if not math.isclose(objectives[-1], float(lookup[key]["objective"]), rel_tol=1e-10):
             raise ValueError(f"history final value mismatches trial summary: {key}")
