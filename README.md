@@ -137,6 +137,22 @@ print(result.objective)
 print(result.x)
 ~~~
 
+## Independent CEC2017 reference backend (development)
+
+A second, explicitly selected benchmark backend now uses the NumPy implementation
+adapted from the original CEC2017 C code, pinned to upstream commit
+`424a9fa2757914c3e4cfdd8f59a268b1aeb3197f`.
+
+~~~bash
+pip install "git+https://github.com/tilleyd/cec2017-py.git@424a9fa2757914c3e4cfdd8f59a268b1aeb3197f"
+boundevo benchmark --backend reference --dimension 30 --repeats 10
+~~~
+
+The new reference-validation workflow checks the 29 official CEC2017 function
+identifiers at D=10 and D=30, then runs a separate 120-trial D=30 comparison
+on F1, F3, F10 and F30. Previous opfunu pilot results are **not** pooled with
+results from this backend. See [reference backend methodology](docs/reference_backend.md).
+
 ## Actual pilot results (October 2026)
 
 A real 60-trial CEC2017 pilot has been executed on F1, F3, F5, and F20 at D=10, 1500 evaluations per trial, with 5 matched initial seeds per method. The three compared coefficient generators are ABC, EDBF, and RE.
