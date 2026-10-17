@@ -116,12 +116,17 @@ def evidence_ratio_svg(summary: list[dict], environment: dict) -> str:
     )
     parts += legend()
     left, top, width, height = 142, 197, 864, 300
-    ylo, yhi = -2.2, 1.1
+    # Scale to measured data rather than silently clipping strong gains.
+    min_log = min(math.log10(value) for value in ratios.values())
+    max_log = max(math.log10(value) for value in ratios.values())
+    ylo = min(-2.2, math.floor(min_log) - 0.3)
+    yhi = max(1.1, math.ceil(max_log) + 0.3)
 
     def y(value: float) -> float:
         return top + (yhi - math.log10(value)) / (yhi - ylo) * height
 
-    for tick in (0.01, 0.1, 1.0, 10.0):
+    for exponent in range(math.ceil(ylo), math.floor(yhi) + 1):
+        tick = 10.0 ** exponent
         pos = y(tick)
         line_color = "#94a3b8" if tick == 1 else "#e2e8f0"
         thickness = 2 if tick == 1 else 1
