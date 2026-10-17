@@ -5,6 +5,8 @@ disjoint from all previously published seed ranges 0..9 at base 20261017.
 No fallback results: incomplete function cohorts fail the merger.
 """
 
+# ruff: noqa: ISC004
+
 from __future__ import annotations
 
 import argparse
@@ -14,7 +16,6 @@ import math
 import platform
 import statistics
 import sys
-from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
