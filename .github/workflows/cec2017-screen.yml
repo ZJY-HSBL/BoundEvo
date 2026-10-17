@@ -1,9 +1,6 @@
 name: CEC2017 Complete Function Screening
 
 on:
-  push:
-    paths:
-      - ".github/workflows/cec2017-screen.yml"
   workflow_dispatch:
 
 permissions:
@@ -64,6 +61,10 @@ jobs:
           assert all(row["status"] == "pass" for row in checks)
           print("Verified 261 actual trials, 87 paired method groups, 58 preflight cases")
           PY
+      - name: Refresh README figures from validated CSV data
+        run: |
+          python scripts/update_readme_results.py
+          python scripts/update_readme_results.py --check
       - name: Upload raw screening archive
         if: always()
         uses: actions/upload-artifact@v4
@@ -76,7 +77,11 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/experiments/cec2017-screen-30d-2026-10-17/
+          git add docs/experiments/cec2017-screen-30d-2026-10-17/ README.md README_CN.md docs/figures/
+          if git diff --cached --quiet; then
+            echo "No new data or README changes"
+            exit 0
+          fi
           git commit -m "data: publish 29-function CEC2017 30D screening results"
           git fetch origin main
           git rebase origin/main
