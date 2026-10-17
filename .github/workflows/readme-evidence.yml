@@ -99,6 +99,22 @@ jobs:
                   assert "cec2017-30d-leader-transitions.svg" in text
                   assert "cec2017-fullsuite-30d-10k-2026-10-17/trials.csv" in text
               print("Verified real full-suite 10k-FE leaderboard and convergence data")
+          holdout = Path(config.get("holdout_experiment", "results/missing"))
+          if (holdout / "summary.csv").exists():
+              meta = json.loads((holdout / "environment.json").read_text())
+              assert meta["trials"] == 120
+              assert meta["seed_base"] == 20261037
+              assert meta["repeats"] == 20
+              assert meta["functions"] == [16, 22]
+              fig = root / "cec2017-f16-f22-holdout-mean-errors.svg"
+              assert fig.stat().st_size > 1000
+              assert ElementTree.parse(fig).getroot().tag.endswith("svg")
+              for name in ("README.md", "README_CN.md"):
+                  body = Path(name).read_text(encoding="utf-8")
+                  assert "cec2017-f16-f22-holdout-mean-errors.svg" in body
+                  assert "cec2017-holdout-30d-10k-2026-10-17/trials.csv" in body
+                  assert "Holm" in body
+              print("Verified F16/F22 new-seed measurements, CI chart and both READMEs")
           PY
       - name: Commit generated artifacts to main
         run: |
