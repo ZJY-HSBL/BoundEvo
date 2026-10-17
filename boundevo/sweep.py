@@ -225,13 +225,12 @@ def run_parent_count_sweep(
     for fid in ids:
         case = make_cec2017_case(fid, dimension, backend=backend)
         for parent_count in counts:
-            for method_index, method in enumerate(methods):
+            for method in methods:
                 for repeat in range(repeats):
                     seed = (
                         base_seed
                         + fid * 100_000
                         + parent_count * 1_000
-                        + method_index * 100
                         + repeat
                     )
                     records.append(
