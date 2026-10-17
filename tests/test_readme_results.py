@@ -95,4 +95,6 @@ def test_longbudget_section_preserves_separate_budgets() -> None:
     assert "F20" in cn and "F22" in cn
     assert "F10" in cn and "F30" in cn
     assert "vs EDBF 40/40" in cn
+    assert "Holm 校正 p" in cn
+    assert "0.015625" in cn
     assert "not" not in cn
