@@ -1116,8 +1116,8 @@ def fullsuite_convergence_svg(history: list[dict], env: dict) -> str:
         minimum = min(value for m in METHODS for _, value in curves[(fid, m)])
         low = min(-1, max(-10, math.floor(math.log10(minimum))))
 
-        def ordinate(value: float) -> float:
-            return top + (-math.log10(max(value, 1e-12))) / -low * h
+        def ordinate(value: float, lo: int = low, upper: int = top, height: int = h) -> float:
+            return upper + (-math.log10(max(value, 1e-12))) / -lo * height
 
         parts.extend(
             [
@@ -1166,7 +1166,7 @@ def fullsuite_convergence_svg(history: list[dict], env: dict) -> str:
 def fullsuite_markdown(
     folder: Path, env: dict, summary: list[dict], tests: list[dict], lang: str,
 ) -> str:
-    winners, counts = screen_winners(env, summary)
+    _winners, counts = screen_winners(env, summary)
     relative = folder.relative_to(ROOT).as_posix()
     en = lang == "en"
     title = (
