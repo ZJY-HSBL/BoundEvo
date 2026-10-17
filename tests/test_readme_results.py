@@ -114,3 +114,33 @@ def test_budget_sensitivity_chart_is_valid_svg_with_matched_3k_10k() -> None:
     assert ElementTree.fromstring(figure).tag.endswith("svg")
     assert "F10" in figure and "F30" in figure
     assert "3,000" in figure and "10k" in figure
+
+
+def test_committed_long_budget_evidence_when_available() -> None:
+    """Future CI enforces real 120-trial integrity once the workflow publishes it."""
+
+    loaded = _SCRIPT.load_long_budget()
+    if loaded is None:
+        return
+    folder, environment, summary, trials = loaded
+    assert folder.name == "cec2017-longbudget-30d-2026-10-17"
+    assert environment["evaluations"] == 10000
+    assert environment["repeats"] == 10
+    assert len(summary) == 12
+    assert len(trials) == 120
+
+    figure = _SCRIPT.evidence_ratio_svg(summary, environment)
+    assert ElementTree.fromstring(figure).tag.endswith("svg")
+
+    _prior_folder, prior_env, prior_summary, _ = parse_data()
+    progression = _SCRIPT.budget_progress_svg(
+        prior_summary, summary, prior_env, environment
+    )
+    assert ElementTree.fromstring(progression).tag.endswith("svg")
+    cn = _SCRIPT.longbudget_markdown(
+        folder, environment, summary, trials, "cn", prior_env, prior_summary
+    )
+    assert "Holm" in cn
+    assert "3,000" in cn
+    assert "10,000" in cn
+    assert "F20" in cn and "F22" in cn
