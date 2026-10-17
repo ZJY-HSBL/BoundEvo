@@ -2,6 +2,16 @@
 
 All notable changes to BoundEvo are documented here.
 
+## [Unreleased] - v0.7.0 development
+
+### Research evidence and documentation
+
+- Generate bilingual README result tables and publication-style SVG charts directly from committed experimental CSV files.
+- Record feature datasets in `configs/readme_results.json`, with GitHub Actions regeneration.
+- Add a standalone all-29-function 30D screening workflow with matched initial random seeds and per-function numerical checks.
+- Automatically feature the 29-function screening chart in both READMEs when verified data are published.
+- Add tests and a documented workflow for reproducible README figures.
+
 ## [0.6.0] - 2026-10-17
 
 ### Added
