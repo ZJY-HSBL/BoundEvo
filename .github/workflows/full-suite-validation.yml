@@ -1,0 +1,125 @@
+name: CEC2017 Full Suite 10k-FE 30D
+
+on:
+  push:
+    paths:
+      - ".github/workflows/full-suite-validation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  shard:
+    name: Run independent shard ${{ matrix.shard }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install fixed benchmark implementation
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+          python -m pip install "git+https://github.com/tilleyd/cec2017-py.git@424a9fa2757914c3e4cfdd8f59a268b1aeb3197f"
+      - name: Run assigned functions and save trial-level checkpoints
+        run: |
+          python -u scripts/run_full_suite_shard.py \
+            --shard-index ${{ matrix.shard }} \
+            --shard-count 4 \
+            --dimension 30 \
+            --repeats 3 \
+            --evaluations 10000 \
+            --seed 20261017 \
+            --history-interval 500 \
+            --output-dir /tmp/cec2017-parts/shard-${{ matrix.shard }}
+      - name: Upload shard data, including completed trials if interrupted
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cec2017-10k-shard-${{ matrix.shard }}
+          path: /tmp/cec2017-parts/
+          retention-days: 90
+          if-no-files-found: warn
+
+  aggregate:
+    name: Validate and publish all 261 trials
+    needs: [shard]
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install statistical analysis dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[analysis]"
+      - name: Download all four real-data shards
+        uses: actions/download-artifact@v4
+        with:
+          pattern: cec2017-10k-shard-*
+          merge-multiple: true
+          path: /tmp/cec2017-parts
+      - name: Validate data completeness and compute cross-function statistics
+        run: |
+          python scripts/merge_full_suite.py \
+            --input-dir /tmp/cec2017-parts \
+            --output-dir docs/experiments/cec2017-fullsuite-30d-10k-2026-10-17 \
+            --shards 4 \
+            --repeats 3 \
+            --evaluations 10000
+      - name: Generate four-function convergence and full-suite leaderboard figures
+        run: |
+          python scripts/update_readme_results.py
+          python scripts/update_readme_results.py --check
+      - name: Independently verify README links and genuine SVG content
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+          from xml.etree import ElementTree
+          root = Path("docs/experiments/cec2017-fullsuite-30d-10k-2026-10-17")
+          with (root/"trials.csv").open(newline="") as handle:
+              trials = list(csv.DictReader(handle))
+          with (root/"history.csv").open(newline="") as handle:
+              states = list(csv.DictReader(handle))
+          env = json.loads((root/"environment.json").read_text())
+          assert len(trials) == 261
+          assert len(states) == env["convergence_rows"]
+          assert len(states) >= 261 * 2
+          assert all(int(row["evaluations"]) == 10000 for row in trials)
+          for name in ("cec2017-30d-fullsuite-10k-winners.svg",
+                       "cec2017-30d-fullsuite-10k-convergence.svg"):
+              path = Path("docs/figures") / name
+              assert path.stat().st_size > 2000
+              assert ElementTree.parse(path).getroot().tag.endswith("svg")
+              for readme in ("README.md", "README_CN.md"):
+                  content = Path(readme).read_text(encoding="utf-8")
+                  assert name in content
+                  assert "cec2017-fullsuite-30d-10k-2026-10-17/trials.csv" in content
+          PY
+      - name: Upload complete experimental data and report
+        uses: actions/upload-artifact@v4
+        with:
+          name: boundevo-29functions-10kfe-real-results
+          path: docs/experiments/cec2017-fullsuite-30d-10k-2026-10-17/
+          retention-days: 90
+      - name: Commit data, bilingual READMEs and source-derived graphics
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/experiments/cec2017-fullsuite-30d-10k-2026-10-17/
+          git add docs/figures/ README.md README_CN.md
+          git commit -m "data: publish validated CEC2017 full-suite 10k-FE measurements"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
