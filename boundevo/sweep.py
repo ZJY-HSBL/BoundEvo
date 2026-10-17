@@ -13,7 +13,7 @@ from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 
-from .cec2017 import CEC2017Case, make_cec2017_case, validate_function_ids
+from .cec2017 import Backend, CEC2017Case, make_cec2017_case, validate_function_ids
 from .coefficients import Method
 from .experiments import _write_dataclasses
 from .optimizer import BoundEvo, BoundEvoConfig
@@ -200,6 +200,7 @@ def run_parent_count_sweep(
     function_ids: Iterable[int] = PAPER_SWEEP_FUNCTION_IDS,
     parent_counts: Iterable[int] = PAPER_PARENT_COUNTS,
     dimension: int = 10,
+    backend: Backend = "opfunu",
     methods: Sequence[Method] = ("re", "edbf", "abc"),
     repeats: int = 1,
     base_seed: int = 42,
@@ -222,7 +223,7 @@ def run_parent_count_sweep(
 
     records: list[ParentSweepTrial] = []
     for fid in ids:
-        case = make_cec2017_case(fid, dimension)
+        case = make_cec2017_case(fid, dimension, backend=backend)
         for parent_count in counts:
             for method_index, method in enumerate(methods):
                 for repeat in range(repeats):
