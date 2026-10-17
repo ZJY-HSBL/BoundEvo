@@ -2,6 +2,10 @@
 
 All notable changes to BoundEvo are documented here.
 
+## [Unreleased]
+
+Development toward v0.9.0: full 29-function higher-budget evaluation and additional convergence validation.
+
 ## [0.8.0] - 2026-10-17
 
 ### Research experiments and presentation
