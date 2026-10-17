@@ -37,6 +37,51 @@ Source: [raw trials](docs/experiments/cec2017-reference-30d-2026-10-17/trials.cs
 
 **Interpretation:** ABC has the lowest mean error on F1, F3, and F30; **EDBF is slightly better on F10**. These exploratory results do not establish universal superiority. The C-derived Python benchmark is an independent reference, not the original official C binary. The 58/58 finite/optimum preflight checks were sampled-point checks, not exhaustive validation. The 3,000-evaluation budget is much smaller than a full paper-level experiment.
 
+### Higher-budget verification: 10,000 evaluations
+
+**120 measured trials** at D=30 (F10, F20, F22, F30), 10 matched initial seeds/method. The focus includes the cases where ABC did not lead in earlier experiments.
+
+![10k-FE error ratio compared to RE](docs/figures/cec2017-30d-longbudget-relative-error.svg)
+
+![3k vs 10k evaluation-budget progression on F10 and F30](docs/figures/cec2017-30d-budget-progression.svg)
+
+| Function | ABC | EDBF | RE |
+|:---|---:|---:|---:|
+| F10 | **7,470.2** | 7,501.9 | 7,661.9 |
+| F20 | **785.2** | 1,129.8 | 1,049.5 |
+| F22 | **5,717.6** | 7,651.5 | 7,300.1 |
+| F30 | **188,044.0** | 6.193e+07 | 5.511e+06 |
+
+**Cross-budget check** (same reference-derived backend and seed schedule; 3,000 → 10,000 evaluations):
+
+| Function | Method | 3k FE mean error | 10k FE mean error |
+|:---|:---|---:|---:|
+| F10 | ABC | 8,157.7 | 7,470.2 |
+| F10 | EDBF | 8,047.6 | 7,501.9 |
+| F10 | RE | 8,174.2 | 7,661.9 |
+| F30 | ABC | 4.884e+06 | 188,044.0 |
+| F30 | EDBF | 1.262e+09 | 6.193e+07 |
+| F30 | RE | 3.776e+08 | 5.511e+06 |
+
+**Exact paired sign tests with Holm correction across 8 comparisons** (exploratory; lower error is better):
+
+| Function | Contrast | ABC W/L/T | Raw p | Holm p |
+|:---|:---|---:|---:|---:|
+| F10 | ABC vs EDBF | 4/6/0 | 0.75391 | 1 |
+| F10 | ABC vs RE | 5/4/1 | 1 | 1 |
+| F20 | ABC vs EDBF | 10/0/0 | 0.0019531 | 0.015625 |
+| F20 | ABC vs RE | 10/0/0 | 0.0019531 | 0.015625 |
+| F22 | ABC vs EDBF | 7/3/0 | 0.34375 | 1 |
+| F22 | ABC vs RE | 7/3/0 | 0.34375 | 1 |
+| F30 | ABC vs EDBF | 10/0/0 | 0.0019531 | 0.015625 |
+| F30 | ABC vs RE | 10/0/0 | 0.0019531 | 0.015625 |
+
+Paired wins by ABC across the 40 matched seeds in the four functions (ties not counted): vs EDBF 31/40; vs RE 32/40.
+
+[Raw 120 trials](docs/experiments/cec2017-longbudget-30d-2026-10-17/trials.csv) · [summary](docs/experiments/cec2017-longbudget-30d-2026-10-17/summary.csv) · [paired tests](docs/experiments/cec2017-longbudget-30d-2026-10-17/paired_sign_tests.csv) · [environment](docs/experiments/cec2017-longbudget-30d-2026-10-17/environment.json) · [Chinese analysis](docs/experiments/cec2017-longbudget-30d-2026-10-17/statistical_analysis_CN.md)
+
+**Limitations:** This is a selected-function challenge, not a 29-function 10k-FE suite. Runtime differences and different budget lengths must not be pooled. Mean leads alone do not establish significance.
+
 ### All 29 functions: exploratory 30D screening
 
 **261 real trials** with 3 matched seeds per method and 1,200 evaluations per trial. The figure colors indicate the lowest *observed mean* error, not statistically established winners.

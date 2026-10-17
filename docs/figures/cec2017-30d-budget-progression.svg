@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 610" width="1100" height="610" role="img" aria-label="CEC2017 | Evaluation-budget sensitivity">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="24" y="24" width="1052" height="562" rx="18" fill="#ffffff" stroke="#dde4ee"/>
+<text x="72" y="78" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#0f172a">CEC2017 | Evaluation-budget sensitivity</text>
+<text x="72" y="108" font-family="Arial, sans-serif" font-size="15" fill="#64748b">F10 / F30 only | Mean error relative to each method at 3,000 FEs | lower is better</text>
+<circle cx="685" cy="153" r="7" fill="#2563eb"/>
+<text x="700" y="158" font-family="Arial, sans-serif" font-size="16" fill="#334155">ABC</text>
+<circle cx="807" cy="153" r="7" fill="#ea580c"/>
+<text x="822" y="158" font-family="Arial, sans-serif" font-size="16" fill="#334155">EDBF</text>
+<circle cx="929" cy="153" r="7" fill="#64748b"/>
+<text x="944" y="158" font-family="Arial, sans-serif" font-size="16" fill="#334155">RE</text>
+<line x1="125" y1="477.00" x2="1012" y2="477.00" stroke="#e2e8f0"/>
+<text x="107" y="482.00" font-family="Arial,sans-serif" font-size="14" text-anchor="end" fill="#64748b">0.00x</text>
+<line x1="125" y1="423.00" x2="1012" y2="423.00" stroke="#e2e8f0"/>
+<text x="107" y="428.00" font-family="Arial,sans-serif" font-size="14" text-anchor="end" fill="#64748b">0.24x</text>
+<line x1="125" y1="369.00" x2="1012" y2="369.00" stroke="#e2e8f0"/>
+<text x="107" y="374.00" font-family="Arial,sans-serif" font-size="14" text-anchor="end" fill="#64748b">0.48x</text>
+<line x1="125" y1="315.00" x2="1012" y2="315.00" stroke="#e2e8f0"/>
+<text x="107" y="320.00" font-family="Arial,sans-serif" font-size="14" text-anchor="end" fill="#64748b">0.72x</text>
+<line x1="125" y1="261.00" x2="1012" y2="261.00" stroke="#e2e8f0"/>
+<text x="107" y="266.00" font-family="Arial,sans-serif" font-size="14" text-anchor="end" fill="#64748b">0.96x</text>
+<line x1="125" y1="207.00" x2="1012" y2="207.00" stroke="#e2e8f0"/>
+<text x="107" y="212.00" font-family="Arial,sans-serif" font-size="14" text-anchor="end" fill="#64748b">1.20x</text>
+<text x="342" y="534" font-family="Arial,sans-serif" font-size="21" text-anchor="middle" font-weight="700" fill="#334155">F10</text>
+<text x="227" y="503" font-family="Arial,sans-serif" font-size="15" text-anchor="middle" fill="#64748b">3k</text>
+<text x="457" y="503" font-family="Arial,sans-serif" font-size="15" text-anchor="middle" fill="#64748b">10k</text>
+<line x1="227" y1="252.00" x2="457" y2="270.96" stroke="#2563eb" stroke-width="4"/>
+<circle cx="227" cy="252.00" r="7" fill="#2563eb" stroke="white" stroke-width="1"/>
+<circle cx="457" cy="270.96" r="7" fill="#2563eb" stroke="white" stroke-width="1"/>
+<title>F10, abc: 10k/3k mean error 0.915725</title>
+<line x1="227" y1="252.00" x2="457" y2="267.26" stroke="#ea580c" stroke-width="4"/>
+<circle cx="227" cy="252.00" r="7" fill="#ea580c" stroke="white" stroke-width="1"/>
+<circle cx="457" cy="267.26" r="7" fill="#ea580c" stroke="white" stroke-width="1"/>
+<title>F10, edbf: 10k/3k mean error 0.932182</title>
+<line x1="227" y1="252.00" x2="457" y2="266.10" stroke="#64748b" stroke-width="4"/>
+<circle cx="227" cy="252.00" r="7" fill="#64748b" stroke="white" stroke-width="1"/>
+<circle cx="457" cy="266.10" r="7" fill="#64748b" stroke="white" stroke-width="1"/>
+<title>F10, re: 10k/3k mean error 0.937325</title>
+<text x="766" y="534" font-family="Arial,sans-serif" font-size="21" text-anchor="middle" font-weight="700" fill="#334155">F30</text>
+<text x="651" y="503" font-family="Arial,sans-serif" font-size="15" text-anchor="middle" fill="#64748b">3k</text>
+<text x="881" y="503" font-family="Arial,sans-serif" font-size="15" text-anchor="middle" fill="#64748b">10k</text>
+<line x1="651" y1="252.00" x2="881" y2="468.34" stroke="#2563eb" stroke-width="4"/>
+<circle cx="651" cy="252.00" r="7" fill="#2563eb" stroke="white" stroke-width="1"/>
+<circle cx="881" cy="468.34" r="7" fill="#2563eb" stroke="white" stroke-width="1"/>
+<title>F30, abc: 10k/3k mean error 0.038499</title>
+<line x1="651" y1="252.00" x2="881" y2="465.95" stroke="#ea580c" stroke-width="4"/>
+<circle cx="651" cy="252.00" r="7" fill="#ea580c" stroke="white" stroke-width="1"/>
+<circle cx="881" cy="465.95" r="7" fill="#ea580c" stroke="white" stroke-width="1"/>
+<title>F30, edbf: 10k/3k mean error 0.0490914</title>
+<line x1="651" y1="252.00" x2="881" y2="473.72" stroke="#64748b" stroke-width="4"/>
+<circle cx="651" cy="252.00" r="7" fill="#64748b" stroke="white" stroke-width="1"/>
+<circle cx="881" cy="473.72" r="7" fill="#64748b" stroke="white" stroke-width="1"/>
+<title>F30, re: 10k/3k mean error 0.014597</title>
+<text x="125" y="572" font-family="Arial,sans-serif" font-size="14" fill="#64748b">Budget cohorts are reported separately; a lower ratio means greater error reduction.</text>
+</svg>
