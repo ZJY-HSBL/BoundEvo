@@ -74,6 +74,9 @@ jobs:
                   assert all(filename in body for filename in figures)
                   assert "cec2017-longbudget-30d-2026-10-17/trials.csv" in body
                   assert "Holm" in body
+              analysis = long_folder / "statistical_analysis_CN.md"
+              assert analysis.stat().st_size > 1000
+              assert "Holm" in analysis.read_text(encoding="utf-8")
               print("Verified real 10k-FE results, Holm tests and both SVG figures")
           PY
       - name: Commit generated artifacts to main
@@ -81,6 +84,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add README.md README_CN.md docs/figures/
+          analysis="docs/experiments/cec2017-longbudget-30d-2026-10-17/statistical_analysis_CN.md"
+          if test -f "$analysis"; then
+            git add "$analysis"
+          fi
           if git diff --cached --quiet; then
             echo "Scientific figures and README evidence are already current."
             exit 0
