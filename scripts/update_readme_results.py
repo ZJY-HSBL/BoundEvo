@@ -1391,6 +1391,233 @@ def fullsuite_markdown(
     return "\n".join(lines)
 
 
+
+
+def load_fresh_seed_holdout() -> tuple[Path, dict, list[dict], list[dict]] | None:
+    """Read validated F16/F22 holdout data, never an incomplete trial cohort."""
+
+    config = json.loads(CONFIG.read_text(encoding="utf-8"))
+    dirname = config.get("holdout_experiment")
+    if not dirname:
+        return None
+    folder = ROOT / dirname
+    if not (folder / "summary.csv").is_file():
+        return None
+    env = json.loads((folder / "environment.json").read_text(encoding="utf-8"))
+    if (
+        env["functions"] != [16, 22] or env["dimension"] != 30
+        or env["repeats"] != 20 or env["evaluations"] != 10000
+        or env["seed_base"] != 20261037 or env["trials"] != 120
+        or env["reference_commit"] != "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f"
+    ):
+        raise ValueError("invalid independent holdout protocol")
+    with (folder / "summary.csv").open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    with (folder / "paired_tests.csv").open(newline="", encoding="utf-8") as handle:
+        tests = list(csv.DictReader(handle))
+    if len(rows) != 6 or len(tests) != 4:
+        raise ValueError("missing holdout summaries or statistical tests")
+    seen = set()
+    for row in rows:
+        key = (int(row["function_id"]), row["method"])
+        if key in seen or key[0] not in (16, 22) or key[1] not in METHODS:
+            raise ValueError("duplicate or unexpected holdout result")
+        seen.add(key)
+        if int(row["repeats"]) != 20 or int(float(row["mean_evaluations"])) != 10000:
+            raise ValueError("incorrect number of paired holdout trials")
+        for metric in (
+            "mean_error", "std_error", "bootstrap_mean_error_ci95_low",
+            "bootstrap_mean_error_ci95_high",
+        ):
+            if not math.isfinite(float(row[metric])) or float(row[metric]) < 0:
+                raise ValueError(f"invalid holdout value {metric}")
+        if not (
+            float(row["bootstrap_mean_error_ci95_low"])
+            <= float(row["bootstrap_mean_error_ci95_high"])
+        ):
+            raise ValueError("invalid bootstrap interval")
+    if seen != {(fid, method) for fid in (16, 22) for method in METHODS}:
+        raise ValueError("incomplete holdout method coverage")
+    return folder, env, rows, tests
+
+
+def fresh_seed_holdout_svg(env: dict, summary: list[dict]) -> str:
+    """Draw source-backed empirical mean errors and 95% bootstrap whiskers."""
+
+    lookup = {(int(row["function_id"]), row["method"]): row for row in summary}
+    all_vals = [
+        float(row[field])
+        for row in summary
+        for field in ("bootstrap_mean_error_ci95_low", "bootstrap_mean_error_ci95_high")
+    ]
+    if min(all_vals) <= 0:
+        raise ValueError("log-scaled holdout plot requires positive measured errors")
+    minimum = 10 ** math.floor(math.log10(min(all_vals)))
+    maximum = 10 ** math.ceil(math.log10(max(all_vals)))
+    lo, hi = math.log10(minimum), math.log10(maximum)
+    if hi <= lo:
+        raise ValueError("degenerate holdout plot range")
+    parts = [
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 580" '
+        'role="img" aria-label="F16 F22 independent 20 fresh-seed bootstrap means">',
+        '<rect width="100%" height="100%" fill="#ffffff"/>',
+        '<rect x="20" y="20" width="1060" height="540" rx="16" '
+        'fill="#ffffff" stroke="#dde4ee"/>',
+        '<text x="65" y="79" font-family="Arial,sans-serif" font-size="28" '
+        'font-weight="700" fill="#0f172a">CEC2017 | New-seed robustness check</text>',
+        '<text x="65" y="112" font-family="Arial,sans-serif" font-size="16" '
+        'fill="#64748b">F16 and F22 · 20 unused paired seeds per method · '
+        '10,000 FEs · 95% bootstrap intervals</text>',
+        '<text x="65" y="145" font-family="Arial,sans-serif" font-size="14" '
+        'fill="#64748b">Lower mean objective error is better '
+        '· logarithmic y-axis · bars denote percentile bootstrap CI</text>',
+    ]
+    top, height = 195, 270
+
+    def ordinate(value: float) -> float:
+        return top + height * (hi - math.log10(value)) / (hi - lo)
+
+    for exponent in range(math.ceil(lo), math.floor(hi) + 1):
+        tick = 10.0 ** exponent
+        y = ordinate(tick)
+        parts.extend(
+            [
+                f'<line x1="145" y1="{y:.2f}" x2="1020" y2="{y:.2f}" '
+                'stroke="#e2e8f0"/>',
+                f'<text x="130" y="{y+6:.2f}" text-anchor="end" '
+                'font-family="Arial,sans-serif" font-size="14" '
+                f'fill="#64748b">{tick:.0f}</text>',
+            ]
+        )
+    for fid, center in ((16, 350), (22, 785)):
+        parts.append(
+            f'<text x="{center}" y="180" text-anchor="middle" '
+            'font-family="Arial,sans-serif" font-size="21" '
+            f'font-weight="700" fill="#334155">F{fid}</text>'
+        )
+        for idx, method in enumerate(METHODS):
+            row = lookup[(fid, method)]
+            mean = float(row["mean_error"])
+            lower = float(row["bootstrap_mean_error_ci95_low"])
+            upper = float(row["bootstrap_mean_error_ci95_high"])
+            x = center + (idx - 1) * 114
+            ymean, ylower, yupper = ordinate(mean), ordinate(lower), ordinate(upper)
+            color = COLORS[method]
+            parts.extend(
+                [
+                    f'<line x1="{x}" y1="{yupper:.2f}" x2="{x}" '
+                    f'y2="{ylower:.2f}" stroke="{color}" stroke-width="5"/>',
+                    f'<line x1="{x-13}" y1="{yupper:.2f}" x2="{x+13}" '
+                    f'y2="{yupper:.2f}" stroke="{color}" stroke-width="3"/>',
+                    f'<line x1="{x-13}" y1="{ylower:.2f}" x2="{x+13}" '
+                    f'y2="{ylower:.2f}" stroke="{color}" stroke-width="3"/>',
+                    f'<circle cx="{x}" cy="{ymean:.2f}" r="10" '
+                    f'fill="{color}" stroke="white" stroke-width="2"/>',
+                    f'<text x="{x}" y="492" text-anchor="middle" '
+                    'font-family="Arial,sans-serif" font-size="16" '
+                    f'fill="#334155">{method.upper()}</text>',
+                    f'<title>F{fid} {method.upper()} mean {mean:.8g}, '
+                    f'95% bootstrap CI [{lower:.8g}, {upper:.8g}]</title>',
+                ]
+            )
+    parts.append(
+        '<text x="65" y="540" font-family="Arial,sans-serif" font-size="14" '
+        'fill="#64748b">Intervals reflect resampling 20 new paired seed indices '
+        'and should not be interpreted as exact 95% coverage.</text>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n"
+
+
+def fresh_seed_holdout_markdown(
+    folder: Path, env: dict, summary: list[dict], tests: list[dict], language: str
+) -> str:
+    en = language == "en"
+    relative = folder.relative_to(ROOT).as_posix()
+    lookup = {(int(row["function_id"]), row["method"]): row for row in summary}
+    lines = [
+        (
+            "### F16/F22: 20 new seeds to test the unstable rankings"
+            if en else
+            "### F16、F22：新增 20 个独立种子验证算法排名"
+        ),
+        "",
+        (
+            "**120 new measured trials** on F16/F22, D=30, 10,000 function "
+            "evaluations, with 20 seed values not reused in previous studies. "
+            "ABC/EDBF/RE have matched initial seeds for each repeat."
+            if en else
+            "**120 次全新实测试验**：F16、F22，30 维，每次 10,000 次函数评价，"
+            "每种算法 20 个此前实验没有使用过的配对种子。"
+        ),
+        "",
+        "![F16/F22 holdout mean errors with bootstrap confidence intervals]"
+        "(docs/figures/cec2017-f16-f22-holdout-mean-errors.svg)",
+        "",
+        (
+            "**Mean objective error and 95% percentile bootstrap interval** "
+            "(lower is better):"
+            if en else "**平均目标误差及 95% 百分位 Bootstrap 区间（越低越好）：**"
+        ),
+        "",
+        "| Function | Method | Mean error | 95% bootstrap interval |"
+        if en else "| 函数 | 方法 | 平均误差 | Bootstrap 95% 区间 |",
+        "|:---|:---|---:|:---|",
+    ]
+    for fid in (16, 22):
+        for method in METHODS:
+            row = lookup[(fid, method)]
+            lines.append(
+                f"| F{fid} | {method.upper()} | "
+                f"{fmt_error(float(row['mean_error']))} | "
+                f"[{fmt_error(float(row['bootstrap_mean_error_ci95_low']))}, "
+                f"{fmt_error(float(row['bootstrap_mean_error_ci95_high']))}] |"
+            )
+    lines += [
+        "",
+        (
+            "**Two-sided exact paired sign tests, Holm correction for 4 contrasts:**"
+            if en else "**双侧配对精确符号检验（4 项比较统一 Holm 校正）：**"
+        ),
+        "",
+        "| Function | Contrast | ABC W/L/T | Holm p |"
+        if en else "| 函数 | 对照 | ABC 胜/负/平 | Holm 校正 p |",
+        "|:---|:---|---:|---:|",
+    ]
+    for row in tests:
+        lines.append(
+            f"| F{row['function_id']} | {row['comparison']} | "
+            f"{row['abc_wins']}/{row['abc_losses']}/{row['ties']} | "
+            f"{float(row['p_sign_holm']):.5g} |"
+        )
+    lines += [
+        "",
+        (
+            f"[120 fresh-seed raw trials]({relative}/trials.csv) · "
+            f"[bootstrap results]({relative}/summary.csv) · "
+            f"[paired hypothesis tests]({relative}/paired_tests.csv) · "
+            f"[experiment protocol]({relative}/environment.json) · "
+            f"[complete report]({relative}/report.md)"
+            if en else
+            f"[120 次原始实测]({relative}/trials.csv) · "
+            f"[Bootstrap 统计表]({relative}/summary.csv) · "
+            f"[配对检验]({relative}/paired_tests.csv) · "
+            f"[随机种子与环境]({relative}/environment.json) · "
+            f"[完整实验报告]({relative}/report.md)"
+        ),
+        "",
+        (
+            "**Caveat:** The functions were selected after earlier ranking "
+            "disagreements. Fresh seeds reduce data reuse but this remains "
+            "an exploratory two-function study."
+            if en else
+            "**解释边界：**F16、F22 是此前发现排名分歧后选定的函数；"
+            "新种子避免了重复使用旧数据，但本轮仍属于两函数探索性实验。"
+        ),
+    ]
+    return "\n".join(lines)
+
+
 def inject_readme(old: str, payload: str) -> str:
     if START not in old and END not in old:
         anchor = "## Overview" if payload.startswith("## Measured") else "## 项目定位"
@@ -1431,6 +1658,12 @@ def main() -> None:
     screening = load_screening()
     long_budget = load_long_budget()
     full_suite = load_full_suite()
+    fresh_holdout = load_fresh_seed_holdout()
+    if fresh_holdout is not None:
+        _, holdout_env, holdout_summary, _ = fresh_holdout
+        outputs[FIGURES / "cec2017-f16-f22-holdout-mean-errors.svg"] = (
+            fresh_seed_holdout_svg(holdout_env, holdout_summary)
+        )
     if full_suite is not None:
         _, full_env, full_summary, full_history, _ = full_suite
         outputs[FIGURES / "cec2017-30d-fullsuite-10k-winners.svg"] = screening_svg(
@@ -1466,6 +1699,13 @@ def main() -> None:
         path = ROOT / name
         markdown = section(primary, secondary, env, summary, language)
         sections = []
+        if fresh_holdout is not None:
+            folder, holdout_env, holdout_summary, holdout_tests = fresh_holdout
+            sections.append(
+                fresh_seed_holdout_markdown(
+                    folder, holdout_env, holdout_summary, holdout_tests, language
+                )
+            )
         if full_suite is not None:
             folder, full_env, full_summary, _, full_tests = full_suite
             old_env = screening[1] if screening is not None else None
