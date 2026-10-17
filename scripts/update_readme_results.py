@@ -1530,7 +1530,9 @@ def fresh_seed_holdout_svg(env: dict, summary: list[dict]) -> str:
 
 
 def fresh_seed_holdout_markdown(
-    folder: Path, env: dict, summary: list[dict], tests: list[dict], language: str
+    folder: Path, env: dict, summary: list[dict], tests: list[dict], language: str,
+    prior_three_seed: list[dict] | None = None,
+    prior_ten_seed: list[dict] | None = None,
 ) -> str:
     en = language == "en"
     relative = folder.relative_to(ROOT).as_posix()
@@ -1573,6 +1575,45 @@ def fresh_seed_holdout_markdown(
                 f"[{fmt_error(float(row['bootstrap_mean_error_ci95_low']))}, "
                 f"{fmt_error(float(row['bootstrap_mean_error_ci95_high']))}] |"
             )
+    if prior_three_seed is not None and prior_ten_seed is not None:
+        historical = {
+            (int(r["function_id"]), r["method"]): float(r["mean_error"])
+            for r in prior_three_seed
+        }
+        historical_ten = {
+            (int(r["function_id"]), r["method"]): float(r["mean_error"])
+            for r in prior_ten_seed
+        }
+
+        def lowest(index: dict, fid: int) -> str:
+            return min(METHODS, key=lambda method: index[(fid, method)]).upper()
+
+        three_f16 = lowest(historical, 16)
+        three_f22 = lowest(historical, 22)
+        ten_f22 = lowest(historical_ten, 22)
+        new_lookup = {
+            (int(r["function_id"]), r["method"]): float(r["mean_error"])
+            for r in summary
+        }
+        twenty_f16 = lowest(new_lookup, 16)
+        twenty_f22 = lowest(new_lookup, 22)
+        lines.extend(
+            [
+                "",
+                (
+                    "**Observed winner sensitivity across disjoint cohorts** "
+                    "(do not pool across repeats):"
+                    if en else
+                    "**不同随机种子批次的均值领先方法变化**（各批数据不合并）："
+                ),
+                "",
+                "| Function | Earlier 3 seeds | Earlier 10 seeds | New 20 seeds |"
+                if en else "| 函数 | 先前 3 种子 | 先前 10 种子 | 新增 20 种子 |",
+                "|:---|:---|:---|:---|",
+                f"| F16 | {three_f16} | — | {twenty_f16} |",
+                f"| F22 | {three_f22} | {ten_f22} | {twenty_f22} |",
+            ]
+        )
     lines += [
         "",
         (
@@ -1703,7 +1744,9 @@ def main() -> None:
             folder, holdout_env, holdout_summary, holdout_tests = fresh_holdout
             sections.append(
                 fresh_seed_holdout_markdown(
-                    folder, holdout_env, holdout_summary, holdout_tests, language
+                    folder, holdout_env, holdout_summary, holdout_tests, language,
+                    full_suite[2] if full_suite is not None else None,
+                    long_budget[2] if long_budget is not None else None,
                 )
             )
         if full_suite is not None:
