@@ -122,11 +122,12 @@ def evidence_ratio_svg(summary: list[dict], environment: dict) -> str:
         pos = y(tick)
         line_color = "#94a3b8" if tick == 1 else "#e2e8f0"
         thickness = 2 if tick == 1 else 1
+        dash = ' stroke-dasharray="6 5"' if tick == 1 else ""
         parts.extend(
             [
                 f'<line x1="{left}" y1="{pos:.2f}" x2="{left + width}" '
                 f'y2="{pos:.2f}" stroke="{line_color}" stroke-width="{thickness}" '
-                f'{"stroke-dasharray=\"6 5\"" if tick == 1 else ""}/>',
+                f'{dash}/>',
                 f'<text x="{left - 22}" y="{pos + 5:.2f}" text-anchor="end" '
                 f'font-family="Arial,sans-serif" font-size="14" fill="#475569">'
                 f'{tick:g}x</text>',
