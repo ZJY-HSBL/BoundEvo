@@ -332,6 +332,194 @@ def section(primary: Path, secondary: Path, env: dict, summary: list[dict], lang
     return "\n".join(lines)
 
 
+
+
+def load_screening() -> tuple[Path, dict, list[dict]] | None:
+    """Return an optional complete-suite screening after its CSV is published."""
+
+    config = json.loads(CONFIG.read_text(encoding="utf-8"))
+    dirname = config.get("screen_experiment")
+    if not dirname:
+        return None
+    folder = ROOT / dirname
+    if not (folder / "summary.csv").exists():
+        # The full screening may still be running on GitHub Actions.
+        return None
+    environment = json.loads((folder / "environment.json").read_text(encoding="utf-8"))
+    with (folder / "summary.csv").open(newline="", encoding="utf-8") as handle:
+        data = list(csv.DictReader(handle))
+    ids = [int(item) for item in environment["functions"]]
+    if len(ids) != 29 or set(ids) != ({1} | set(range(3, 31))):
+        raise ValueError("screening must contain all 29 official CEC2017 functions")
+    if len(data) != len(ids) * len(METHODS):
+        raise ValueError("screening result table has incomplete method coverage")
+    found = set()
+    for row in data:
+        key = (int(row["function_id"]), row["method"])
+        error = float(row["mean_error"])
+        if key in found or key[0] not in ids or key[1] not in METHODS:
+            raise ValueError("screening includes unknown or duplicate cases")
+        if not math.isfinite(error) or error < 0:
+            raise ValueError("screening contains an invalid mean objective error")
+        if int(row["repeats"]) != int(environment["repeats"]):
+            raise ValueError("screening metadata disagree about repeat count")
+        found.add(key)
+    return folder, environment, data
+
+
+def screen_winners(
+    environment: dict, summary: list[dict]
+) -> tuple[list[tuple[int, str]], dict[str, int]]:
+    lookup = {(int(row["function_id"]), row["method"]): row for row in summary}
+    winners = []
+    counts = {method: 0 for method in METHODS}
+    counts["tie"] = 0
+    for fid in [int(x) for x in environment["functions"]]:
+        scores = {method: float(lookup[(fid, method)]["mean_error"]) for method in METHODS}
+        minimum = min(scores.values())
+        leader = [
+            method for method, value in scores.items()
+            if math.isclose(value, minimum, rel_tol=1e-12, abs_tol=1e-12)
+        ]
+        selected = leader[0] if len(leader) == 1 else "tie"
+        counts[selected] += 1
+        winners.append((fid, selected))
+    return winners, counts
+
+
+def screening_svg(environment: dict, data: list[dict]) -> str:
+    winners, counts = screen_winners(environment, data)
+    parts = [
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 580" '
+        'width="1100" height="580" role="img" '
+        'aria-label="CEC2017 29 function screening lowest mean error by function">',
+        '<rect width="100%" height="100%" fill="#ffffff"/>',
+        '<rect x="24" y="24" width="1052" height="532" rx="18" '
+        'fill="#ffffff" stroke="#dde4ee"/>',
+        '<text x="72" y="80" font-family="Arial,sans-serif" font-size="28" '
+        'font-weight="700" fill="#0f172a">CEC2017 | 29-function screening</text>',
+        (
+            f'<text x="72" y="111" font-family="Arial,sans-serif" font-size="15" '
+            f'fill="#64748b">D={environment["dimension"]}; '
+            f'{environment["repeats"]} paired seeds/method; '
+            f'{environment["evaluations"]:,} evaluations/run; exploratory</text>'
+        ),
+        '<text x="72" y="171" font-family="Arial,sans-serif" font-size="19" '
+        'font-weight="600" fill="#334155">Lowest observed mean error per function</text>',
+    ]
+    palette = {**COLORS, "tie": "#64748b"}
+    for idx, method in enumerate((*METHODS, "tie")):
+        x = 510 + 135 * idx
+        color = palette[method]
+        parts.extend(
+            [
+                f'<rect x="{x}" y="149" width="18" height="18" rx="4" '
+                f'fill="{color}"/>',
+                f'<text x="{x + 25}" y="163" font-family="Arial,sans-serif" '
+                f'font-size="15" fill="#334155">{method.upper()}</text>',
+            ]
+        )
+    for index, (fid, method) in enumerate(winners):
+        x = 75 + index * 34
+        parts.extend(
+            [
+                f'<rect x="{x}" y="208" width="29" height="49" rx="4" '
+                f'fill="{palette[method]}"/>',
+                f'<text x="{x + 14.5:.1f}" y="279" font-family="Arial,sans-serif" '
+                'font-size="11" fill="#475569" text-anchor="middle">'
+                f'F{fid}</text>',
+            ]
+        )
+    parts.extend(
+        [
+            '<text x="72" y="342" font-family="Arial,sans-serif" font-size="19" '
+            'font-weight="600" fill="#334155">Functions led (by mean only)</text>',
+        ]
+    )
+    for index, method in enumerate(METHODS):
+        x = 95 + 336 * index
+        y = 390
+        share = counts[method] / len(winners)
+        width = 242 * share
+        parts.extend(
+            [
+                f'<text x="{x}" y="{y - 10}" font-family="Arial,sans-serif" '
+                f'font-size="16" fill="#334155">{method.upper()} — '
+                f'{counts[method]} / {len(winners)}</text>',
+                f'<rect x="{x}" y="{y + 5}" width="242" height="27" '
+                'rx="6" fill="#e2e8f0"/>',
+                f'<rect x="{x}" y="{y + 5}" width="{width:.2f}" height="27" '
+                f'rx="6" fill="{palette[method]}"/>',
+            ]
+        )
+    parts.extend(
+        [
+            '<text x="72" y="505" font-family="Arial,sans-serif" font-size="14" '
+            'fill="#64748b">Short-budget screening, not a significance test. '
+            'Do not pool with the 3,000-evaluation pilot.</text>',
+            '</svg>',
+        ]
+    )
+    return "\n".join(parts) + "\n"
+
+
+def screening_markdown(folder: Path, environment: dict, data: list[dict], lang: str) -> str:
+    winners, counts = screen_winners(environment, data)
+    root = folder.relative_to(ROOT).as_posix()
+    en = lang == "en"
+    title = (
+        "### All 29 functions: exploratory 30D screening"
+        if en else "### 全部 29 个函数：30 维探索性普查"
+    )
+    intro = (
+        f"**{len(winners) * 3 * environment['repeats']} real trials** with "
+        f"{environment['repeats']} matched seeds per method and "
+        f"{environment['evaluations']:,} evaluations per trial. "
+        "The figure colors indicate the lowest *observed mean* error, not "
+        "statistically established winners."
+        if en else
+        f"共 **{len(winners) * 3 * environment['repeats']} 次真实试验**；"
+        f"每种方法 {environment['repeats']} 个配对种子、"
+        f"每次 {environment['evaluations']:,} 次函数评价。"
+        "颜色只表示观测均值最低，并不表示统计显著。"
+    )
+    lead = (
+        "Functions with the lowest observed average error: "
+        if en else "获得最低观测平均误差的函数数量："
+    )
+    return "\n".join(
+        [
+            title,
+            "",
+            intro,
+            "",
+            "![CEC2017 all 29 functions screening winner map]"
+            "(docs/figures/cec2017-30d-29function-screen.svg)",
+            "",
+            lead + ", ".join(f"{m.upper()} {counts[m]}" for m in METHODS)
+            + (f", ties {counts['tie']}" if counts["tie"] else "") + ".",
+            "",
+            (
+                f"[Full screening CSV]({root}/trials.csv) · "
+                f"[per-function means]({root}/summary.csv) · "
+                f"[environment]({root}/environment.json)"
+                if en else
+                f"[261 条原始记录]({root}/trials.csv) · "
+                f"[逐函数均值]({root}/summary.csv) · "
+                f"[实验环境]({root}/environment.json)"
+            ),
+            "",
+            (
+                "**Budget caveat:** This 1,200-evaluation screening must not be "
+                "pooled with the 3,000-evaluation main result."
+                if en else
+                "**预算限制：**本轮 1,200 次评价的普查结果不得与前述 "
+                "3,000 次评价的实验合并统计。"
+            ),
+        ]
+    )
+
+
 def inject_readme(old: str, payload: str) -> str:
     if START not in old and END not in old:
         anchor = "## Overview" if payload.startswith("## Measured") else "## 项目定位"
@@ -369,11 +557,25 @@ def main() -> None:
         FIGURES / "cec2017-30d-relative-error.svg": evidence_ratio_svg(summary, env),
         FIGURES / "cec2017-30d-runtime.svg": runtime_svg(summary, env),
     }
+    screening = load_screening()
+    if screening is not None:
+        folder, screen_env, screen_data = screening
+        outputs[FIGURES / "cec2017-30d-29function-screen.svg"] = screening_svg(
+            screen_env, screen_data
+        )
+
     for language, name in (("en", "README.md"), ("cn", "README_CN.md")):
         path = ROOT / name
+        markdown = section(primary, secondary, env, summary, language)
+        if screening is not None:
+            folder, screen_env, screen_data = screening
+            extra_section = screening_markdown(folder, screen_env, screen_data, language)
+            marker = "<details><summary>"
+            if marker not in markdown:
+                raise ValueError("10D pilot details block missing from results section")
+            markdown = markdown.replace(marker, extra_section + "\n\n" + marker, 1)
         outputs[path] = inject_readme(
-            path.read_text(encoding="utf-8"),
-            section(primary, secondary, env, summary, language),
+            path.read_text(encoding="utf-8"), markdown
         )
     ok = all(emit(path, text, args.check) for path, text in outputs.items())
     if not ok:
