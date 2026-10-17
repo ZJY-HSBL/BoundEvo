@@ -1262,6 +1262,8 @@ def leader_transition_svg(
 
 def fullsuite_markdown(
     folder: Path, env: dict, summary: list[dict], tests: list[dict], lang: str,
+    previous_environment: dict | None = None,
+    previous_summary: list[dict] | None = None,
 ) -> str:
     _winners, counts = screen_winners(env, summary)
     relative = folder.relative_to(ROOT).as_posix()
