@@ -10,7 +10,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from importlib import import_module
 from inspect import signature
-from typing import Any
+from typing import Any, Literal
 
 import numpy as np
 
@@ -20,6 +20,10 @@ from .problem import OptimizationProblem
 # O p f u n u's cec2017.py classes instead use sequential F1..F29:
 # F2 in opfunu is the official F3 (Zakharov), and F29 is official F30.
 PAPER_FUNCTION_IDS: tuple[int, ...] = (1, *range(3, 31))
+Backend = Literal["opfunu", "reference"]
+REFERENCE_REPO = "https://github.com/tilleyd/cec2017-py"
+REFERENCE_COMMIT = "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f"
+
 
 
 @dataclass(frozen=True, slots=True)
@@ -64,9 +68,19 @@ def _benchmark_class_name(function_id: int) -> str:
     return f"F{opfunu_id}2017"
 
 
-def make_cec2017_case(function_id: int, dimension: int) -> CEC2017Case:
-    """Create a CEC2017 case backed by opfunu."""
+def make_cec2017_case(
+    function_id: int,
+    dimension: int,
+    *,
+    backend: Backend = "opfunu",
+) -> CEC2017Case:
+    """Create a benchmark using opfunu or the independent C-derived Python suite."""
 
+    validate_function_ids((function_id,))
+    if backend == "reference":
+        return _make_reference_case(function_id, dimension)
+    if backend != "opfunu":
+        raise ValueError("backend must be 'reference' or 'opfunu'")
     if dimension < 2:
         raise ValueError("CEC2017 dimension must be at least 2")
     module = _load_cec2017_module()
@@ -110,3 +124,49 @@ def make_cec2017_case(function_id: int, dimension: int) -> CEC2017Case:
     description = upstream_name.split(": ", maxsplit=1)[-1]
     name = f"F{function_id}: {description}"
     return CEC2017Case(function_id, dimension, name, optimum, problem)
+
+
+def _make_reference_case(function_id: int, dimension: int) -> CEC2017Case:
+    """Use Duncan Tilley's CEC2017 implementation adapted from the original C.
+
+    Unlike the opfunu classes, this implementation preserves official F1..F30
+    IDs and embeds the original shift/rotation/shuffle benchmark data. It is
+    still an independently maintained reference-derived implementation.
+    """
+
+    if dimension not in (10, 30, 50, 100):
+        raise ValueError(
+            "reference backend requires one of dimensions 10, 30, 50, 100"
+        )
+    try:
+        functions = import_module("cec2017.functions")
+    except ModuleNotFoundError as exc:
+        if exc.name and exc.name.startswith("cec2017"):
+            raise RuntimeError(
+                "reference CEC2017 backend not installed; use "
+                f"pip install git+{REFERENCE_REPO}.git@{REFERENCE_COMMIT}"
+            ) from exc
+        raise
+    objective = getattr(functions, f"f{function_id}", None)
+    if objective is None:
+        raise RuntimeError(f"reference CEC2017 backend lacks f{function_id}")
+
+    def evaluate(point: np.ndarray) -> float:
+        result = np.asarray(
+            objective(np.asarray(point, dtype=np.float64)[None, :]),
+            dtype=np.float64,
+        )
+        if result.shape != (1,):
+            raise RuntimeError(
+                f"reference f{function_id} returned shape {result.shape}, expected (1,)"
+            )
+        return float(result[0])
+
+    bounds = np.full(dimension, 100.0, dtype=np.float64)
+    return CEC2017Case(
+        function_id=function_id,
+        dimension=dimension,
+        name=f"F{function_id}: CEC2017 reference-derived implementation",
+        optimum=float(function_id * 100),
+        problem=OptimizationProblem(evaluate, lower=-bounds, upper=bounds),
+    )
