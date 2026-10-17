@@ -8,6 +8,9 @@ Usage:
     python scripts/update_readme_results.py --check
 """
 
+# Ruff ISC004 is intentionally suppressed for multiline SVG/XML string assembly.
+# ruff: noqa: ISC004
+
 from __future__ import annotations
 
 import argparse
