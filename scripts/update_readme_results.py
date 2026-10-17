@@ -1163,6 +1163,103 @@ def fullsuite_convergence_svg(history: list[dict], env: dict) -> str:
     return "\n".join(parts) + "\n"
 
 
+
+
+def leader_transition_counts(
+    screen_env: dict, screen_summary: list[dict],
+    full_env: dict, full_summary: list[dict],
+) -> tuple[dict[tuple[str, str], int], int]:
+    """Count observed mean-error leader changes between matched budget cohorts."""
+
+    for field in ("functions", "dimension", "repeats", "base_seed", "reference_commit"):
+        if screen_env[field] != full_env[field]:
+            raise ValueError(f"leader changes require identical {field}")
+    if int(screen_env["evaluations"]) != 1200 or int(full_env["evaluations"]) != 10000:
+        raise ValueError("leader transition expects 1200 versus 10000 evaluations")
+    former, _ = screen_winners(screen_env, screen_summary)
+    later, _ = screen_winners(full_env, full_summary)
+    if [fid for fid, _ in former] != [fid for fid, _ in later]:
+        raise ValueError("leader comparison has inconsistent function ordering")
+    transitions = {(a, b): 0 for a in (*METHODS, "tie") for b in (*METHODS, "tie")}
+    changed = 0
+    for (_, old_method), (_, new_method) in zip(former, later):
+        transitions[(old_method, new_method)] += 1
+        changed += old_method != new_method
+    if sum(transitions.values()) != 29:
+        raise ValueError("leader change study requires all 29 functions")
+    return transitions, changed
+
+
+def leader_transition_svg(
+    screen_env: dict, screen_summary: list[dict],
+    full_env: dict, full_summary: list[dict],
+) -> str:
+    """Plot an observed 29-function transition matrix, not simulated outcomes."""
+
+    counts, changed = leader_transition_counts(
+        screen_env, screen_summary, full_env, full_summary
+    )
+    names = (*METHODS, "tie")
+    parts = [
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 540" '
+        'role="img" aria-label="Observed algorithm leadership changes with budget">',
+        '<rect width="100%" height="100%" fill="#ffffff"/>',
+        '<rect x="18" y="18" width="964" height="505" rx="18" '
+        'fill="#ffffff" stroke="#dde4ee"/>',
+        '<text x="70" y="73" font-family="Arial,sans-serif" font-size="26" '
+        'font-weight="700" fill="#0f172a">CEC2017 | Budget-driven rank changes</text>',
+        '<text x="70" y="107" font-family="Arial,sans-serif" font-size="15" '
+        'fill="#64748b">29 official functions · D=30 · 3 matched seeds/method · '
+        'lowest observed mean error</text>',
+        '<text x="517" y="156" font-family="Arial,sans-serif" font-size="17" '
+        'font-weight="600" fill="#334155" text-anchor="middle">'
+        'Winner at 10,000 function evaluations →</text>',
+    ]
+    start_x, start_y = 215, 213
+    cell_w, cell_h = 158, 64
+    for j, method in enumerate(names):
+        parts.append(
+            f'<text x="{start_x + j * cell_w + cell_w / 2}" y="193" '
+            'text-anchor="middle" font-family="Arial,sans-serif" '
+            f'font-size="16" fill="#334155">{method.upper()}</text>'
+        )
+    parts.append(
+        '<text x="83" y="196" font-family="Arial,sans-serif" font-size="15" '
+        'fill="#64748b">1,200 FE ↓</text>'
+    )
+    for i, previous in enumerate(names):
+        y = start_y + i * cell_h
+        parts.append(
+            f'<text x="179" y="{y + 38}" text-anchor="end" '
+            f'font-family="Arial,sans-serif" font-size="16" '
+            f'fill="#334155">{previous.upper()}</text>'
+        )
+        for j, newer in enumerate(names):
+            number = counts[(previous, newer)]
+            x = start_x + j * cell_w
+            opacity = 0.08 + 0.80 * number / 29
+            color = COLORS.get(newer, "#64748b")
+            parts.extend(
+                [
+                    f'<rect x="{x}" y="{y}" width="{cell_w - 9}" '
+                    f'height="{cell_h - 8}" rx="7" fill="{color}" '
+                    f'fill-opacity="{opacity:.3f}" stroke="#e2e8f0"/>',
+                    f'<text x="{x + (cell_w - 9)/2}" y="{y + 34}" '
+                    'text-anchor="middle" font-family="Arial,sans-serif" '
+                    f'font-size="21" font-weight="700" fill="#0f172a">{number}</text>',
+                ]
+            )
+    parts.extend(
+        [
+            f'<text x="215" y="504" font-family="Arial,sans-serif" '
+            f'font-size="17" font-weight="600" fill="#334155">'
+            f'{changed} of 29 functions changed their observed leader</text>',
+            '</svg>',
+        ]
+    )
+    return "\n".join(parts) + "\n"
+
+
 def fullsuite_markdown(
     folder: Path, env: dict, summary: list[dict], tests: list[dict], lang: str,
 ) -> str:
@@ -1240,6 +1337,26 @@ def fullsuite_markdown(
             "的数据不得混合统计。"
         ),
     ]
+    if previous_environment is not None and previous_summary is not None:
+        _, changed = leader_transition_counts(
+            previous_environment, previous_summary, env, summary
+        )
+        lines.extend(
+            [
+                "",
+                "![Observed changes in function-level leading methods]"
+                "(docs/figures/cec2017-30d-leader-transitions.svg)",
+                "",
+                (
+                    f"Across 29 functions, {changed} changed their observed "
+                    "mean-error leader between 1,200 and 10,000 evaluations."
+                    if en else
+                    f"在 29 个函数中，有 {changed} 个函数在 1,200 与 10,000 "
+                    "次评价之间更换了观测均值领先的方法。"
+                ),
+                "",
+            ]
+        )
     return "\n".join(lines)
 
 
@@ -1291,6 +1408,11 @@ def main() -> None:
         outputs[FIGURES / "cec2017-30d-fullsuite-10k-convergence.svg"] = (
             fullsuite_convergence_svg(full_history, full_env)
         )
+        if screening is not None:
+            _, old_env, old_summary = screening
+            outputs[FIGURES / "cec2017-30d-leader-transitions.svg"] = leader_transition_svg(
+                old_env, old_summary, full_env, full_summary
+            )
     if long_budget is not None:
         _, longer_env, longer_summary, _ = long_budget
         outputs[FIGURES / "cec2017-30d-longbudget-relative-error.svg"] = (
@@ -1314,8 +1436,11 @@ def main() -> None:
         markdown = section(primary, secondary, env, summary, language)
         if full_suite is not None:
             folder, full_env, full_summary, _, full_tests = full_suite
+            old_env = screening[1] if screening is not None else None
+            old_summary = screening[2] if screening is not None else None
             full_section = fullsuite_markdown(
-                folder, full_env, full_summary, full_tests, language
+                folder, full_env, full_summary, full_tests, language,
+                old_env, old_summary,
             )
             markdown = markdown.replace(
                 "<details><summary>", full_section + "\n\n<details><summary>", 1
