@@ -1313,6 +1313,35 @@ def fullsuite_markdown(
             f"| {row['comparison']} | {row['wins']}/{row['losses']} | "
             f"{float(row['raw_p']):.5g} | {float(row['holm_p']):.5g} |"
         )
+    per_function = {
+        (int(row["function_id"]), row["method"]): float(row["mean_error"])
+        for row in summary
+    }
+    lines.extend(
+        [
+            "",
+            (
+                "<details><summary>See measured means for all 29 functions</summary>"
+                if en else
+                "<details><summary>展开查看全部 29 个函数的真实平均误差</summary>"
+            ),
+            "",
+            "| Function | ABC | EDBF | RE |"
+            if en else "| 函数 | ABC | EDBF | RE |",
+            "|:---|---:|---:|---:|",
+        ]
+    )
+    for fid in env["functions"]:
+        values = {method: per_function[(fid, method)] for method in METHODS}
+        best = min(values.values())
+        rendered = [
+            f"**{fmt_error(values[method])}**"
+            if math.isclose(values[method], best, rel_tol=1e-12)
+            else fmt_error(values[method])
+            for method in METHODS
+        ]
+        lines.append(f"| F{fid} | {' | '.join(rendered)} |")
+    lines.extend(["", "</details>", ""])
     lines += [
         "",
         (
