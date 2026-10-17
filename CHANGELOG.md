@@ -2,6 +2,10 @@
 
 All notable changes to BoundEvo are documented here.
 
+## [Unreleased]
+
+Development toward v0.10.0: confidence intervals, seed sensitivity, and original 100,000-FE replication.
+
 ## [0.9.0] - 2026-10-17
 
 ### Real full-suite experiments and research visualizations
