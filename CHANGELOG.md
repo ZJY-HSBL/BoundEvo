@@ -2,9 +2,16 @@
 
 All notable changes to BoundEvo are documented here.
 
-## [Unreleased]
+## [0.8.0] - 2026-10-17
 
-Development toward v0.8.0. Upcoming research priorities: longer-budget 29-function replication and stopping-rule validation.
+### Research experiments and presentation
+
+- 120 real 30D CEC2017 trials on F10/F20/F22/F30 (three methods, ten matched seeds, 10,000 evaluations each).
+- Reconciled trial-level mean-error CSVs with README figures, generated Markdown analysis and pinned runtime metadata.
+- Two new SVGs showing measured 10k-FE relative errors and 3k-to-10k-FE budget sensitivity.
+- Eight exact paired sign tests jointly Holm-adjusted and shown in both README versions and Chinese research report.
+- Added source-data validation to reject wrong seeds, missing/duplicate trials, invalid budgets and summary/CSV mismatches.
+- Documented purposive case selection and the statistical interpretation limits.
 
 ## [0.7.0] - 2026-10-17
 
