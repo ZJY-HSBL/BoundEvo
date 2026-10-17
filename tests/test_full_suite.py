@@ -143,3 +143,39 @@ def test_fullsuite_winner_and_convergence_images_are_valid_svg():
     assert "收敛" in markdown
     assert "261 次" in markdown
     assert "Holm" in markdown
+
+
+def test_budget_leader_transitions_are_derived_from_mean_errors():
+    generator = load_script("update_readme_results.py")
+    env = {
+        "functions": [1, *range(3, 31)], "dimension": 30,
+        "repeats": 3, "base_seed": 20261017,
+        "reference_commit": REFERENCE_COMMIT,
+    }
+    early = {**env, "evaluations": 1200}
+    later = {**env, "evaluations": 10000}
+    old_data = []
+    new_data = []
+    for fid in env["functions"]:
+        old_winner = "re" if fid in (20, 22) else "abc"
+        for method in ("abc", "edbf", "re"):
+            old_data.append(
+                {
+                    "function_id": fid, "method": method,
+                    "mean_error": 1.0 if method == old_winner else 9.0,
+                }
+            )
+            new_data.append(
+                {"function_id": fid, "method": method,
+                 "mean_error": 1.0 if method == "abc" else 9.0}
+            )
+    matrix, changed = generator.leader_transition_counts(
+        early, old_data, later, new_data
+    )
+    assert changed == 2
+    assert matrix[("abc", "abc")] == 27
+    assert matrix[("re", "abc")] == 2
+    assert sum(matrix.values()) == 29
+    svg = generator.leader_transition_svg(early, old_data, later, new_data)
+    assert ElementTree.fromstring(svg).tag.endswith("svg")
+    assert "2 of 29" in svg
