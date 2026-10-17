@@ -2,5 +2,6 @@
   "featured_experiment": "docs/experiments/cec2017-reference-30d-2026-10-17",
   "secondary_experiment": "docs/experiments/cec2017-pilot-2026-10-17",
   "screen_experiment": "docs/experiments/cec2017-screen-30d-2026-10-17",
-  "long_budget_experiment": "docs/experiments/cec2017-longbudget-30d-2026-10-17"
+  "long_budget_experiment": "docs/experiments/cec2017-longbudget-30d-2026-10-17",
+  "long_budget_dataset_commit": "716868e85e380df865c39b66e9245d486b14e8cc"
 }
