@@ -1,0 +1,93 @@
+name: Reference CEC2017 30D Validation
+
+on:
+  push:
+    paths:
+      - "scripts/validate_reference_cec2017.py"
+      - ".github/workflows/reference-validation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  reference-30d:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install BoundEvo and pinned C-derived benchmark
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+          python -m pip install "git+https://github.com/tilleyd/cec2017-py.git@424a9fa2757914c3e4cfdd8f59a268b1aeb3197f"
+
+      - name: Preflight 29 official functions at D=10 and D=30
+        run: >-
+          python -u scripts/validate_reference_cec2017.py
+          --preflight-only
+          --functions 1 3 10 30
+          --dimensions-preflight 10 30
+          --dimension 30
+          --repeats 10
+          --evaluations 3000
+
+      - name: Run 120 matched-seed trials at D=30
+        run: >-
+          python -u scripts/validate_reference_cec2017.py
+          --functions 1 3 10 30
+          --dimension 30
+          --dimensions-preflight 10 30
+          --repeats 10
+          --evaluations 3000
+          --seed 20261017
+          --output-dir docs/experiments/cec2017-reference-30d-2026-10-17
+
+      - name: Verify numerical outputs and matching seeds
+        run: |
+          python - <<'PY'
+          import csv
+          from collections import defaultdict
+          from pathlib import Path
+
+          output = Path("docs/experiments/cec2017-reference-30d-2026-10-17")
+          with (output / "trials.csv").open(newline="") as handle:
+              rows = list(csv.DictReader(handle))
+          assert len(rows) == 120, len(rows)
+          groups = defaultdict(list)
+          for row in rows:
+              assert int(row["evaluations"]) == 3000
+              assert float(row["error"]) >= -1e-7
+              assert float(row["attempts_per_offspring"]) >= 1.0
+              groups[(int(row["function_id"]), int(row["repeat"]))].append(row)
+          assert len(groups) == 40, len(groups)
+          for key, trials in groups.items():
+              assert {item["method"] for item in trials} == {"abc", "edbf", "re"}, key
+              assert len({item["seed"] for item in trials}) == 1, key
+          for name in ("backend_preflight.csv", "summary.csv",
+                       "paired_sign_tests.csv", "environment.json", "report.md"):
+              assert (output / name).stat().st_size > 0, name
+          PY
+
+      - name: Upload full experiment data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: boundevo-cec2017-reference-30d-2026-10-17
+          path: docs/experiments/cec2017-reference-30d-2026-10-17/
+          retention-days: 90
+          if-no-files-found: warn
+
+      - name: Publish curated results to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/experiments/cec2017-reference-30d-2026-10-17/
+          git commit -m "data: publish independent-reference CEC2017 30D validation"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
