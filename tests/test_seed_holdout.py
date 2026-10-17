@@ -77,7 +77,7 @@ def test_holdout_seed_pairing_exact_sign_and_bootstrap(tmp_path):
     assert all(row["p_sign_holm"] < 0.05 for row in comparisons)
     assert all(row["paired_log1p_ci95_low"] > 0 for row in comparisons)
     assert module.exact_sign_p(0, 20) == pytest.approx(2 / 2**20)
-    assert "20 **new**" in module.report(summary, comparisons)
+    assert "Twenty **new**" in module.report(summary, comparisons)
 
 
 def test_holdout_rejects_duplicate_seed_or_missing_trial(tmp_path):
