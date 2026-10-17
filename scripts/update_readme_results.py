@@ -590,6 +590,52 @@ def load_long_budget() -> tuple[Path, dict, list[dict], list[dict]] | None:
     return folder, environment, summary, trials
 
 
+
+
+def longbudget_paired_sign_holm(
+    environment: dict, trials: list[dict]
+) -> list[dict]:
+    """Exact two-sided sign tests with Holm family-wise adjustment."""
+
+    by_key = {
+        (int(row["function_id"]), int(row["repeat"]), row["method"]):
+        float(row["error"])
+        for row in trials
+    }
+    hypotheses = []
+    for fid in environment["functions"]:
+        for baseline in ("edbf", "re"):
+            wins = 0
+            losses = 0
+            ties = 0
+            for rep in range(int(environment["repeats"])):
+                gap = by_key[(fid, rep, baseline)] - by_key[(fid, rep, "abc")]
+                if gap > 1e-10:
+                    wins += 1
+                elif gap < -1e-10:
+                    losses += 1
+                else:
+                    ties += 1
+            n = wins + losses
+            shorter = min(wins, losses)
+            p = (
+                min(1.0, 2 * sum(math.comb(n, k) for k in range(shorter + 1)) / 2**n)
+                if n > 0 else 1.0
+            )
+            hypotheses.append(
+                {"function_id": fid, "baseline": baseline,
+                 "wins": wins, "losses": losses, "ties": ties,
+                 "p_raw": p, "p_holm": 1.0}
+            )
+    order = sorted(range(len(hypotheses)), key=lambda i: hypotheses[i]["p_raw"])
+    cumulative = 0.0
+    for rank, index in enumerate(order):
+        adjusted = min(1.0, hypotheses[index]["p_raw"] * (len(order) - rank))
+        cumulative = max(cumulative, adjusted)
+        hypotheses[index]["p_holm"] = cumulative
+    return hypotheses
+
+
 def longbudget_markdown(
     folder: Path,
     environment: dict,
@@ -673,6 +719,28 @@ def longbudget_markdown(
             for rep in range(int(environment["repeats"])):
                 if raw[(fid, rep, "abc")] < raw[(fid, rep, method)]:
                     total_wins[method] += 1
+    tests = longbudget_paired_sign_holm(environment, trials)
+    rows.extend(
+        [
+            "",
+            (
+                "**Exact paired sign tests with Holm correction across 8 comparisons** "
+                "(exploratory; lower error is better):"
+                if en else
+                "**配对精确符号检验（全部 8 项统一 Holm 校正，仅探索性）：**"
+            ),
+            "",
+            "| Function | Contrast | ABC W/L/T | Raw p | Holm p |"
+            if en else "| 函数 | 对照 | ABC 胜/负/平 | 原始 p | Holm 校正 p |",
+            "|:---|:---|---:|---:|---:|",
+        ]
+    )
+    for test in tests:
+        rows.append(
+            f"| F{test['function_id']} | ABC vs {test['baseline'].upper()} | "
+            f"{test['wins']}/{test['losses']}/{test['ties']} | "
+            f"{test['p_raw']:.5g} | {test['p_holm']:.5g} |"
+        )
     rows.extend(
         [
             "",
