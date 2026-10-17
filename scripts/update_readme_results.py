@@ -1003,6 +1003,246 @@ def longbudget_analysis_cn(
     return "\n".join(lines)
 
 
+
+
+def load_full_suite() -> tuple[Path, dict, list[dict], list[dict], list[dict]] | None:
+    """Read real all-29-function results only after their aggregator has validated them."""
+
+    config = json.loads(CONFIG.read_text(encoding="utf-8"))
+    folder_name = config.get("full_suite_experiment")
+    if not folder_name:
+        return None
+    folder = ROOT / folder_name
+    if not (folder / "summary.csv").is_file():
+        return None
+    env = json.loads((folder / "environment.json").read_text(encoding="utf-8"))
+    ids = [int(x) for x in env["functions"]]
+    if (
+        len(ids) != 29 or set(ids) != ({1} | set(range(3, 31)))
+        or int(env["dimension"]) != 30
+        or int(env["evaluations"]) != 10000
+        or int(env["repeats"]) != 3
+        or int(env["trials"]) != 261
+        or env["reference_commit"] != "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f"
+    ):
+        raise ValueError("unverified 29-function full-suite protocol")
+    with (folder / "summary.csv").open(newline="", encoding="utf-8") as handle:
+        summary = list(csv.DictReader(handle))
+    with (folder / "history.csv").open(newline="", encoding="utf-8") as handle:
+        history = list(csv.DictReader(handle))
+    with (folder / "paired_function_tests.csv").open(newline="", encoding="utf-8") as handle:
+        tests = list(csv.DictReader(handle))
+    if len(summary) != 87 or len(history) != int(env["convergence_rows"]) or len(tests) != 2:
+        raise ValueError("incomplete full-suite summary, history, or statistical analysis")
+    pairs = {(int(row["function_id"]), row["method"]) for row in summary}
+    if pairs != {(fid, method) for fid in ids for method in METHODS}:
+        raise ValueError("invalid full-suite function and method coverage")
+    for row in summary:
+        if (
+            int(row["repeats"]) != 3
+            or int(float(row["mean_evaluations"])) != 10000
+            or not math.isfinite(float(row["mean_error"]))
+            or float(row["mean_error"]) < 0
+        ):
+            raise ValueError("invalid full-suite mean summary")
+    return folder, env, summary, history, tests
+
+
+def fullsuite_convergence_svg(history: list[dict], env: dict) -> str:
+    """Four real convergence comparisons, grouped by function and method.
+
+    Each curve divides its mean checkpoint error by the same method's mean
+    initial error for that function. This permits showing different functions
+    on a common relative scale without averaging their raw objective values.
+    """
+
+    selected = (10, 20, 22, 30)
+    by_case: dict[tuple[int, str, int], list[float]] = {}
+    for row in history:
+        fid = int(row["function_id"])
+        if fid not in selected:
+            continue
+        method = row["method"]
+        fe = int(row["evaluations"])
+        error = float(row["best_error"])
+        if method not in METHODS or not math.isfinite(error) or error < 0:
+            raise ValueError("invalid convergence sample")
+        by_case.setdefault((fid, method, fe), []).append(error)
+
+    curves: dict[tuple[int, str], list[tuple[int, float]]] = {}
+    for fid in selected:
+        for method in METHODS:
+            checkpoints = sorted(fe for (f, m, fe) in by_case if (f, m) == (fid, method))
+            if not checkpoints or checkpoints[0] != 100 or checkpoints[-1] != 10000:
+                raise ValueError(f"missing convergence endpoints for F{fid}/{method}")
+            if any(len(by_case[(fid, method, fe)]) != 3 for fe in checkpoints):
+                raise ValueError(f"unpaired convergence checkpoint for F{fid}/{method}")
+            values = [
+                (fe, statistics.fmean(by_case[(fid, method, fe)]))
+                for fe in checkpoints
+            ]
+            if values[0][1] <= 0:
+                raise ValueError("initial objective error must be positive")
+            curves[(fid, method)] = [
+                (fe, max(1e-12, value / values[0][1])) for fe, value in values
+            ]
+
+    width = 1380
+    parts = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} 560" '
+        'role="img" aria-label="Observed CEC2017 convergence at 10k evaluations">',
+        '<rect width="100%" height="100%" fill="#ffffff"/>',
+        '<rect x="16" y="16" width="1348" height="528" rx="18" '
+        'fill="#ffffff" stroke="#dde4ee"/>',
+        '<text x="55" y="62" font-family="Arial,sans-serif" font-size="26" '
+        'font-weight="700" fill="#0f172a">CEC2017 | 10k-FE convergence history</text>',
+        '<text x="55" y="92" font-family="Arial,sans-serif" font-size="15" '
+        'fill="#64748b">D=30 · 3 matched seeds/method · mean error relative to '
+        'the same method at initialization · lower is better</text>',
+    ]
+    for idx, method in enumerate(METHODS):
+        x = 915 + idx * 137
+        parts.extend(
+            [
+                f'<circle cx="{x}" cy="90" r="6" fill="{COLORS[method]}"/>',
+                f'<text x="{x+14}" y="96" font-family="Arial,sans-serif" '
+                f'font-size="14" fill="#334155">{method.upper()}</text>',
+            ]
+        )
+    for i, fid in enumerate(selected):
+        origin_x = 62 + i * 328
+        x1 = origin_x + 46
+        top, h, w = 154, 307, 236
+        minimum = min(value for m in METHODS for _, value in curves[(fid, m)])
+        low = min(-1, max(-10, math.floor(math.log10(minimum))))
+
+        def ordinate(value: float) -> float:
+            return top + (-math.log10(max(value, 1e-12))) / -low * h
+
+        parts.extend(
+            [
+                f'<text x="{x1 + 118}" y="135" text-anchor="middle" '
+                f'font-family="Arial,sans-serif" font-weight="700" font-size="21" '
+                f'fill="#0f172a">F{fid}</text>',
+                f'<line x1="{x1}" y1="{top}" x2="{x1+w}" y2="{top}" stroke="#cbd5e1"/>',
+                f'<line x1="{x1}" y1="{top+h}" x2="{x1+w}" y2="{top+h}" '
+                'stroke="#cbd5e1"/>',
+            ]
+        )
+        for exponent in range(low, 1):
+            y = ordinate(10.0 ** exponent)
+            parts.append(
+                f'<line x1="{x1}" y1="{y:.2f}" x2="{x1+w}" y2="{y:.2f}" '
+                'stroke="#e2e8f0"/>'
+            )
+        for method in METHODS:
+            coords = []
+            for fe, ratio in curves[(fid, method)]:
+                xp = x1 + (fe - 100) / (10000 - 100) * w
+                coords.append(f"{xp:.2f},{ordinate(ratio):.2f}")
+            parts.append(
+                f'<polyline points="{" ".join(coords)}" fill="none" '
+                f'stroke="{COLORS[method]}" stroke-width="3" '
+                'stroke-linejoin="round" stroke-linecap="round"/>'
+            )
+        parts.extend(
+            [
+                f'<text x="{x1}" y="483" font-family="Arial,sans-serif" '
+                'font-size="13" fill="#64748b">100 FE</text>',
+                f'<text x="{x1+w}" y="483" text-anchor="end" '
+                'font-family="Arial,sans-serif" font-size="13" '
+                'fill="#64748b">10,000 FE</text>',
+                f'<text x="{x1}" y="507" font-family="Arial,sans-serif" '
+                f'font-size="13" fill="#64748b">1x initial</text>',
+                f'<text x="{x1+w}" y="507" text-anchor="end" '
+                f'font-family="Arial,sans-serif" font-size="13" '
+                f'fill="#64748b">min 10^{low}x</text>',
+            ]
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n"
+
+
+def fullsuite_markdown(
+    folder: Path, env: dict, summary: list[dict], tests: list[dict], lang: str,
+) -> str:
+    winners, counts = screen_winners(env, summary)
+    relative = folder.relative_to(ROOT).as_posix()
+    en = lang == "en"
+    title = (
+        "### All 29 functions at 10,000 evaluations (3 paired seeds)"
+        if en else "### 全部 29 个函数：10,000 次评价与收敛曲线"
+    )
+    lines = [
+        title,
+        "",
+        (
+            "**261 real independent optimization trials**; CEC2017 D=30; "
+            "ABC, EDBF and RE start each paired repetition from the same seed. "
+            "Results remain exploratory because there are just three seeds per function."
+            if en else
+            "**261 次真实优化试验**，CEC2017 30 维，每方法 3 个配对种子。"
+            "每函数重复次数仍较少，结果仅用于探索性比较。"
+        ),
+        "",
+        "![Measured 29-function leaderboard at 10k FEs]"
+        "(docs/figures/cec2017-30d-fullsuite-10k-winners.svg)",
+        "",
+        "![F10 F20 F22 F30 measured convergence histories]"
+        "(docs/figures/cec2017-30d-fullsuite-10k-convergence.svg)",
+        "",
+        (
+            "Functions with lowest observed mean error: "
+            if en else "观测平均目标误差最低的函数数目："
+        ) + ", ".join(f"{m.upper()} {counts[m]}" for m in METHODS)
+        + (f", ties {counts['tie']}" if counts["tie"] else "") + ".",
+        "",
+        (
+            "**Across-function paired Wilcoxon tests** on log10 of function-level "
+            "mean errors, Holm correction across two contrasts:"
+            if en else
+            "**跨函数配对 Wilcoxon 检验**（对各函数平均误差取 log10，"
+            "两项比较统一 Holm 校正）："
+        ),
+        "",
+        "| Contrast | ABC leads / trails | Raw p | Holm p |"
+        if en else "| 对照 | ABC 领先/落后 | 原始 p | Holm 校正 p |",
+        "|:---|---:|---:|---:|",
+    ]
+    for row in tests:
+        lines.append(
+            f"| {row['comparison']} | {row['wins']}/{row['losses']} | "
+            f"{float(row['raw_p']):.5g} | {float(row['holm_p']):.5g} |"
+        )
+    lines += [
+        "",
+        (
+            f"[Raw trial CSV]({relative}/trials.csv) · "
+            f"[convergence checkpoints]({relative}/history.csv) · "
+            f"[per-function metrics]({relative}/summary.csv) · "
+            f"[research report]({relative}/report.md) · "
+            f"[runtime environment]({relative}/environment.json)"
+            if en else
+            f"[261 条原始试验]({relative}/trials.csv) · "
+            f"[收敛历史]({relative}/history.csv) · "
+            f"[逐函数汇总]({relative}/summary.csv) · "
+            f"[统计报告]({relative}/report.md) · "
+            f"[环境与源码修订]({relative}/environment.json)"
+        ),
+        "",
+        (
+            "**Scope:** This is a 10k-FE full-function exploratory benchmark, "
+            "not a reproduction of the 100k-FE paper. Different evaluation "
+            "budgets and different benchmark backends must never be pooled."
+            if en else
+            "**适用范围：**这是全部 29 函数的 10k 次评价探索实验，"
+            "不是原论文 100k 次评价的完整复现。不同预算、不同基准实现"
+            "的数据不得混合统计。"
+        ),
+    ]
+    return "\n".join(lines)
+
+
 def inject_readme(old: str, payload: str) -> str:
     if START not in old and END not in old:
         anchor = "## Overview" if payload.startswith("## Measured") else "## 项目定位"
@@ -1042,6 +1282,15 @@ def main() -> None:
     }
     screening = load_screening()
     long_budget = load_long_budget()
+    full_suite = load_full_suite()
+    if full_suite is not None:
+        _, full_env, full_summary, full_history, _ = full_suite
+        outputs[FIGURES / "cec2017-30d-fullsuite-10k-winners.svg"] = screening_svg(
+            full_env, full_summary
+        )
+        outputs[FIGURES / "cec2017-30d-fullsuite-10k-convergence.svg"] = (
+            fullsuite_convergence_svg(full_history, full_env)
+        )
     if long_budget is not None:
         _, longer_env, longer_summary, _ = long_budget
         outputs[FIGURES / "cec2017-30d-longbudget-relative-error.svg"] = (
@@ -1063,6 +1312,14 @@ def main() -> None:
     for language, name in (("en", "README.md"), ("cn", "README_CN.md")):
         path = ROOT / name
         markdown = section(primary, secondary, env, summary, language)
+        if full_suite is not None:
+            folder, full_env, full_summary, _, full_tests = full_suite
+            full_section = fullsuite_markdown(
+                folder, full_env, full_summary, full_tests, language
+            )
+            markdown = markdown.replace(
+                "<details><summary>", full_section + "\n\n<details><summary>", 1
+            )
         if long_budget is not None:
             folder, long_env, long_data, trials = long_budget
             long_section = longbudget_markdown(
