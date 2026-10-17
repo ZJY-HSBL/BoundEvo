@@ -11,6 +11,7 @@ from pathlib import Path
 
 from .cec2017 import (
     PAPER_FUNCTION_IDS,
+    Backend,
     CEC2017Case,
     make_cec2017_case,
     validate_function_ids,
@@ -196,6 +197,7 @@ def run_cec2017_suite(
     *,
     function_ids: Iterable[int] = PAPER_FUNCTION_IDS,
     dimension: int = 10,
+    backend: Backend = "opfunu",
     methods: Sequence[Method] = ("re", "edbf", "abc"),
     repeats: int = 1,
     base_seed: int = 42,
@@ -213,7 +215,7 @@ def run_cec2017_suite(
 
     records: list[TrialRecord] = []
     for fid in ids:
-        case = make_cec2017_case(fid, dimension)
+        case = make_cec2017_case(fid, dimension, backend=backend)
         for method_index, method in enumerate(methods):
             for repeat in range(repeats):
                 seed = base_seed + fid * 10_000 + method_index * 1_000 + repeat
