@@ -2,13 +2,20 @@
 
 from xml.etree import ElementTree
 
-from scripts.update_readme_results import (
-    evidence_ratio_svg,
-    parse_data,
-    runtime_svg,
-    screen_winners,
-    screening_svg,
-)
+import importlib.util
+from pathlib import Path
+
+_SOURCE = Path(__file__).resolve().parents[1] / "scripts" / "update_readme_results.py"
+_SPEC = importlib.util.spec_from_file_location("readme_evidence_generator", _SOURCE)
+assert _SPEC is not None and _SPEC.loader is not None
+_SCRIPT = importlib.util.module_from_spec(_SPEC)
+_SPEC.loader.exec_module(_SCRIPT)
+
+evidence_ratio_svg = _SCRIPT.evidence_ratio_svg
+parse_data = _SCRIPT.parse_data
+runtime_svg = _SCRIPT.runtime_svg
+screen_winners = _SCRIPT.screen_winners
+screening_svg = _SCRIPT.screening_svg
 
 
 def test_main_figures_parse_as_svg_and_reflect_actual_experiment() -> None:
