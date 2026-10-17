@@ -4,7 +4,6 @@ on:
   push:
     paths:
       - "scripts/validate_reference_cec2017.py"
-      - ".github/workflows/reference-validation.yml"
   workflow_dispatch:
 
 permissions:
@@ -73,6 +72,10 @@ jobs:
               assert (output / name).stat().st_size > 0, name
           PY
 
+      - name: Refresh README figures from validated CSV data
+        run: |
+          python scripts/update_readme_results.py
+          python scripts/update_readme_results.py --check
       - name: Upload full experiment data
         if: always()
         uses: actions/upload-artifact@v4
@@ -86,7 +89,11 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/experiments/cec2017-reference-30d-2026-10-17/
+          git add docs/experiments/cec2017-reference-30d-2026-10-17/ README.md README_CN.md docs/figures/
+          if git diff --cached --quiet; then
+            echo "No new data or README changes"
+            exit 0
+          fi
           git commit -m "data: publish independent-reference CEC2017 30D validation"
           git fetch origin main
           git rebase origin/main
