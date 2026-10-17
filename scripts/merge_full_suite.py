@@ -17,8 +17,8 @@ import platform
 import statistics
 import sys
 from collections import defaultdict
-from itertools import pairwise
 from datetime import datetime, timezone
+from itertools import pairwise
 from pathlib import Path
 
 import numpy as np
