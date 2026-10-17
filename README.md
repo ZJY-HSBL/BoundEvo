@@ -54,9 +54,51 @@ Functions with lowest observed mean error: ABC 27, EDBF 1, RE 1.
 | abc_vs_edbf | 28/1 | 7.4506e-09 | 1.4901e-08 |
 | abc_vs_re | 28/1 | 1.1176e-08 | 1.4901e-08 |
 
+<details><summary>See measured means for all 29 functions</summary>
+
+| Function | ABC | EDBF | RE |
+|:---|---:|---:|---:|
+| F1 | **1.321e+11** | 3.331e+11 | 1.537e+11 |
+| F3 | **31,980.2** | 275,529.3 | 145,773.4 |
+| F4 | **915.1** | 7,212.7 | 1,048.8 |
+| F5 | **279.5** | 419.5 | 317.7 |
+| F6 | **48.2** | 100.6 | 71.6 |
+| F7 | **441.7** | 1,754.9 | 693.4 |
+| F8 | **273.2** | 402.4 | 318.5 |
+| F9 | **3,853.2** | 18,373.9 | 9,431.4 |
+| F10 | **7,300.6** | 7,715.9 | 7,773.1 |
+| F11 | **281.8** | 3,532.0 | 691.5 |
+| F12 | **2.247e+07** | 1.373e+10 | 2.408e+09 |
+| F13 | **16,042.5** | 2.463e+09 | 2.624e+07 |
+| F14 | **295.6** | 19,196.9 | 435.4 |
+| F15 | **810.3** | 1.470e+07 | 50,695.6 |
+| F16 | 2,327.5 | 2,610.2 | **2,257.3** |
+| F17 | **883.3** | 1,368.5 | 1,125.7 |
+| F18 | **406.7** | 5.193e+06 | 757,108.7 |
+| F19 | **206.6** | 5.637e+07 | 1.350e+06 |
+| F20 | **682.2** | 1,188.4 | 953.3 |
+| F21 | **458.6** | 589.1 | 486.1 |
+| F22 | 7,889.5 | **7,725.8** | 7,904.8 |
+| F23 | **694.9** | 809.1 | 728.5 |
+| F24 | **763.2** | 841.2 | 828.4 |
+| F25 | **736.0** | 3,931.1 | 1,013.2 |
+| F26 | **4,284.3** | 6,036.8 | 4,558.3 |
+| F27 | **568.8** | 633.5 | 593.4 |
+| F28 | **1,129.9** | 2,898.3 | 1,302.0 |
+| F29 | **1,310.6** | 1,925.1 | 1,920.1 |
+| F30 | **459,541.4** | 6.323e+07 | 4.889e+06 |
+
+</details>
+
+
 [Raw trial CSV](docs/experiments/cec2017-fullsuite-30d-10k-2026-10-17/trials.csv) · [convergence checkpoints](docs/experiments/cec2017-fullsuite-30d-10k-2026-10-17/history.csv) · [per-function metrics](docs/experiments/cec2017-fullsuite-30d-10k-2026-10-17/summary.csv) · [research report](docs/experiments/cec2017-fullsuite-30d-10k-2026-10-17/report.md) · [runtime environment](docs/experiments/cec2017-fullsuite-30d-10k-2026-10-17/environment.json)
 
 **Scope:** This is a 10k-FE full-function exploratory benchmark, not a reproduction of the 100k-FE paper. Different evaluation budgets and different benchmark backends must never be pooled.
+
+![Observed changes in function-level leading methods](docs/figures/cec2017-30d-leader-transitions.svg)
+
+Across 29 functions, 3 changed their observed mean-error leader between 1,200 and 10,000 evaluations.
+
 
 ### Higher-budget verification: 10,000 evaluations
 

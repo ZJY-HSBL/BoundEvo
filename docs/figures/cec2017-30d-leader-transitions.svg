@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 540" role="img" aria-label="Observed algorithm leadership changes with budget">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="18" y="18" width="964" height="505" rx="18" fill="#ffffff" stroke="#dde4ee"/>
+<text x="70" y="73" font-family="Arial,sans-serif" font-size="26" font-weight="700" fill="#0f172a">CEC2017 | Budget-driven rank changes</text>
+<text x="70" y="107" font-family="Arial,sans-serif" font-size="15" fill="#64748b">29 official functions · D=30 · 3 matched seeds/method · lowest observed mean error</text>
+<text x="517" y="156" font-family="Arial,sans-serif" font-size="17" font-weight="600" fill="#334155" text-anchor="middle">Winner at 10,000 function evaluations →</text>
+<text x="294.0" y="193" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" fill="#334155">ABC</text>
+<text x="452.0" y="193" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" fill="#334155">EDBF</text>
+<text x="610.0" y="193" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" fill="#334155">RE</text>
+<text x="768.0" y="193" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" fill="#334155">TIE</text>
+<text x="83" y="196" font-family="Arial,sans-serif" font-size="15" fill="#64748b">1,200 FE ↓</text>
+<text x="179" y="251" text-anchor="end" font-family="Arial,sans-serif" font-size="16" fill="#334155">ABC</text>
+<rect x="215" y="213" width="149" height="56" rx="7" fill="#2563eb" fill-opacity="0.797" stroke="#e2e8f0"/>
+<text x="289.5" y="247" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#0f172a">26</text>
+<rect x="373" y="213" width="149" height="56" rx="7" fill="#ea580c" fill-opacity="0.080" stroke="#e2e8f0"/>
+<text x="447.5" y="247" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#0f172a">0</text>
+<rect x="531" y="213" width="149" height="56" rx="7" fill="#64748b" fill-opacity="0.108" stroke="#e2e8f0"/>
+<text x="605.5" y="247" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#0f172a">1</text>
+<rect x="689" y="213" width="149" height="56" rx="7" fill="#64748b" fill-opacity="0.080" stroke="#e2e8f0"/>
+<text x="763.5" y="247" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#0f172a">0</text>
+<text x="179" y="315" text-anchor="end" font-family="Arial,sans-serif" font-size="16" fill="#334155">EDBF</text>
+<rect x="215" y="277" width="149" height="56" rx="7" fill="#2563eb" fill-opacity="0.080" stroke="#e2e8f0"/>
+<text x="289.5" y="311" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#0f172a">0</text>
+<rect x="373" y="277" width="149" height="56" rx="7" fill="#ea580c" fill-opacity="0.080" stroke="#e2e8f0"/>
+<text x="447.5" y="311" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#0f172a">0</text>
+<rect x="531" y="277" width="149" height="56" rx="7" fill="#64748b" fill-opacity="0.080" stroke="#e2e8f0"/>
+<text x="605.5" y="311" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#0f172a">0</text>
+<rect x="689" y="277" width="149" height="56" rx="7" fill="#64748b" fill-opacity="0.080" stroke="#e2e8f0"/>
+<text x="763.5" y="311" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#0f172a">0</text>
+<text x="179" y="379" text-anchor="end" font-family="Arial,sans-serif" font-size="16" fill="#334155">RE</text>
+<rect x="215" y="341" width="149" height="56" rx="7" fill="#2563eb" fill-opacity="0.108" stroke="#e2e8f0"/>
+<text x="289.5" y="375" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#0f172a">1</text>
+<rect x="373" y="341" width="149" height="56" rx="7" fill="#ea580c" fill-opacity="0.108" stroke="#e2e8f0"/>
+<text x="447.5" y="375" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#0f172a">1</text>
+<rect x="531" y="341" width="149" height="56" rx="7" fill="#64748b" fill-opacity="0.080" stroke="#e2e8f0"/>
+<text x="605.5" y="375" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#0f172a">0</text>
+<rect x="689" y="341" width="149" height="56" rx="7" fill="#64748b" fill-opacity="0.080" stroke="#e2e8f0"/>
+<text x="763.5" y="375" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#0f172a">0</text>
+<text x="179" y="443" text-anchor="end" font-family="Arial,sans-serif" font-size="16" fill="#334155">TIE</text>
+<rect x="215" y="405" width="149" height="56" rx="7" fill="#2563eb" fill-opacity="0.080" stroke="#e2e8f0"/>
+<text x="289.5" y="439" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#0f172a">0</text>
+<rect x="373" y="405" width="149" height="56" rx="7" fill="#ea580c" fill-opacity="0.080" stroke="#e2e8f0"/>
+<text x="447.5" y="439" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#0f172a">0</text>
+<rect x="531" y="405" width="149" height="56" rx="7" fill="#64748b" fill-opacity="0.080" stroke="#e2e8f0"/>
+<text x="605.5" y="439" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#0f172a">0</text>
+<rect x="689" y="405" width="149" height="56" rx="7" fill="#64748b" fill-opacity="0.080" stroke="#e2e8f0"/>
+<text x="763.5" y="439" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#0f172a">0</text>
+<text x="215" y="504" font-family="Arial,sans-serif" font-size="17" font-weight="600" fill="#334155">3 of 29 functions changed their observed leader</text>
+</svg>
