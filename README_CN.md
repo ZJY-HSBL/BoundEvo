@@ -137,6 +137,17 @@ print(result.objective)
 print(result.x)
 ~~~
 
+## 独立 CEC2017 基准后端（开发中）
+
+目前新增了一个独立可选的 CEC2017 实现，它由原始 C 代码改写为 NumPy，固定使用上游提交 `424a9fa2757914c3e4cfdd8f59a268b1aeb3197f`，保留官方函数编号。
+
+~~~bash
+pip install "git+https://github.com/tilleyd/cec2017-py.git@424a9fa2757914c3e4cfdd8f59a268b1aeb3197f"
+boundevo benchmark --backend reference --dimension 30 --repeats 10
+~~~
+
+独立验证流程在 10 维和 30 维检查全部 29 个官方函数编号，再在 F1、F3、F10、F30 上进行 120 组 30 维对照试验。不同后端的数值不会混入同一统计结果。详见[独立基准验证说明](docs/reference_backend.md)。
+
 ## 真实数值验证（2026 年 10 月）
 
 已在 GitHub Actions 上完成一轮 60 组真实试验：CEC2017 F1、F3、F5、F20，10 维，每组最多 1500 次函数评价；ABC、EDBF、RE 各重复 5 次，相同函数及重复编号使用相同初始种子。
