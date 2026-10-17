@@ -154,8 +154,8 @@ def report_text(config: dict, rows: list[dict], tests: list[dict], checks: list[
     lines = [
         "# BoundEvo: independent-reference 30D CEC2017 comparison",
         "",
-        "This document reports measured numbers from GitHub Actions. It is not "
-        "a complete reproduction of the source paper.",
+        ("This document reports measured numbers from GitHub Actions. It is not "
+        "a complete reproduction of the source paper."),
         "",
         f"Reference-derived implementation: {REFERENCE_REPO}",
         f"Pinned upstream commit: {REFERENCE_COMMIT}",
@@ -207,9 +207,9 @@ def report_text(config: dict, rows: list[dict], tests: list[dict], checks: list[
         )
     lines += [
         "",
-        "The sign tests are per-function and exploratory; multiple comparisons "
+        ("The sign tests are per-function and exploratory; multiple comparisons "
         "are not corrected here. Do not interpret these p values as a "
-        "family-wise significant result.",
+        "family-wise significant result."),
         "",
         "## Timing and generator efficiency",
         "",
@@ -227,15 +227,15 @@ def report_text(config: dict, rows: list[dict], tests: list[dict], checks: list[
         "",
         "## Limitations",
         "",
-        "- A pinned C-derived Python implementation is an independent cross-check, "
-        "not byte-for-byte execution of the organizers' official C binaries.",
+        ("- A pinned C-derived Python implementation is an independent cross-check, "
+        "not byte-for-byte execution of the organizers' official C binaries."),
         "- Small numbers of functions and repetitions cannot establish general superiority.",
         "- Equal evaluation budgets do not equalize implementation overhead.",
         "- Shared random seeds equalize initial populations, not later RNG streams.",
-        "- Differences from the opfunu pilot reflect a change of benchmark backend; "
-        "the numeric values from different backends must not be pooled.",
-        "- More repetitions, validated complete 29-function coverage, and "
-        "paper-matching stopping rules are needed for publication claims.",
+        ("- Differences from the opfunu pilot reflect a change of benchmark backend; "
+        "the numeric values from different backends must not be pooled."),
+        ("- More repetitions, validated complete 29-function coverage, and "
+        "paper-matching stopping rules are needed for publication claims."),
         "",
     ]
     return "\n".join(lines)
