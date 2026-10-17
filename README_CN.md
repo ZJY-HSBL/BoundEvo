@@ -37,6 +37,18 @@
 
 **解释边界：**ABC 在 F1、F3、F30 的平均误差最低，**F10 则由 EDBF 略优**。这只能说明当前所测函数与预算下的表现，不能推导出对全部函数的普遍优势。独立 Python 后端并非原始官方 C 程序；58/58 项仅为有限采样点的数值预检，且每次 3,000 次评价不等于论文级完整复现。
 
+### 全部 29 个函数：30 维探索性普查
+
+共 **261 次真实试验**；每种方法 3 个配对种子、每次 1,200 次函数评价。颜色只表示观测均值最低，并不表示统计显著。
+
+![CEC2017 all 29 functions screening winner map](docs/figures/cec2017-30d-29function-screen.svg)
+
+获得最低观测平均误差的函数数量：ABC 27, EDBF 0, RE 2.
+
+[261 条原始记录](docs/experiments/cec2017-screen-30d-2026-10-17/trials.csv) · [逐函数均值](docs/experiments/cec2017-screen-30d-2026-10-17/summary.csv) · [实验环境](docs/experiments/cec2017-screen-30d-2026-10-17/environment.json)
+
+**预算限制：**本轮 1,200 次评价的普查结果不得与前述 3,000 次评价的实验合并统计。
+
 <details><summary>更早的 10 维探索性实验（使用另一后端，数据不得混合统计）</summary>
 
 ![Earlier 10D pilot](docs/experiments/cec2017-pilot-2026-10-17/error_comparison.png)

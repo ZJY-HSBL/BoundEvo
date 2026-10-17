@@ -37,6 +37,18 @@ Source: [raw trials](docs/experiments/cec2017-reference-30d-2026-10-17/trials.cs
 
 **Interpretation:** ABC has the lowest mean error on F1, F3, and F30; **EDBF is slightly better on F10**. These exploratory results do not establish universal superiority. The C-derived Python benchmark is an independent reference, not the original official C binary. The 58/58 finite/optimum preflight checks were sampled-point checks, not exhaustive validation. The 3,000-evaluation budget is much smaller than a full paper-level experiment.
 
+### All 29 functions: exploratory 30D screening
+
+**261 real trials** with 3 matched seeds per method and 1,200 evaluations per trial. The figure colors indicate the lowest *observed mean* error, not statistically established winners.
+
+![CEC2017 all 29 functions screening winner map](docs/figures/cec2017-30d-29function-screen.svg)
+
+Functions with the lowest observed average error: ABC 27, EDBF 0, RE 2.
+
+[Full screening CSV](docs/experiments/cec2017-screen-30d-2026-10-17/trials.csv) · [per-function means](docs/experiments/cec2017-screen-30d-2026-10-17/summary.csv) · [environment](docs/experiments/cec2017-screen-30d-2026-10-17/environment.json)
+
+**Budget caveat:** This 1,200-evaluation screening must not be pooled with the 3,000-evaluation main result.
+
 <details><summary>Earlier 10D exploratory pilot (different backend; do not pool results)</summary>
 
 ![Earlier 10D pilot](docs/experiments/cec2017-pilot-2026-10-17/error_comparison.png)
