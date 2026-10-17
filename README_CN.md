@@ -45,7 +45,7 @@
 
 获得最低观测平均误差的函数数量：ABC 27, EDBF 0, RE 2.
 
-[261 条原始记录](docs/experiments/cec2017-screen-30d-2026-10-17/trials.csv) · [逐函数均值](docs/experiments/cec2017-screen-30d-2026-10-17/summary.csv) · [实验环境](docs/experiments/cec2017-screen-30d-2026-10-17/environment.json)
+[261 条原始记录](docs/experiments/cec2017-screen-30d-2026-10-17/trials.csv) · [逐函数均值](docs/experiments/cec2017-screen-30d-2026-10-17/summary.csv) · [实验环境](docs/experiments/cec2017-screen-30d-2026-10-17/environment.json) · [中文结果分析](docs/experiments/cec2017-screen-30d-2026-10-17/statistical_analysis_CN.md)
 
 **预算限制：**本轮 1,200 次评价的普查结果不得与前述 3,000 次评价的实验合并统计。
 

@@ -45,7 +45,7 @@ Source: [raw trials](docs/experiments/cec2017-reference-30d-2026-10-17/trials.cs
 
 Functions with the lowest observed average error: ABC 27, EDBF 0, RE 2.
 
-[Full screening CSV](docs/experiments/cec2017-screen-30d-2026-10-17/trials.csv) · [per-function means](docs/experiments/cec2017-screen-30d-2026-10-17/summary.csv) · [environment](docs/experiments/cec2017-screen-30d-2026-10-17/environment.json)
+[Full screening CSV](docs/experiments/cec2017-screen-30d-2026-10-17/trials.csv) · [per-function means](docs/experiments/cec2017-screen-30d-2026-10-17/summary.csv) · [environment](docs/experiments/cec2017-screen-30d-2026-10-17/environment.json) · [Chinese analysis](docs/experiments/cec2017-screen-30d-2026-10-17/statistical_analysis_CN.md)
 
 **Budget caveat:** This 1,200-evaluation screening must not be pooled with the 3,000-evaluation main result.
 
