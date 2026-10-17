@@ -878,12 +878,14 @@ def longbudget_markdown(
                 f"[Raw 120 trials]({loc}/trials.csv) · "
                 f"[summary]({loc}/summary.csv) · "
                 f"[paired tests]({loc}/paired_sign_tests.csv) · "
-                f"[environment]({loc}/environment.json)"
+                f"[environment]({loc}/environment.json) · "
+                f"[Chinese analysis]({loc}/statistical_analysis_CN.md)"
                 if en else
                 f"[120 次原始试验]({loc}/trials.csv) · "
                 f"[均值和方差]({loc}/summary.csv) · "
                 f"[配对检验]({loc}/paired_sign_tests.csv) · "
-                f"[环境记录]({loc}/environment.json)"
+                f"[环境记录]({loc}/environment.json) · "
+                f"[中文分析报告]({loc}/statistical_analysis_CN.md)"
             ),
             "",
             (
@@ -898,6 +900,107 @@ def longbudget_markdown(
         ]
     )
     return "\n".join(rows)
+
+
+
+
+def longbudget_analysis_cn(
+    folder: Path, env: dict, summary: list[dict], trials: list[dict],
+    prior_env: dict, prior_summary: list[dict],
+) -> str:
+    """Generate a Chinese scientific report entirely from measured CSV records."""
+
+    result_map = {(int(row["function_id"]), row["method"]): row for row in summary}
+    previous = {(int(row["function_id"]), row["method"]): row for row in prior_summary}
+    methods = ("abc", "edbf", "re")
+    tests = longbudget_paired_sign_holm(env, trials)
+    lines = [
+        "# BoundEvo：CEC2017 高评价预算配对实验分析", "",
+        "## 实验方法", "",
+        f"- 后端：{env['reference_repo']}；固定修订版 "
+        f"`{env['reference_commit']}`。",
+        f"- 目标函数：{', '.join('F'+str(fid) for fid in env['functions'])}；"
+        f"维度 D={env['dimension']}。",
+        f"- 每种方法重复 {env['repeats']} 次，"
+        f"每次 {env['evaluations']:,} 次函数评价，共 {len(trials)} 条实测记录。",
+        "- 优化器采用 N=100、M=15、K=5、L=1，ABC、EDBF、RE "
+        "在同一函数和重复编号使用相同初始种子。",
+        "- 该实验刻意包含前期表现存在争议的 F10、F20、F22，"
+        "并包含 F30 作为对照函数。",
+        "- 代码和运行环境请以 [environment.json](environment.json) 为准。",
+        "", "## 原始测量汇总", "",
+        "| 函数 | 方法 | 均值误差 | 误差标准差 | 平均耗时(s) | 生成候选数/子代 |",
+        "|:---|:---|---:|---:|---:|---:|",
+    ]
+    for fid in env["functions"]:
+        for method in methods:
+            row = result_map[(fid, method)]
+            lines.append(
+                f"| F{fid} | {method.upper()} | {float(row['mean_error']):.6g} | "
+                f"{float(row['std_error']):.6g} | "
+                f"{float(row['mean_elapsed_seconds']):.3f} | "
+                f"{float(row['mean_attempts_per_offspring']):.2f} |"
+            )
+    lines += [
+        "", "## 逐函数配对精确符号检验与 Holm 校正", "",
+        "每个函数共有 10 个配对种子，比较方向为“对照误差 − ABC 误差”。"
+        "其中胜表示 ABC 误差较小。四个函数与两个对照算法组成 8 个检验，"
+        "按 Holm 方法统一调整。",
+        "",
+        "| 函数 | 对照 | ABC 胜/负/平 | 双侧原始 p | Holm p |",
+        "|:---|:---|---:|---:|---:|",
+    ]
+    for test in tests:
+        lines.append(
+            f"| F{test['function_id']} | {test['baseline'].upper()} | "
+            f"{test['wins']}/{test['losses']}/{test['ties']} | "
+            f"{test['p_raw']:.6g} | {test['p_holm']:.6g} |"
+        )
+    lines += [
+        "", "## 3,000 与 10,000 次函数评价的可比子集", "",
+        "仅 F10 与 F30 在此前 3,000 次评价实验中存在同后端、"
+        "同随机种子编号和同维度的记录。"
+        "这一比较是描述性的，不将不同预算下的数据混入同一个总体均值。",
+        "",
+        "| 函数 | 方法 | 3k 平均误差 | 10k 平均误差 | 相对变化 |",
+        "|:---|:---|---:|---:|---:|",
+    ]
+    shared = sorted(set(env["functions"]) & set(prior_env["functions"]))
+    for fid in shared:
+        for method in methods:
+            before = float(previous[(fid, method)]["mean_error"])
+            after = float(result_map[(fid, method)]["mean_error"])
+            fraction = (after / before - 1) * 100 if before > 0 else float("nan")
+            lines.append(
+                f"| F{fid} | {method.upper()} | {before:.6g} | "
+                f"{after:.6g} | {fraction:+.2f}% |"
+            )
+    leaders = {}
+    for fid in env["functions"]:
+        leaders[fid] = min(
+            methods, key=lambda m: float(result_map[(fid, m)]["mean_error"])
+        )
+    lines += [
+        "", "## 研究结论的限定范围", "",
+        "本轮各函数最低观测均值来自：" +
+        "；".join(f"F{fid}—{method.upper()}" for fid, method in leaders.items()) + "。",
+        "配对显著性应按上表 Holm 调整后的结果判断；"
+        "不能仅据均值差距宣称统计显著。",
+        "本轮仅覆盖 4 个经过有目的挑选的函数，"
+        "可能存在选择效应，不能将结论推广为 29 函数整体性能。",
+        "Wall-clock 时间取自 GitHub Actions runner，"
+        "不能作为跨机器、跨实现的普适加速比。",
+        "所用后端是独立的参考衍生 Python 实现，不等同于主办方原始 C 二进制。",
+        "后续仍需更高预算、完整函数集与更多独立重复。",
+        "", "## 可追溯文件", "",
+        "- [120 条原始数据](trials.csv)",
+        "- [统计汇总](summary.csv)",
+        "- [未校正的原始配对符号检验](paired_sign_tests.csv)",
+        "- [后端数值预检](backend_preflight.csv)",
+        "- [环境、种子及固定上游源码](environment.json)",
+        "",
+    ]
+    return "\n".join(lines)
 
 
 def inject_readme(old: str, payload: str) -> str:
@@ -946,6 +1049,10 @@ def main() -> None:
         )
         outputs[FIGURES / "cec2017-30d-budget-progression.svg"] = budget_progress_svg(
             summary, longer_summary, env, longer_env
+        )
+        target, _, _, long_trials = long_budget
+        outputs[target / "statistical_analysis_CN.md"] = longbudget_analysis_cn(
+            target, longer_env, longer_summary, long_trials, env, summary
         )
     if screening is not None:
         folder, screen_env, screen_data = screening
