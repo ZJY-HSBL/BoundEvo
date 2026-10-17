@@ -20,7 +20,6 @@ from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 
 import numpy as np
-from scipy.stats import friedmanchisquare, wilcoxon
 
 from boundevo.cec2017 import PAPER_FUNCTION_IDS, REFERENCE_COMMIT
 
@@ -173,6 +172,8 @@ def summaries(trials: list[dict], repeats: int) -> list[dict]:
 
 
 def compare_function_ranks(summary: list[dict]):
+    from scipy.stats import friedmanchisquare, wilcoxon
+
     by_case = {(int(r["function_id"]), r["method"]): float(r["mean_error"]) for r in summary}
     winners = {method: 0 for method in METHODS}
     ranks = {method: 0.0 for method in METHODS}
