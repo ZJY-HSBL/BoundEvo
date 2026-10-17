@@ -2,6 +2,10 @@
 
 All notable changes to BoundEvo are documented here.
 
+## [Unreleased]
+
+Development toward v0.8.0. Upcoming research priorities: longer-budget 29-function replication and stopping-rule validation.
+
 ## [0.7.0] - 2026-10-17
 
 ### Research evidence and documentation
