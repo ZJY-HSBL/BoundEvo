@@ -592,6 +592,112 @@ def load_long_budget() -> tuple[Path, dict, list[dict], list[dict]] | None:
 
 
 
+
+
+def budget_progress_svg(
+    prior_summary: list[dict], long_summary: list[dict],
+    prior_environment: dict, long_environment: dict
+) -> str:
+    """Plot 10k/3k mean-error ratios on overlapping functions only."""
+
+    previous = {(int(row["function_id"]), row["method"]): row for row in prior_summary}
+    current = {(int(row["function_id"]), row["method"]): row for row in long_summary}
+    functions = sorted(set(prior_environment["functions"]) & set(long_environment["functions"]))
+    if functions != [10, 30]:
+        raise ValueError("budget sensitivity chart expects F10 and F30")
+    if prior_environment["dimension"] != long_environment["dimension"]:
+        raise ValueError("budget sensitivity requires identical dimensions")
+    if int(prior_environment["repeats"]) != int(long_environment["repeats"]):
+        raise ValueError("budget sensitivity requires identical repeat counts")
+    ratios = {}
+    for fid in functions:
+        for method in METHODS:
+            original = float(previous[(fid, method)]["mean_error"])
+            later = float(current[(fid, method)]["mean_error"])
+            if original <= 0 or not math.isfinite(original) or not math.isfinite(later):
+                raise ValueError("budget sensitivity needs finite positive baseline error")
+            ratios[(fid, method)] = later / original
+    top, height = 207, 270
+    max_ratio = max(1.0, max(ratios.values()))
+    upper = max(1.2, max_ratio * 1.15)
+    parts = plot_header(
+        "CEC2017 | Evaluation-budget sensitivity",
+        "F10 / F30 only | Mean error relative to each method at 3,000 FEs | lower is better"
+    )
+    parts += legend()
+
+    def y(value: float) -> float:
+        return top + height * (1.0 - value / upper)
+
+    for t in range(6):
+        tick = upper * t / 5
+        yy = y(tick)
+        parts.extend(
+            [
+                (
+                    f'<line x1="125" y1="{yy:.2f}" x2="1012" y2="{yy:.2f}" '
+                    'stroke="#e2e8f0"/>'
+                ),
+                (
+                    f'<text x="107" y="{yy + 5:.2f}" font-family="Arial,sans-serif" '
+                    f'font-size="14" text-anchor="end" fill="#64748b">{tick:.2f}x</text>'
+                ),
+            ]
+        )
+    for index, fid in enumerate(functions):
+        center = 342 + index * 424
+        x0, x1 = center - 115, center + 115
+        parts.extend(
+            [
+                (
+                    f'<text x="{center}" y="534" font-family="Arial,sans-serif" '
+                    f'font-size="21" text-anchor="middle" font-weight="700" '
+                    f'fill="#334155">F{fid}</text>'
+                ),
+                (
+                    f'<text x="{x0}" y="503" font-family="Arial,sans-serif" '
+                    f'font-size="15" text-anchor="middle" fill="#64748b">3k</text>'
+                ),
+                (
+                    f'<text x="{x1}" y="503" font-family="Arial,sans-serif" '
+                    f'font-size="15" text-anchor="middle" fill="#64748b">10k</text>'
+                ),
+            ]
+        )
+        for method in METHODS:
+            y0 = y(1.0)
+            y1 = y(ratios[(fid, method)])
+            parts.extend(
+                [
+                    (
+                        f'<line x1="{x0}" y1="{y0:.2f}" x2="{x1}" y2="{y1:.2f}" '
+                        f'stroke="{COLORS[method]}" stroke-width="4"/>'
+                    ),
+                    (
+                        f'<circle cx="{x0}" cy="{y0:.2f}" r="7" '
+                        f'fill="{COLORS[method]}" stroke="white" stroke-width="1"/>'
+                    ),
+                    (
+                        f'<circle cx="{x1}" cy="{y1:.2f}" r="7" '
+                        f'fill="{COLORS[method]}" stroke="white" stroke-width="1"/>'
+                    ),
+                    (
+                        f'<title>F{fid}, {method}: 10k/3k mean error '
+                        f'{ratios[(fid, method)]:.6g}</title>'
+                    ),
+                ]
+            )
+    parts.extend(
+        [
+            '<text x="125" y="572" font-family="Arial,sans-serif" font-size="14" '
+            'fill="#64748b">Budget cohorts are reported separately; '
+            'a lower ratio means greater error reduction.</text>',
+            '</svg>',
+        ]
+    )
+    return "\n".join(parts) + "\n"
+
+
 def longbudget_paired_sign_holm(
     environment: dict, trials: list[dict]
 ) -> list[dict]:
@@ -670,6 +776,9 @@ def longbudget_markdown(
         "",
         "![10k-FE error ratio compared to RE]"
         "(docs/figures/cec2017-30d-longbudget-relative-error.svg)",
+        "",
+        "![3k vs 10k evaluation-budget progression on F10 and F30]"
+        "(docs/figures/cec2017-30d-budget-progression.svg)",
         "",
         "| Function | ABC | EDBF | RE |" if en else "| 函数 | ABC | EDBF | RE |",
         "|:---|---:|---:|---:|",
@@ -820,6 +929,9 @@ def main() -> None:
         _, longer_env, longer_summary, _ = long_budget
         outputs[FIGURES / "cec2017-30d-longbudget-relative-error.svg"] = (
             evidence_ratio_svg(longer_summary, longer_env)
+        )
+        outputs[FIGURES / "cec2017-30d-budget-progression.svg"] = budget_progress_svg(
+            summary, longer_summary, env, longer_env
         )
     if screening is not None:
         folder, screen_env, screen_data = screening
