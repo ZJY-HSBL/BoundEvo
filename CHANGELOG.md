@@ -2,9 +2,17 @@
 
 All notable changes to BoundEvo are documented here.
 
-## [Unreleased]
+## [0.6.0] - 2026-10-17
 
-Development toward v0.6.0.
+### Added
+
+- Independent C-derived CEC2017 Python reference backend, pinned upstream, alongside opfunu.
+- 58 sampled function/dimension integrity checks across official F1,F3..F30 at D=10/30.
+- 120 actual D=30 trials across F1,F3,F10,F30 with paired seeds and objective budgets.
+- Exact paired sign-test analysis with Holm multiple-comparison correction.
+- Matched initial RNG seeds across algorithms in benchmark and parent-count workflows.
+- Reference backend selection from Python/CLI/pipeline and corresponding regression tests.
+- Full experiment data, scientific caveats and numerical integrity issue tracking.
 
 ### Experimental validation
 
