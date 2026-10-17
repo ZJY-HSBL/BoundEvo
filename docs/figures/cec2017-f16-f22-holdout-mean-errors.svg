@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 580" role="img" aria-label="F16 F22 independent 20 fresh-seed bootstrap means">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="20" y="20" width="1060" height="540" rx="16" fill="#ffffff" stroke="#dde4ee"/>
+<text x="65" y="79" font-family="Arial,sans-serif" font-size="28" font-weight="700" fill="#0f172a">CEC2017 | New-seed robustness check</text>
+<text x="65" y="112" font-family="Arial,sans-serif" font-size="16" fill="#64748b">F16 and F22 · 20 unused paired seeds per method · 10,000 FEs · 95% bootstrap intervals</text>
+<text x="65" y="145" font-family="Arial,sans-serif" font-size="14" fill="#64748b">Lower mean objective error is better · logarithmic y-axis · bars denote percentile bootstrap CI</text>
+<line x1="145" y1="465.00" x2="1020" y2="465.00" stroke="#e2e8f0"/>
+<text x="130" y="471.00" text-anchor="end" font-family="Arial,sans-serif" font-size="14" fill="#64748b">1000</text>
+<line x1="145" y1="195.00" x2="1020" y2="195.00" stroke="#e2e8f0"/>
+<text x="130" y="201.00" text-anchor="end" font-family="Arial,sans-serif" font-size="14" fill="#64748b">10000</text>
+<text x="350" y="180" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#334155">F16</text>
+<line x1="236" y1="374.00" x2="236" y2="387.63" stroke="#2563eb" stroke-width="5"/>
+<line x1="223" y1="374.00" x2="249" y2="374.00" stroke="#2563eb" stroke-width="3"/>
+<line x1="223" y1="387.63" x2="249" y2="387.63" stroke="#2563eb" stroke-width="3"/>
+<circle cx="236" cy="380.79" r="10" fill="#2563eb" stroke="white" stroke-width="2"/>
+<text x="236" y="492" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" fill="#334155">ABC</text>
+<title>F16 ABC mean 2050.7224, 95% bootstrap CI [1934.3834, 2172.813]</title>
+<line x1="350" y1="347.86" x2="350" y2="355.30" stroke="#ea580c" stroke-width="5"/>
+<line x1="337" y1="347.86" x2="363" y2="347.86" stroke="#ea580c" stroke-width="3"/>
+<line x1="337" y1="355.30" x2="363" y2="355.30" stroke="#ea580c" stroke-width="3"/>
+<circle cx="350" cy="351.33" r="10" fill="#ea580c" stroke="white" stroke-width="2"/>
+<text x="350" y="492" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" fill="#334155">EDBF</text>
+<title>F16 EDBF mean 2636.263, 95% bootstrap CI [2548.624, 2715.4666]</title>
+<line x1="464" y1="358.88" x2="464" y2="367.53" stroke="#64748b" stroke-width="5"/>
+<line x1="451" y1="358.88" x2="477" y2="358.88" stroke="#64748b" stroke-width="3"/>
+<line x1="451" y1="367.53" x2="477" y2="367.53" stroke="#64748b" stroke-width="3"/>
+<circle cx="464" cy="362.77" r="10" fill="#64748b" stroke="white" stroke-width="2"/>
+<text x="464" y="492" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" fill="#334155">RE</text>
+<title>F16 RE mean 2391.3246, 95% bootstrap CI [2296.2035, 2471.838]</title>
+<text x="785" y="180" text-anchor="middle" font-family="Arial,sans-serif" font-size="21" font-weight="700" fill="#334155">F22</text>
+<line x1="671" y1="235.88" x2="671" y2="291.48" stroke="#2563eb" stroke-width="5"/>
+<line x1="658" y1="235.88" x2="684" y2="235.88" stroke="#2563eb" stroke-width="3"/>
+<line x1="658" y1="291.48" x2="684" y2="291.48" stroke="#2563eb" stroke-width="3"/>
+<circle cx="671" cy="259.78" r="10" fill="#2563eb" stroke="white" stroke-width="2"/>
+<text x="671" y="492" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" fill="#334155">ABC</text>
+<title>F22 ABC mean 5755.3156, 95% bootstrap CI [4391.9792, 7056.5909]</title>
+<line x1="785" y1="222.79" x2="785" y2="234.55" stroke="#ea580c" stroke-width="5"/>
+<line x1="772" y1="222.79" x2="798" y2="222.79" stroke="#ea580c" stroke-width="3"/>
+<line x1="772" y1="234.55" x2="798" y2="234.55" stroke="#ea580c" stroke-width="3"/>
+<circle cx="785" cy="227.63" r="10" fill="#ea580c" stroke="white" stroke-width="2"/>
+<text x="785" y="492" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" fill="#334155">EDBF</text>
+<title>F22 EDBF mean 7571.1722, 95% bootstrap CI [7137.0269, 7890.0436]</title>
+<line x1="899" y1="219.74" x2="899" y2="230.38" stroke="#64748b" stroke-width="5"/>
+<line x1="886" y1="219.74" x2="912" y2="219.74" stroke="#64748b" stroke-width="3"/>
+<line x1="886" y1="230.38" x2="912" y2="230.38" stroke="#64748b" stroke-width="3"/>
+<circle cx="899" cy="224.26" r="10" fill="#64748b" stroke="white" stroke-width="2"/>
+<text x="899" y="492" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" fill="#334155">RE</text>
+<title>F22 RE mean 7791.6419, 95% bootstrap CI [7395.5377, 8097.7761]</title>
+<text x="65" y="540" font-family="Arial,sans-serif" font-size="14" fill="#64748b">Intervals reflect resampling 20 new paired seed indices and should not be interpreted as exact 95% coverage.</text>
+</svg>

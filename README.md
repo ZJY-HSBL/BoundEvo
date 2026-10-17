@@ -37,6 +37,36 @@ Source: [raw trials](docs/experiments/cec2017-reference-30d-2026-10-17/trials.cs
 
 **Interpretation:** ABC has the lowest mean error on F1, F3, and F30; **EDBF is slightly better on F10**. These exploratory results do not establish universal superiority. The C-derived Python benchmark is an independent reference, not the original official C binary. The 58/58 finite/optimum preflight checks were sampled-point checks, not exhaustive validation. The 3,000-evaluation budget is much smaller than a full paper-level experiment.
 
+### F16/F22: 20 new seeds to test the unstable rankings
+
+**120 new measured trials** on F16/F22, D=30, 10,000 function evaluations, with 20 seed values not reused in previous studies. ABC/EDBF/RE have matched initial seeds for each repeat.
+
+![F16/F22 holdout mean errors with bootstrap confidence intervals](docs/figures/cec2017-f16-f22-holdout-mean-errors.svg)
+
+**Mean objective error and 95% percentile bootstrap interval** (lower is better):
+
+| Function | Method | Mean error | 95% bootstrap interval |
+|:---|:---|---:|:---|
+| F16 | ABC | 2,050.7 | [1,934.4, 2,172.8] |
+| F16 | EDBF | 2,636.3 | [2,548.6, 2,715.5] |
+| F16 | RE | 2,391.3 | [2,296.2, 2,471.8] |
+| F22 | ABC | 5,755.3 | [4,392.0, 7,056.6] |
+| F22 | EDBF | 7,571.2 | [7,137.0, 7,890.0] |
+| F22 | RE | 7,791.6 | [7,395.5, 8,097.8] |
+
+**Two-sided exact paired sign tests, Holm correction for 4 contrasts:**
+
+| Function | Contrast | ABC W/L/T | Holm p |
+|:---|:---|---:|---:|
+| F16 | abc_vs_edbf | 19/1/0 | 0.00016022 |
+| F16 | abc_vs_re | 16/4/0 | 0.035454 |
+| F22 | abc_vs_edbf | 13/7/0 | 0.26318 |
+| F22 | abc_vs_re | 14/6/0 | 0.23064 |
+
+[120 fresh-seed raw trials](docs/experiments/cec2017-holdout-30d-10k-2026-10-17/trials.csv) · [bootstrap results](docs/experiments/cec2017-holdout-30d-10k-2026-10-17/summary.csv) · [paired hypothesis tests](docs/experiments/cec2017-holdout-30d-10k-2026-10-17/paired_tests.csv) · [experiment protocol](docs/experiments/cec2017-holdout-30d-10k-2026-10-17/environment.json) · [complete report](docs/experiments/cec2017-holdout-30d-10k-2026-10-17/report.md)
+
+**Caveat:** The functions were selected after earlier ranking disagreements. Fresh seeds reduce data reuse but this remains an exploratory two-function study.
+
 ### All 29 functions at 10,000 evaluations (3 paired seeds)
 
 **261 real independent optimization trials**; CEC2017 D=30; ABC, EDBF and RE start each paired repetition from the same seed. Results remain exploratory because there are just three seeds per function.
