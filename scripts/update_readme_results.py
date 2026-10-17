@@ -522,6 +522,188 @@ def screening_markdown(folder: Path, environment: dict, data: list[dict], lang: 
     )
 
 
+
+
+def load_long_budget() -> tuple[Path, dict, list[dict], list[dict]] | None:
+    """Load and independently validate every trial before showing a 10k-FE result."""
+
+    config = json.loads(CONFIG.read_text(encoding="utf-8"))
+    directory = config.get("long_budget_experiment")
+    if not directory:
+        return None
+    folder = ROOT / directory
+    if not (folder / "summary.csv").is_file():
+        return None
+    environment = json.loads((folder / "environment.json").read_text(encoding="utf-8"))
+    ids = [int(fid) for fid in environment["functions"]]
+    reps = int(environment["repeats"])
+    budget = int(environment["evaluations"])
+    if (ids, int(environment["dimension"]), reps, budget) != (
+        [10, 20, 22, 30], 30, 10, 10_000
+    ):
+        raise ValueError("long-budget experiment metadata do not match protocol")
+    with (folder / "summary.csv").open(newline="", encoding="utf-8") as handle:
+        summary = list(csv.DictReader(handle))
+    if len(summary) != len(ids) * len(METHODS):
+        raise ValueError("long-budget summary is incomplete")
+    summary_keys = set()
+    for row in summary:
+        key = (int(row["function_id"]), row["method"])
+        if key in summary_keys or key[0] not in ids or key[1] not in METHODS:
+            raise ValueError("duplicate or unexpected long-budget summary")
+        summary_keys.add(key)
+        if int(row["repeats"]) != reps or int(float(row["mean_evaluations"])) != budget:
+            raise ValueError("long-budget summary has incorrect repetitions or budget")
+        for column in ("mean_error", "std_error", "mean_elapsed_seconds"):
+            value = float(row[column])
+            if not math.isfinite(value) or value < 0:
+                raise ValueError(f"invalid long-budget {column}: {key}")
+    with (folder / "trials.csv").open(newline="", encoding="utf-8") as handle:
+        trials = list(csv.DictReader(handle))
+    if len(trials) != len(ids) * len(METHODS) * reps:
+        raise ValueError("long-budget trial CSV has missing observations")
+    grouped: dict[tuple[int, int], list[dict]] = {}
+    for row in trials:
+        fid = int(row["function_id"])
+        rep = int(row["repeat"])
+        if fid not in ids or not 0 <= rep < reps:
+            raise ValueError("unexpected function or repetition in long-budget trials")
+        if int(row["evaluations"]) != budget or int(row["dimension"]) != 30:
+            raise ValueError("incorrect budget or dimension in long-budget trial")
+        if not math.isfinite(float(row["error"])) or float(row["error"]) < 0:
+            raise ValueError("nonfinite or negative objective error")
+        grouped.setdefault((fid, rep), []).append(row)
+    if len(grouped) != len(ids) * reps:
+        raise ValueError("long-budget trials contain incomplete paired groups")
+    for (fid, rep), matched in grouped.items():
+        if len(matched) != len(METHODS):
+            raise ValueError(f"duplicate/missing method for F{fid} repeat {rep}")
+        if {row["method"] for row in matched} != set(METHODS):
+            raise ValueError(f"missing method for F{fid} repeat {rep}")
+        if len({row["seed"] for row in matched}) != 1:
+            raise ValueError(f"unpaired seeds for F{fid} repeat {rep}")
+    return folder, environment, summary, trials
+
+
+def longbudget_markdown(
+    folder: Path,
+    environment: dict,
+    summary: list[dict],
+    trials: list[dict],
+    lang: str,
+    prior_environment: dict,
+    prior_summary: list[dict],
+) -> str:
+    """Render longer-budget evidence and compare common cases across budgets."""
+
+    en = lang == "en"
+    loc = folder.relative_to(ROOT).as_posix()
+    by_case = {(int(row["function_id"]), row["method"]): row for row in summary}
+    prior = {(int(row["function_id"]), row["method"]): row for row in prior_summary}
+    title = (
+        "### Higher-budget verification: 10,000 evaluations"
+        if en else "### 高评价预算验证：每次 10,000 次函数评价"
+    )
+    header = (
+        "**120 measured trials** at D=30 (F10, F20, F22, F30), "
+        "10 matched initial seeds/method. The focus includes the cases "
+        "where ABC did not lead in earlier experiments."
+        if en else
+        "**120 次真实试验**，D=30，测试 F10、F20、F22、F30，"
+        "每方法 10 个配对初始种子。重点检验此前 ABC 未领先的函数。"
+    )
+    rows = [
+        title,
+        "",
+        header,
+        "",
+        "![10k-FE error ratio compared to RE]"
+        "(docs/figures/cec2017-30d-longbudget-relative-error.svg)",
+        "",
+        "| Function | ABC | EDBF | RE |" if en else "| 函数 | ABC | EDBF | RE |",
+        "|:---|---:|---:|---:|",
+    ]
+    for fid in environment["functions"]:
+        scores = {method: float(by_case[(fid, method)]["mean_error"]) for method in METHODS}
+        best = min(scores.values())
+        rendered = [
+            f"**{fmt_error(scores[method])}**"
+            if math.isclose(scores[method], best, rel_tol=1e-12)
+            else fmt_error(scores[method])
+            for method in METHODS
+        ]
+        rows.append(f"| F{fid} | {' | '.join(rendered)} |")
+    matched_fids = sorted(set(environment["functions"]) & set(prior_environment["functions"]))
+    if int(prior_environment["evaluations"]) != 3_000:
+        raise ValueError("cross-budget comparison expects 3000-FE baseline")
+    if int(prior_environment["repeats"]) != int(environment["repeats"]):
+        raise ValueError("cross-budget comparison requires matched repeats")
+    rows.extend(
+        [
+            "",
+            (
+                f"**Cross-budget check** (same reference-derived backend and "
+                f"seed schedule; {prior_environment['evaluations']:,} → "
+                f"{environment['evaluations']:,} evaluations):"
+                if en else
+                f"**跨预算验证**（同一参考后端与种子规则，"
+                f"{prior_environment['evaluations']:,} → "
+                f"{environment['evaluations']:,} 次评价）："
+            ),
+            "",
+            "| Function | Method | 3k FE mean error | 10k FE mean error |"
+            if en else "| 函数 | 方法 | 3k 次评价误差 | 10k 次评价误差 |",
+            "|:---|:---|---:|---:|",
+        ]
+    )
+    for fid in matched_fids:
+        for method in METHODS:
+            previous = float(prior[(fid, method)]["mean_error"])
+            current = float(by_case[(fid, method)]["mean_error"])
+            rows.append(f"| F{fid} | {method.upper()} | {fmt_error(previous)} | {fmt_error(current)} |")
+    raw = {(int(r["function_id"]), int(r["repeat"]), r["method"]): float(r["error"]) for r in trials}
+    total_wins: dict[str, int] = {method: 0 for method in METHODS}
+    for fid in environment["functions"]:
+        for method in ("edbf", "re"):
+            for rep in range(int(environment["repeats"])):
+                if raw[(fid, rep, "abc")] < raw[(fid, rep, method)]:
+                    total_wins[method] += 1
+    rows.extend(
+        [
+            "",
+            (
+                "Paired wins by ABC across the 40 matched seeds in the four "
+                "functions (ties not counted): "
+                if en else
+                "四个函数共 40 组配对种子中 ABC 的获胜次数（不计平局）："
+            ) + f"vs EDBF {total_wins['edbf']}/40; vs RE {total_wins['re']}/40.",
+            "",
+            (
+                f"[Raw 120 trials]({loc}/trials.csv) · "
+                f"[summary]({loc}/summary.csv) · "
+                f"[paired tests]({loc}/paired_sign_tests.csv) · "
+                f"[environment]({loc}/environment.json)"
+                if en else
+                f"[120 次原始试验]({loc}/trials.csv) · "
+                f"[均值和方差]({loc}/summary.csv) · "
+                f"[配对检验]({loc}/paired_sign_tests.csv) · "
+                f"[环境记录]({loc}/environment.json)"
+            ),
+            "",
+            (
+                "**Limitations:** This is a selected-function challenge, not "
+                "a 29-function 10k-FE suite. Runtime differences and different "
+                "budget lengths must not be pooled. Mean leads alone do not "
+                "establish significance."
+                if en else
+                "**解释边界：**这只是选定四函数的高预算试验，不是完整 29 函数的 "
+                "10k 次评价复现。不同预算不能合并统计，均值领先不等于显著优势。"
+            ),
+        ]
+    )
+    return "\n".join(rows)
+
+
 def inject_readme(old: str, payload: str) -> str:
     if START not in old and END not in old:
         anchor = "## Overview" if payload.startswith("## Measured") else "## 项目定位"
@@ -560,6 +742,12 @@ def main() -> None:
         FIGURES / "cec2017-30d-runtime.svg": runtime_svg(summary, env),
     }
     screening = load_screening()
+    long_budget = load_long_budget()
+    if long_budget is not None:
+        _, longer_env, longer_summary, _ = long_budget
+        outputs[FIGURES / "cec2017-30d-longbudget-relative-error.svg"] = (
+            evidence_ratio_svg(longer_summary, longer_env)
+        )
     if screening is not None:
         folder, screen_env, screen_data = screening
         outputs[FIGURES / "cec2017-30d-29function-screen.svg"] = screening_svg(
@@ -569,6 +757,14 @@ def main() -> None:
     for language, name in (("en", "README.md"), ("cn", "README_CN.md")):
         path = ROOT / name
         markdown = section(primary, secondary, env, summary, language)
+        if long_budget is not None:
+            folder, long_env, long_data, trials = long_budget
+            long_section = longbudget_markdown(
+                folder, long_env, long_data, trials, language, env, summary
+            )
+            markdown = markdown.replace(
+                "<details><summary>", long_section + "\n\n<details><summary>", 1
+            )
         if screening is not None:
             folder, screen_env, screen_data = screening
             extra_section = screening_markdown(folder, screen_env, screen_data, language)
