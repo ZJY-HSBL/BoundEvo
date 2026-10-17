@@ -1438,6 +1438,47 @@ def load_fresh_seed_holdout() -> tuple[Path, dict, list[dict], list[dict]] | Non
             raise ValueError("invalid bootstrap interval")
     if seen != {(fid, method) for fid in (16, 22) for method in METHODS}:
         raise ValueError("incomplete holdout method coverage")
+    with (folder / "trials.csv").open(newline="", encoding="utf-8") as handle:
+        trials = list(csv.DictReader(handle))
+    if len(trials) != 120:
+        raise ValueError("missing original holdout trial records")
+    paired: dict[tuple[int, int], dict[str, float]] = {}
+    for trial in trials:
+        fid = int(trial["function_id"])
+        rep = int(trial["repeat"])
+        method = trial["method"]
+        if (
+            fid not in (16, 22) or not 0 <= rep < 20 or method not in METHODS
+            or int(trial["seed"]) != 20261037 + fid * 10000 + rep
+            or int(trial["evaluations"]) != 10000
+            or int(trial["dimension"]) != 30
+        ):
+            raise ValueError("invalid trial seed or budget in README data")
+        group = paired.setdefault((fid, rep), {})
+        if method in group:
+            raise ValueError("duplicate coefficient method in holdout trial")
+        objective = float(trial["objective"])
+        optimum = float(trial["optimum"])
+        error = float(trial["error"])
+        if (
+            not all(map(math.isfinite, (objective, optimum, error)))
+            or error < 0 or not math.isclose(objective - optimum, error, abs_tol=1e-6)
+        ):
+            raise ValueError("invalid known-optimum objective gap")
+        group[method] = error
+    if len(paired) != 40 or any(set(group) != set(METHODS) for group in paired.values()):
+        raise ValueError("incomplete independent holdout seed pairing")
+    for row in rows:
+        fid, method = int(row["function_id"]), row["method"]
+        mean = statistics.fmean(paired[(fid, rep)][method] for rep in range(20))
+        if not math.isclose(float(row["mean_error"]), mean, rel_tol=1e-10):
+            raise ValueError("holdout summary mean differs from raw trial records")
+    if {
+        (int(test["function_id"]), test["comparison"])
+        for test in tests
+    } != {(fid, "abc_vs_" + opponent) for fid in (16, 22)
+         for opponent in ("edbf", "re")}:
+        raise ValueError("holdout Holm hypothesis family is incomplete")
     return folder, env, rows, tests
 
 
