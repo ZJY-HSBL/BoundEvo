@@ -150,3 +150,44 @@ The `results/` directory is ignored by Git. Curated tables, figures, or reports
 should be copied into a deliberate publication or documentation directory before
 committing them. This prevents raw benchmark output and repeated-run directories
 from polluting the repository history.
+
+
+## Publishing experiment evidence to both READMEs
+
+BoundEvo README charts are generated from committed, *real* CSV results.
+Do not manually substitute simulated observations or reconstruct outcomes from
+narrative claims.
+
+The featured and historical experiment directories are configured in
+[configs/readme_results.json](../configs/readme_results.json). The generator is
+[scripts/update_readme_results.py](../scripts/update_readme_results.py).
+
+~~~bash
+python scripts/update_readme_results.py
+python scripts/update_readme_results.py --check
+~~~
+
+This updates:
+
+- `README.md` and `README_CN.md`: numerical tables, research parameters,
+  interpretation limitations, source links, and embedded charts.
+- `docs/figures/cec2017-30d-relative-error.svg`: per-function error ratios
+  normalized to the RE baseline, with logarithmic scaling.
+- `docs/figures/cec2017-30d-runtime.svg`: observed wall-clock time by method.
+- `docs/figures/cec2017-30d-29function-screen.svg` (after the independent
+  29-function screen is published): winners by *observed mean*, not a
+  statistical significance claim.
+
+The [README evidence workflow](../.github/workflows/readme-evidence.yml)
+automatically regenerates and commits figures and both READMEs when the
+configured CSV source, environment metadata, or generator changes. It also
+validates SVG XML structure. Unit tests exercise the plotting functions
+against the recorded experimental metadata and synthetic edge-case fixtures;
+these tests are not substitutes for actual optimization experiments.
+
+A new experiment should be made the featured one **only after** its raw CSV,
+summary, environment/seed metadata and validity checks have been committed.
+Change the config path, run the generation script, inspect the resulting
+tables/figures, and retain links to previous experiments in a clearly labeled
+historical section. Never combine results with different backends or
+evaluation budgets in a single unqualified summary.
