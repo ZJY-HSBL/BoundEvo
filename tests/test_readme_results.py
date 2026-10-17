@@ -1,9 +1,8 @@
 """README scientific figures must be reproducible from actual experiment CSVs."""
 
-from xml.etree import ElementTree
-
 import importlib.util
 from pathlib import Path
+from xml.etree import ElementTree
 
 _SOURCE = Path(__file__).resolve().parents[1] / "scripts" / "update_readme_results.py"
 _SPEC = importlib.util.spec_from_file_location("readme_evidence_generator", _SOURCE)
