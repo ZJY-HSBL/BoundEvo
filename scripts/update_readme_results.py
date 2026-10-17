@@ -18,6 +18,7 @@ import csv
 import html
 import json
 import math
+import statistics
 import sys
 from pathlib import Path
 
@@ -587,6 +588,16 @@ def load_long_budget() -> tuple[Path, dict, list[dict], list[dict]] | None:
             raise ValueError(f"missing method for F{fid} repeat {rep}")
         if len({row["seed"] for row in matched}) != 1:
             raise ValueError(f"unpaired seeds for F{fid} repeat {rep}")
+    for entry in summary:
+        subset = [
+            float(row["error"]) for row in trials
+            if int(row["function_id"]) == int(entry["function_id"])
+            and row["method"] == entry["method"]
+        ]
+        if len(subset) != reps or not math.isclose(
+            statistics.fmean(subset), float(entry["mean_error"]), rel_tol=1e-10
+        ):
+            raise ValueError("long-budget summary does not match raw trial CSV")
     return folder, environment, summary, trials
 
 
@@ -755,6 +766,9 @@ def longbudget_markdown(
 
     en = lang == "en"
     loc = folder.relative_to(ROOT).as_posix()
+    for key in ("reference_commit", "base_seed"):
+        if environment.get(key) != prior_environment.get(key):
+            raise ValueError(f"cross-budget comparison requires equal {key}")
     by_case = {(int(row["function_id"]), row["method"]): row for row in summary}
     prior = {(int(row["function_id"]), row["method"]): row for row in prior_summary}
     title = (
