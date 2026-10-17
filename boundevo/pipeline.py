@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from .analysis import load_summary_metric, render_analysis_report, write_analysis_report
-from .cec2017 import PAPER_FUNCTION_IDS
+from .cec2017 import PAPER_FUNCTION_IDS, Backend
 from .coefficients import Method
 from .efficiency import EfficiencyPoint, estimate_efficiency, write_efficiency_csv
 from .experiments import (
@@ -39,6 +39,7 @@ class PipelineConfig:
     sweep_function_ids: tuple[int, ...] = PAPER_SWEEP_FUNCTION_IDS
     parent_counts: tuple[int, ...] = PAPER_PARENT_COUNTS
     dimension: int = 10
+    backend: Backend = "opfunu"
     methods: tuple[Method, ...] = ("re", "edbf", "abc")
     repeats: int = 1
     base_seed: int = 42
@@ -53,6 +54,8 @@ class PipelineConfig:
     statistical_analysis: bool = True
 
     def validate(self) -> None:
+        if self.backend not in ("opfunu", "reference"):
+            raise ValueError("backend must be opfunu or reference")
         if self.dimension < 2:
             raise ValueError("dimension must be at least 2")
         if self.repeats < 1:
@@ -119,6 +122,7 @@ def run_pipeline(
     benchmark_trials = run_cec2017_suite(
         function_ids=cfg.function_ids,
         dimension=cfg.dimension,
+        backend=cfg.backend,
         methods=cfg.methods,
         repeats=cfg.repeats,
         base_seed=cfg.base_seed,
@@ -141,6 +145,7 @@ def run_pipeline(
         config={
             "function_ids": cfg.function_ids,
             "dimension": cfg.dimension,
+            "backend": cfg.backend,
             "methods": cfg.methods,
             "repeats": cfg.repeats,
             "base_seed": cfg.base_seed,
@@ -159,6 +164,7 @@ def run_pipeline(
         function_ids=cfg.sweep_function_ids,
         parent_counts=cfg.parent_counts,
         dimension=cfg.dimension,
+        backend=cfg.backend,
         methods=cfg.methods,
         repeats=cfg.repeats,
         base_seed=cfg.base_seed,
@@ -184,6 +190,7 @@ def run_pipeline(
             "function_ids": cfg.sweep_function_ids,
             "parent_counts": cfg.parent_counts,
             "dimension": cfg.dimension,
+            "backend": cfg.backend,
             "methods": cfg.methods,
             "repeats": cfg.repeats,
             "base_seed": cfg.base_seed,
@@ -293,6 +300,7 @@ def run_pipeline(
             "sweep_function_ids": cfg.sweep_function_ids,
             "parent_counts": cfg.parent_counts,
             "dimension": cfg.dimension,
+            "backend": cfg.backend,
             "methods": cfg.methods,
             "repeats": cfg.repeats,
             "base_seed": cfg.base_seed,
