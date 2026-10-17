@@ -30,6 +30,7 @@ jobs:
       - name: Verify SVG structure, figure content and README embeds
         run: |
           python - <<'PY'
+          import json
           from pathlib import Path
           from xml.etree import ElementTree
 
@@ -47,6 +48,17 @@ jobs:
               assert "docs/figures/cec2017-30d-relative-error.svg" in text
               assert "docs/figures/cec2017-30d-runtime.svg" in text
               assert "docs/experiments/cec2017-reference-30d-2026-10-17/trials.csv" in text
+          config = json.loads(Path("configs/readme_results.json").read_text())
+          screening_dir = Path(config["screen_experiment"])
+          if (screening_dir / "summary.csv").exists():
+              fig = root / "cec2017-30d-29function-screen.svg"
+              assert fig.stat().st_size > 1000
+              assert ElementTree.parse(fig).getroot().tag.endswith("svg")
+              for name in ("README.md", "README_CN.md"):
+                  body = Path(name).read_text(encoding="utf-8")
+                  assert "cec2017-30d-29function-screen.svg" in body
+                  assert "docs/experiments/cec2017-screen-30d-2026-10-17/trials.csv" in body
+              print("Verified complete 29-function screening figure in both READMEs")
           PY
       - name: Commit generated artifacts to main
         run: |
