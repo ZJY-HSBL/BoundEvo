@@ -2,9 +2,23 @@
 
 All notable changes to BoundEvo are documented here.
 
-## [Unreleased]
+## [0.9.0] - 2026-10-17
 
-Development toward v0.9.0: full 29-function higher-budget evaluation and additional convergence validation.
+### Real full-suite experiments and research visualizations
+
+- Completed all 261 actual CEC2017 trials at D=30, with 29 official functions,
+  three coefficient generators, three paired random seeds, and 10,000 FEs.
+- Recorded, archived, and validated 5,481 convergence states from four
+  independently executing experiment shards.
+- Published function-level mean errors, average ranks, Friedman test,
+  exploratory Wilcoxon comparisons and Holm-adjusted p values.
+- Automatically generated new 29-function winner, four-function convergence
+  and 1,200-to-10,000-FE leaderboard-transition SVG charts.
+- Added expandable all-29-function empirical error tables to both READMEs.
+- Confirmed measured leader changes on F16, F20 and F22 as evaluation budget
+  increased, while preserving the earlier 10-seed F22 result separately.
+- Documented full-suite experiment design, scientific limitations,
+  run provenance and strict CSV/history integrity checks.
 
 ## [0.8.0] - 2026-10-17
 
