@@ -1,0 +1,23 @@
+{
+  "functions": [
+    1,
+    3,
+    10,
+    30
+  ],
+  "dimension": 30,
+  "repeats": 10,
+  "evaluations": 3000,
+  "base_seed": 20261017,
+  "reference_repo": "https://github.com/tilleyd/cec2017-py",
+  "reference_commit": "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f",
+  "git_sha": "c4cc6fad70665d664a0fa6813c0a499631017776",
+  "python_version": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]",
+  "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "numpy_version": "2.5.4",
+  "cec2017_version": "1.0",
+  "timestamp_utc": "2026-10-17T03:59:30.149160+00:00",
+  "runtime_seconds": 251.80323181999998,
+  "preflight_passed": 58,
+  "preflight_total": 58
+}
