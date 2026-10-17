@@ -73,6 +73,7 @@ def _benchmark(args: argparse.Namespace) -> None:
     function_ids = int_selection(cfg.get("function_ids"), preset=PAPER_FUNCTION_IDS)
     methods = string_selection(cfg.get("methods"), default=("re", "edbf", "abc"))
     dimension = int(_coalesce(args.dimension, cfg, "dimension", 10))
+    backend = str(_coalesce(args.backend, cfg, "backend", "opfunu"))
     repeats = int(_coalesce(args.repeats, cfg, "repeats", 1))
     evaluations = int(_coalesce(args.evaluations, cfg, "max_evaluations", 100_000))
     seed = int(_coalesce(args.seed, cfg, "base_seed", 42))
@@ -94,6 +95,7 @@ def _benchmark(args: argparse.Namespace) -> None:
     records = run_cec2017_suite(
         function_ids=function_ids,
         dimension=dimension,
+        backend=backend,
         methods=methods,
         repeats=repeats,
         base_seed=seed,
@@ -112,6 +114,7 @@ def _benchmark(args: argparse.Namespace) -> None:
         config={
             "function_ids": function_ids,
             "dimension": dimension,
+            "backend": backend,
             "methods": methods,
             "repeats": repeats,
             "base_seed": seed,
@@ -138,6 +141,7 @@ def _sweep(args: argparse.Namespace) -> None:
     )
     methods = string_selection(cfg.get("methods"), default=("re", "edbf", "abc"))
     dimension = int(_coalesce(args.dimension, cfg, "dimension", 10))
+    backend = str(_coalesce(args.backend, cfg, "backend", "opfunu"))
     repeats = int(_coalesce(args.repeats, cfg, "repeats", 1))
     evaluations = int(_coalesce(args.evaluations, cfg, "max_evaluations", 100_000))
     seed = int(_coalesce(args.seed, cfg, "base_seed", 42))
@@ -163,6 +167,7 @@ def _sweep(args: argparse.Namespace) -> None:
         function_ids=function_ids,
         parent_counts=parent_counts,
         dimension=dimension,
+        backend=backend,
         methods=methods,
         repeats=repeats,
         base_seed=seed,
@@ -183,6 +188,7 @@ def _sweep(args: argparse.Namespace) -> None:
             "function_ids": function_ids,
             "parent_counts": parent_counts,
             "dimension": dimension,
+            "backend": backend,
             "methods": methods,
             "repeats": repeats,
             "base_seed": seed,
@@ -386,6 +392,7 @@ def _pipeline(args: argparse.Namespace) -> None:
         sweep_function_ids=sweep_function_ids,
         parent_counts=parent_counts,
         dimension=int(_coalesce(args.dimension, cfg, "dimension", 10)),
+        backend=str(_coalesce(args.backend, cfg, "backend", "opfunu")),
         methods=methods,
         repeats=int(_coalesce(args.repeats, cfg, "repeats", 1)),
         base_seed=int(_coalesce(args.seed, cfg, "base_seed", 42)),
@@ -457,6 +464,7 @@ def _compare(args: argparse.Namespace) -> None:
 def _add_common_run_overrides(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--config", type=Path)
     parser.add_argument("--dimension", type=int)
+    parser.add_argument("--backend", choices=("opfunu", "reference"))
     parser.add_argument("--repeats", type=int)
     parser.add_argument("--evaluations", type=int)
     parser.add_argument("--seed", type=int)
@@ -538,6 +546,7 @@ def build_parser() -> argparse.ArgumentParser:
     pipeline.add_argument("--run-id")
     pipeline.add_argument("--run-root", type=Path)
     pipeline.add_argument("--dimension", type=int)
+    pipeline.add_argument("--backend", choices=("opfunu", "reference"))
     pipeline.add_argument("--repeats", type=int)
     pipeline.add_argument("--evaluations", type=int)
     pipeline.add_argument("--history-interval", type=int)
