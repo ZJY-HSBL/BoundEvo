@@ -78,6 +78,25 @@ jobs:
               assert analysis.stat().st_size > 1000
               assert "Holm" in analysis.read_text(encoding="utf-8")
               print("Verified real 10k-FE results, Holm tests and both SVG figures")
+          full_folder = Path(config.get("full_suite_experiment", "results/missing"))
+          if (full_folder / "summary.csv").exists():
+              for filename in (
+                  "cec2017-30d-fullsuite-10k-winners.svg",
+                  "cec2017-30d-fullsuite-10k-convergence.svg",
+              ):
+                  fig = root / filename
+                  assert fig.stat().st_size > 2000
+                  assert ElementTree.parse(fig).getroot().tag.endswith("svg")
+              env = json.loads((full_folder / "environment.json").read_text())
+              assert env["trials"] == 261
+              assert env["evaluations"] == 10000
+              assert env["convergence_rows"] >= 522
+              for name in ("README.md", "README_CN.md"):
+                  text = Path(name).read_text(encoding="utf-8")
+                  assert "cec2017-30d-fullsuite-10k-convergence.svg" in text
+                  assert "cec2017-30d-fullsuite-10k-winners.svg" in text
+                  assert "cec2017-fullsuite-30d-10k-2026-10-17/trials.csv" in text
+              print("Verified real full-suite 10k-FE leaderboard and convergence data")
           PY
       - name: Commit generated artifacts to main
         run: |
