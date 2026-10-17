@@ -1465,32 +1465,32 @@ def main() -> None:
     for language, name in (("en", "README.md"), ("cn", "README_CN.md")):
         path = ROOT / name
         markdown = section(primary, secondary, env, summary, language)
+        sections = []
         if full_suite is not None:
             folder, full_env, full_summary, _, full_tests = full_suite
             old_env = screening[1] if screening is not None else None
             old_summary = screening[2] if screening is not None else None
-            full_section = fullsuite_markdown(
-                folder, full_env, full_summary, full_tests, language,
-                old_env, old_summary,
-            )
-            markdown = markdown.replace(
-                "<details><summary>", full_section + "\n\n<details><summary>", 1
+            sections.append(
+                fullsuite_markdown(
+                    folder, full_env, full_summary, full_tests, language,
+                    old_env, old_summary,
+                )
             )
         if long_budget is not None:
             folder, long_env, long_data, trials = long_budget
-            long_section = longbudget_markdown(
-                folder, long_env, long_data, trials, language, env, summary
-            )
-            markdown = markdown.replace(
-                "<details><summary>", long_section + "\n\n<details><summary>", 1
+            sections.append(
+                longbudget_markdown(
+                    folder, long_env, long_data, trials, language, env, summary
+                )
             )
         if screening is not None:
             folder, screen_env, screen_data = screening
-            extra_section = screening_markdown(folder, screen_env, screen_data, language)
+            sections.append(screening_markdown(folder, screen_env, screen_data, language))
+        if sections:
             marker = "<details><summary>"
             if marker not in markdown:
                 raise ValueError("10D pilot details block missing from results section")
-            markdown = markdown.replace(marker, extra_section + "\n\n" + marker, 1)
+            markdown = markdown.replace(marker, "\n\n".join(sections) + "\n\n" + marker, 1)
         outputs[path] = inject_readme(
             path.read_text(encoding="utf-8"), markdown
         )
