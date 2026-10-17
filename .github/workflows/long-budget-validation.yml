@@ -1,0 +1,101 @@
+name: CEC2017 10k-Budget Challenge
+
+on:
+  push:
+    paths:
+      - ".github/workflows/long-budget-validation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  long-budget:
+    runs-on: ubuntu-latest
+    timeout-minutes: 80
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install reproducible benchmark environment
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+          python -m pip install "git+https://github.com/tilleyd/cec2017-py.git@424a9fa2757914c3e4cfdd8f59a268b1aeb3197f"
+
+      - name: Run 120 real optimization trials with ten matched seeds
+        run: |
+          python -u scripts/validate_reference_cec2017.py \
+            --functions 10 20 22 30 \
+            --dimension 30 \
+            --dimensions-preflight 10 30 \
+            --methods abc edbf re \
+            --repeats 10 \
+            --evaluations 10000 \
+            --seed 20261017 \
+            --output-dir docs/experiments/cec2017-longbudget-30d-2026-10-17
+
+      - name: Verify experimental completeness, budget and seed pairing
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          import math
+          from collections import defaultdict
+          from pathlib import Path
+
+          root = Path("docs/experiments/cec2017-longbudget-30d-2026-10-17")
+          with (root / "trials.csv").open(newline="", encoding="utf-8") as handle:
+              rows = list(csv.DictReader(handle))
+          assert len(rows) == 4 * 3 * 10, len(rows)
+          groups = defaultdict(list)
+          for row in rows:
+              assert int(row["function_id"]) in (10, 20, 22, 30)
+              assert int(row["dimension"]) == 30
+              assert int(row["evaluations"]) == 10000
+              assert math.isfinite(float(row["error"]))
+              assert float(row["error"]) >= -1e-7
+              assert math.isfinite(float(row["elapsed_seconds"]))
+              assert float(row["attempts_per_offspring"]) >= 1.0
+              groups[(int(row["function_id"]), int(row["repeat"]))].append(row)
+          assert len(groups) == 40, len(groups)
+          for key, matched in groups.items():
+              assert {row["method"] for row in matched} == {"abc", "edbf", "re"}, key
+              assert len({row["seed"] for row in matched}) == 1, key
+          with (root / "summary.csv").open(newline="") as handle:
+              summary = list(csv.DictReader(handle))
+          assert len(summary) == 12
+          with (root / "backend_preflight.csv").open(newline="") as handle:
+              checks = list(csv.DictReader(handle))
+          assert len(checks) == 58 and all(row["status"] == "pass" for row in checks)
+          env = json.loads((root / "environment.json").read_text(encoding="utf-8"))
+          assert env["evaluations"] == 10000 and env["repeats"] == 10
+          print("Verified: 120 real trials, 40 matched triplets, 58 reference probes")
+          PY
+
+      - name: Upload raw experiments and reproducibility files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: boundevo-cec2017-longbudget-30d
+          path: docs/experiments/cec2017-longbudget-30d-2026-10-17/
+          if-no-files-found: warn
+          retention-days: 90
+
+      - name: Publish verified results and refresh both READMEs
+        run: |
+          python scripts/update_readme_results.py
+          python scripts/update_readme_results.py --check
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/experiments/cec2017-longbudget-30d-2026-10-17/ README.md README_CN.md docs/figures/
+          if git diff --cached --quiet; then
+            echo "No new experiment evidence to publish"
+            exit 0
+          fi
+          git commit -m "data: publish CEC2017 10k-FE long-budget validation"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
