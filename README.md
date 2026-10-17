@@ -37,6 +37,27 @@ Source: [raw trials](docs/experiments/cec2017-reference-30d-2026-10-17/trials.cs
 
 **Interpretation:** ABC has the lowest mean error on F1, F3, and F30; **EDBF is slightly better on F10**. These exploratory results do not establish universal superiority. The C-derived Python benchmark is an independent reference, not the original official C binary. The 58/58 finite/optimum preflight checks were sampled-point checks, not exhaustive validation. The 3,000-evaluation budget is much smaller than a full paper-level experiment.
 
+### All 29 functions at 10,000 evaluations (3 paired seeds)
+
+**261 real independent optimization trials**; CEC2017 D=30; ABC, EDBF and RE start each paired repetition from the same seed. Results remain exploratory because there are just three seeds per function.
+
+![Measured 29-function leaderboard at 10k FEs](docs/figures/cec2017-30d-fullsuite-10k-winners.svg)
+
+![F10 F20 F22 F30 measured convergence histories](docs/figures/cec2017-30d-fullsuite-10k-convergence.svg)
+
+Functions with lowest observed mean error: ABC 27, EDBF 1, RE 1.
+
+**Across-function paired Wilcoxon tests** on log10 of function-level mean errors, Holm correction across two contrasts:
+
+| Contrast | ABC leads / trails | Raw p | Holm p |
+|:---|---:|---:|---:|
+| abc_vs_edbf | 28/1 | 7.4506e-09 | 1.4901e-08 |
+| abc_vs_re | 28/1 | 1.1176e-08 | 1.4901e-08 |
+
+[Raw trial CSV](docs/experiments/cec2017-fullsuite-30d-10k-2026-10-17/trials.csv) · [convergence checkpoints](docs/experiments/cec2017-fullsuite-30d-10k-2026-10-17/history.csv) · [per-function metrics](docs/experiments/cec2017-fullsuite-30d-10k-2026-10-17/summary.csv) · [research report](docs/experiments/cec2017-fullsuite-30d-10k-2026-10-17/report.md) · [runtime environment](docs/experiments/cec2017-fullsuite-30d-10k-2026-10-17/environment.json)
+
+**Scope:** This is a 10k-FE full-function exploratory benchmark, not a reproduction of the 100k-FE paper. Different evaluation budgets and different benchmark backends must never be pooled.
+
 ### Higher-budget verification: 10,000 evaluations
 
 **120 measured trials** at D=30 (F10, F20, F22, F30), 10 matched initial seeds/method. The focus includes the cases where ABC did not lead in earlier experiments.

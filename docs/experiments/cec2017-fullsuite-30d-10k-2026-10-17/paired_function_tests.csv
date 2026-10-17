@@ -1,0 +1,3 @@
+comparison,wilcoxon_statistic,raw_p,wins,losses,holm_p
+abc_vs_edbf,1.0,7.450580596923828e-09,28,1,1.4901161193847656e-08
+abc_vs_re,2.0,1.1175870895385742e-08,28,1,1.4901161193847656e-08

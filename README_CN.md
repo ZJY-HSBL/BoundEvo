@@ -37,6 +37,27 @@
 
 **解释边界：**ABC 在 F1、F3、F30 的平均误差最低，**F10 则由 EDBF 略优**。这只能说明当前所测函数与预算下的表现，不能推导出对全部函数的普遍优势。独立 Python 后端并非原始官方 C 程序；58/58 项仅为有限采样点的数值预检，且每次 3,000 次评价不等于论文级完整复现。
 
+### 全部 29 个函数：10,000 次评价与收敛曲线
+
+**261 次真实优化试验**，CEC2017 30 维，每方法 3 个配对种子。每函数重复次数仍较少，结果仅用于探索性比较。
+
+![Measured 29-function leaderboard at 10k FEs](docs/figures/cec2017-30d-fullsuite-10k-winners.svg)
+
+![F10 F20 F22 F30 measured convergence histories](docs/figures/cec2017-30d-fullsuite-10k-convergence.svg)
+
+观测平均目标误差最低的函数数目：ABC 27, EDBF 1, RE 1.
+
+**跨函数配对 Wilcoxon 检验**（对各函数平均误差取 log10，两项比较统一 Holm 校正）：
+
+| 对照 | ABC 领先/落后 | 原始 p | Holm 校正 p |
+|:---|---:|---:|---:|
+| abc_vs_edbf | 28/1 | 7.4506e-09 | 1.4901e-08 |
+| abc_vs_re | 28/1 | 1.1176e-08 | 1.4901e-08 |
+
+[261 条原始试验](docs/experiments/cec2017-fullsuite-30d-10k-2026-10-17/trials.csv) · [收敛历史](docs/experiments/cec2017-fullsuite-30d-10k-2026-10-17/history.csv) · [逐函数汇总](docs/experiments/cec2017-fullsuite-30d-10k-2026-10-17/summary.csv) · [统计报告](docs/experiments/cec2017-fullsuite-30d-10k-2026-10-17/report.md) · [环境与源码修订](docs/experiments/cec2017-fullsuite-30d-10k-2026-10-17/environment.json)
+
+**适用范围：**这是全部 29 函数的 10k 次评价探索实验，不是原论文 100k 次评价的完整复现。不同预算、不同基准实现的数据不得混合统计。
+
 ### 高评价预算验证：每次 10,000 次函数评价
 
 **120 次真实试验**，D=30，测试 F10、F20、F22、F30，每方法 10 个配对初始种子。重点检验此前 ABC 未领先的函数。
