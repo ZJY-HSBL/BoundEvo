@@ -1,0 +1,63 @@
+name: Regenerate README Evidence
+
+on:
+  push:
+    paths:
+      - "scripts/update_readme_results.py"
+      - "configs/readme_results.json"
+      - "docs/experiments/**/summary.csv"
+      - "docs/experiments/**/environment.json"
+      - ".github/workflows/readme-evidence.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Generate bilingual README tables and vector graphics from CSV
+        run: |
+          python -m py_compile scripts/update_readme_results.py
+          python scripts/update_readme_results.py
+          python scripts/update_readme_results.py --check
+      - name: Verify SVG structure, figure content and README embeds
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from xml.etree import ElementTree
+
+          root = Path("docs/figures")
+          for name in ("cec2017-30d-relative-error.svg", "cec2017-30d-runtime.svg"):
+              image = root / name
+              assert image.stat().st_size > 1000, image
+              tree = ElementTree.parse(image)
+              assert tree.getroot().tag.endswith("svg"), name
+              print("VALID SVG", image)
+          for name in ("README.md", "README_CN.md"):
+              text = Path(name).read_text(encoding="utf-8")
+              assert text.count("<!-- BENCHMARK_RESULTS_START -->") == 1
+              assert text.count("<!-- BENCHMARK_RESULTS_END -->") == 1
+              assert "docs/figures/cec2017-30d-relative-error.svg" in text
+              assert "docs/figures/cec2017-30d-runtime.svg" in text
+              assert "docs/experiments/cec2017-reference-30d-2026-10-17/trials.csv" in text
+          PY
+      - name: Commit generated artifacts to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md README_CN.md docs/figures/
+          if git diff --cached --quiet; then
+            echo "Scientific figures and README evidence are already current."
+            exit 0
+          fi
+          git commit -m "docs: publish reproducible CEC2017 results with SVG figures"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
