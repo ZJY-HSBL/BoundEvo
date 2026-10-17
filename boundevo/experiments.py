@@ -216,9 +216,9 @@ def run_cec2017_suite(
     records: list[TrialRecord] = []
     for fid in ids:
         case = make_cec2017_case(fid, dimension, backend=backend)
-        for method_index, method in enumerate(methods):
+        for method in methods:
             for repeat in range(repeats):
-                seed = base_seed + fid * 10_000 + method_index * 1_000 + repeat
+                seed = base_seed + fid * 10_000 + repeat
                 records.append(
                     run_case(
                         case,
