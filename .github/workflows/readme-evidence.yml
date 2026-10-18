@@ -115,6 +115,21 @@ jobs:
                   assert "cec2017-holdout-30d-10k-2026-10-17/trials.csv" in body
                   assert "Holm" in body
               print("Verified F16/F22 new-seed measurements, CI chart and both READMEs")
+          paper = Path(config.get("paper_budget_experiment", "results/missing"))
+          if (paper / "summary.csv").exists():
+              env = json.loads((paper / "environment.json").read_text())
+              assert env["trials"] == 30
+              assert env["evaluations"] == 100000
+              assert env["base_seed"] == 20261037
+              assert env["functions"] == [16, 22] and env["repeats"] == 5
+              figure = root / "cec2017-f16-f22-100k-trajectories.svg"
+              assert figure.stat().st_size > 2500
+              assert ElementTree.parse(figure).getroot().tag.endswith("svg")
+              for name in ("README.md", "README_CN.md"):
+                  readme = Path(name).read_text(encoding="utf-8")
+                  assert "cec2017-f16-f22-100k-trajectories.svg" in readme
+                  assert "cec2017-paperbudget-30d-100k-2026-10-18/trials.csv" in readme
+              print("Verified exact 10k/100k matched-seed continuation on READMEs")
           PY
       - name: Commit generated artifacts to main
         run: |
