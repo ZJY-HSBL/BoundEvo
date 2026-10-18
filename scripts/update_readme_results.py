@@ -1700,6 +1700,227 @@ def fresh_seed_holdout_markdown(
     return "\n".join(lines)
 
 
+
+
+def load_paper_budget() -> tuple[Path, dict, list[dict], list[dict]] | None:
+    """Accept only the fully verified two-function 100k-FE continuation cohort."""
+
+    cfg = json.loads(CONFIG.read_text(encoding="utf-8"))
+    destination = cfg.get("paper_budget_experiment")
+    if not destination:
+        return None
+    folder = ROOT / destination
+    if not (folder / "summary.csv").is_file():
+        return None
+    env = json.loads((folder / "environment.json").read_text(encoding="utf-8"))
+    if (
+        env["functions"] != [16, 22] or env["dimension"] != 30
+        or env["repeats"] != 5 or env["evaluations"] != 100000
+        or env["baseline_evaluations"] != 10000
+        or env["base_seed"] != 20261037 or env["trials"] != 30
+        or env["reference_commit"] != "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f"
+    ):
+        raise ValueError("unsupported paper-budget README cohort")
+    def load(name: str) -> list[dict]:
+        with (folder / name).open(newline="", encoding="utf-8") as handle:
+            return list(csv.DictReader(handle))
+    summaries = load("summary.csv")
+    trials = load("trials.csv")
+    history = load("history.csv")
+    if (
+        len(summaries) != 6 or len(trials) != 30
+        or len(history) != env["history_rows"]
+        or len(history) < 90
+    ):
+        raise ValueError("incomplete 100k-FE publication evidence")
+    summary_index = {(int(r["function_id"]), r["method"]): r for r in summaries}
+    expected = {(fid, method) for fid in (16, 22) for method in METHODS}
+    if set(summary_index) != expected:
+        raise ValueError("incorrect 100k cohort summary keys")
+    for fid, method in expected:
+        values = [r for r in trials
+                  if int(r["function_id"]) == fid and r["method"] == method]
+        if len(values) != 5:
+            raise ValueError("missing paired 100k-FE trials")
+        m100 = statistics.fmean(float(r["error"]) for r in values)
+        m10 = statistics.fmean(float(r["baseline_10k_error"]) for r in values)
+        row = summary_index[(fid, method)]
+        if not (
+            math.isclose(m100, float(row["mean_error_100k"]), rel_tol=1e-10)
+            and math.isclose(m10, float(row["mean_error_10k"]), rel_tol=1e-10)
+        ):
+            raise ValueError("100k README summaries are not derived from raw trials")
+    return folder, env, summaries, history
+
+
+def paper_budget_trajectory_svg(env: dict, history: list[dict]) -> str:
+    """Render mean best-so-far CEC2017 error at its actual recorded budgets."""
+
+    grouped: dict[tuple[int, str, int], list[float]] = {}
+    for row in history:
+        key = (int(row["function_id"]), row["method"], int(row["evaluations"]))
+        value = float(row["best_error"])
+        if not math.isfinite(value) or value < 0:
+            raise ValueError("invalid measured 100k-FE objective error")
+        grouped.setdefault(key, []).append(value)
+    series = {}
+    for fid in (16, 22):
+        for method in METHODS:
+            budgets = sorted(fe for f, m, fe in grouped if f == fid and m == method)
+            if not budgets or budgets[0] != 100 or budgets[-1] != 100000 or 10000 not in budgets:
+                raise ValueError("missing source-paper FE milestones")
+            if any(len(grouped[(fid, method, fe)]) != 5 for fe in budgets):
+                raise ValueError("missing paired convergence samples")
+            series[(fid, method)] = [
+                (fe, statistics.fmean(grouped[(fid, method, fe)])) for fe in budgets
+            ]
+    positive = [
+        error for values in series.values() for _, error in values if error > 0
+    ]
+    if not positive or any(error == 0 for values in series.values() for _, error in values):
+        raise ValueError("paper-budget log plot requires positive measured errors")
+    lower = math.floor(math.log10(min(positive)))
+    upper = math.ceil(math.log10(max(positive)))
+    if upper <= lower:
+        upper = lower + 1
+    parts = [
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 620" '
+        'role="img" aria-label="Measured 10k-to-100k evaluation trajectories">',
+        '<rect width="100%" height="100%" fill="#ffffff"/>',
+        '<rect x="20" y="20" width="1060" height="580" rx="16" '
+        'fill="#ffffff" stroke="#dde4ee"/>',
+        '<text x="65" y="76" font-family="Arial,sans-serif" font-size="26" '
+        'font-weight="700" fill="#0f172a">CEC2017 | 100,000-FE trajectory check</text>',
+        '<text x="65" y="108" font-family="Arial,sans-serif" font-size="15" '
+        'fill="#64748b">D=30 · same 5 paired seeds as the 10k-FE holdout '
+        '· mean best-so-far error · log y-axis</text>',
+    ]
+    for idx, method in enumerate(METHODS):
+        x = 685 + idx * 126
+        parts.extend([
+            f'<circle cx="{x}" cy="153" r="7" fill="{COLORS[method]}"/>',
+            f'<text x="{x + 15}" y="159" font-family="Arial,sans-serif" '
+            f'font-size="15" fill="#334155">{method.upper()}</text>',
+        ])
+    top, height, width = 207, 288, 370
+    for index, fid in enumerate((16, 22)):
+        x0 = 133 + index * 510
+        parts.append(
+            f'<text x="{x0 + width / 2}" y="185" text-anchor="middle" '
+            f'font-family="Arial,sans-serif" font-size="22" '
+            f'font-weight="700" fill="#334155">F{fid}</text>'
+        )
+        for power in range(lower, upper + 1):
+            tick = 10 ** power
+            yy = top + (upper - power) / (upper - lower) * height
+            parts.append(
+                f'<line x1="{x0}" y1="{yy:.2f}" x2="{x0 + width}" '
+                f'y2="{yy:.2f}" stroke="#e2e8f0"/>'
+            )
+            parts.append(
+                f'<text x="{x0 - 10}" y="{yy + 4:.2f}" text-anchor="end" '
+                f'font-family="Arial,sans-serif" font-size="12" '
+                f'fill="#64748b">10^{power}</text>'
+            )
+        ten_k_x = x0 + (10000 - 100) / (100000 - 100) * width
+        parts.append(
+            f'<line x1="{ten_k_x:.2f}" y1="{top}" '
+            f'x2="{ten_k_x:.2f}" y2="{top + height}" '
+            'stroke="#94a3b8" stroke-dasharray="5 4"/>'
+        )
+        for method in METHODS:
+            coords = []
+            for fe, error in series[(fid, method)]:
+                x = x0 + (fe - 100) / (100000 - 100) * width
+                y = top + (upper - math.log10(error)) / (upper - lower) * height
+                coords.append(f"{x:.2f},{y:.2f}")
+            parts.append(
+                f'<polyline points="{" ".join(coords)}" fill="none" '
+                f'stroke="{COLORS[method]}" stroke-width="3" '
+                'stroke-linecap="round" stroke-linejoin="round"/>'
+            )
+        parts.append(
+            f'<text x="{x0}" y="518" font-family="Arial,sans-serif" '
+            'font-size="13" fill="#64748b">100</text>'
+        )
+        parts.append(
+            f'<text x="{ten_k_x:.2f}" y="537" text-anchor="middle" '
+            'font-family="Arial,sans-serif" font-size="13" fill="#64748b">10k</text>'
+        )
+        parts.append(
+            f'<text x="{x0+width}" y="518" text-anchor="end" '
+            'font-family="Arial,sans-serif" font-size="13" fill="#64748b">100k FE</text>'
+        )
+    parts.append("</svg>")
+    return "\n".join(parts) + "\n"
+
+
+def paper_budget_markdown(
+    folder: Path, env: dict, summary: list[dict], language: str
+) -> str:
+    en = language == "en"
+    loc = folder.relative_to(ROOT).as_posix()
+    lookup = {(int(r["function_id"]), r["method"]): r for r in summary}
+    content = [
+        (
+            "### Toward the source-paper budget: 100,000 evaluations"
+            if en else "### 接近原论文评价预算：100,000 次函数评价"
+        ),
+        "",
+        (
+            "**30 actual optimization trials** on F16/F22, D=30; ABC/EDBF/RE "
+            "each use 5 seeds taken from the prior 20-seed holdout. Every 10k "
+            "checkpoint must reproduce its previously measured result exactly."
+            if en else
+            "**30 次真实优化试验**：F16/F22，30 维，每种算法使用先前 20 "
+            "种子中的 5 个相同种子。10k 时刻与此前实测结果逐一核对。"
+        ),
+        "",
+        "![Source paper budget objective trajectories]"
+        "(docs/figures/cec2017-f16-f22-100k-trajectories.svg)",
+        "",
+        (
+            "| Function | Method | 10k mean error | 100k mean error | Change |"
+            if en else
+            "| 函数 | 方法 | 10k 均值误差 | 100k 均值误差 | 相对变化 |"
+        ),
+        "|:---|:---|---:|---:|---:|",
+    ]
+    for fid in (16, 22):
+        for method in METHODS:
+            record = lookup[(fid, method)]
+            content.append(
+                f"| F{fid} | {method.upper()} | "
+                f"{fmt_error(float(record['mean_error_10k']))} | "
+                f"{fmt_error(float(record['mean_error_100k']))} | "
+                f"{float(record['relative_improvement_pct']):+.2f}% |"
+            )
+    content += [
+        "",
+        (
+            f"[30 raw 100k-FE trials]({loc}/trials.csv) · "
+            f"[actual convergence checkpoints]({loc}/history.csv) · "
+            f"[source verification]({loc}/environment.json) · "
+            f"[analysis]({loc}/report.md)"
+            if en else
+            f"[30 次原始记录]({loc}/trials.csv) · "
+            f"[真实收敛过程]({loc}/history.csv) · "
+            f"[环境和来源]({loc}/environment.json) · "
+            f"[实验分析]({loc}/report.md)"
+        ),
+        "",
+        (
+            "**Scope:** Only two functions and five matched seeds. The "
+            "100k-FE cap matches the source paper's upper budget, but this "
+            "does not replicate its full 29-function experimental suite."
+            if en else
+            "**局限：**仅两个函数和五个配对种子。100k 评价预算与原论文上限"
+            "一致，但并非完整 29 函数原论文复现。"
+        ),
+    ]
+    return "\n".join(content)
+
+
 def inject_readme(old: str, payload: str) -> str:
     if START not in old and END not in old:
         anchor = "## Overview" if payload.startswith("## Measured") else "## 项目定位"
@@ -1741,6 +1962,12 @@ def main() -> None:
     long_budget = load_long_budget()
     full_suite = load_full_suite()
     fresh_holdout = load_fresh_seed_holdout()
+    paper_budget = load_paper_budget()
+    if paper_budget is not None:
+        _, paper_env, paper_summary, paper_history = paper_budget
+        outputs[FIGURES / "cec2017-f16-f22-100k-trajectories.svg"] = (
+            paper_budget_trajectory_svg(paper_env, paper_history)
+        )
     if fresh_holdout is not None:
         _, holdout_env, holdout_summary, _ = fresh_holdout
         outputs[FIGURES / "cec2017-f16-f22-holdout-mean-errors.svg"] = (
@@ -1781,6 +2008,11 @@ def main() -> None:
         path = ROOT / name
         markdown = section(primary, secondary, env, summary, language)
         sections = []
+        if paper_budget is not None:
+            folder, paper_env, paper_summary, _ = paper_budget
+            sections.append(
+                paper_budget_markdown(folder, paper_env, paper_summary, language)
+            )
         if fresh_holdout is not None:
             folder, holdout_env, holdout_summary, holdout_tests = fresh_holdout
             sections.append(
