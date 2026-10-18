@@ -2,9 +2,26 @@
 
 All notable changes to BoundEvo are documented here.
 
-## [Unreleased]
+## [0.10.0] - 2026-10-18
 
-Development toward v0.10.0: confidence intervals, seed sensitivity, and original 100,000-FE replication.
+### Independent-seed robustness experiment
+
+- Finished 120 actual optimization trials: F16/F22, D=30, 10,000 FEs, three
+  coefficient generators and 20 newly sampled paired initial seeds.
+- Confirmed the two uncertain function mean-error rankings switch to ABC
+  on new seeds, while distinguishing F16's significant adjusted exact sign
+  tests from nonsignificant paired F22 sign tests.
+- Reported percentile-bootstrap 95% confidence intervals for mean objective
+  error, 10,000 paired resamples of log1p error advantage, and Holm correction
+  across four prespecified comparisons.
+- Published original trials, summary statistics, backend preflight results,
+  environment metadata and experimental protocol in GitHub.
+- Embedded a data-generated bootstrap whisker SVG in English/Chinese READMEs
+  alongside observed 3-, 10- and 20-seed winner comparisons.
+- Added validation of seed disjointness, paired-method coverage,
+  function-evaluation budgets and recomputed README means.
+- All findings are exploratory and specific to the independent Python CEC2017
+  reference implementation, not the original official C binary.
 
 ## [0.9.0] - 2026-10-17
 
