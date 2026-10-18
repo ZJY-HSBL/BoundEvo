@@ -5,18 +5,20 @@ Each reported 10k checkpoint must reproduce the already published 20-seed
 holdout's first five seeds, not merely match an invented synthetic baseline.
 """
 
+# ruff: noqa: ISC004
+
 from __future__ import annotations
 
 import argparse
 import csv
 import json
 import math
-import os
 import platform
 import statistics
 import sys
 from collections import defaultdict
 from datetime import datetime, timezone
+from itertools import pairwise
 from pathlib import Path
 
 from boundevo.cec2017 import REFERENCE_COMMIT
@@ -136,7 +138,7 @@ def validate(source: Path) -> tuple[list[dict], list[dict], list[dict]]:
         ):
             raise ValueError(f"missing or duplicated budget checkpoints: {key}")
         objectives = [float(row["best_error"]) for row in ordered]
-        if any(curr > prev + 1e-7 for prev, curr in zip(objectives, objectives[1:])):
+        if any(curr > prev + 1e-7 for prev, curr in pairwise(objectives)):
             raise ValueError(f"best-so-far objective became worse: {key}")
         prefix = next(
             float(row["best_error"]) for row in ordered
