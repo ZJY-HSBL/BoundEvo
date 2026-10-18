@@ -2,6 +2,10 @@
 
 All notable changes to BoundEvo are documented here.
 
+## [Unreleased]
+
+Development toward v0.11.0: targeted 100,000-function-evaluation budget experiments and cross-budget trajectory verification.
+
 ## [0.10.0] - 2026-10-18
 
 ### Independent-seed robustness experiment
