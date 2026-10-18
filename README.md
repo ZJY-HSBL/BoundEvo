@@ -54,6 +54,13 @@ Source: [raw trials](docs/experiments/cec2017-reference-30d-2026-10-17/trials.cs
 | F22 | EDBF | 7,571.2 | [7,137.0, 7,890.0] |
 | F22 | RE | 7,791.6 | [7,395.5, 8,097.8] |
 
+**Observed winner sensitivity across disjoint cohorts** (do not pool across repeats):
+
+| Function | Earlier 3 seeds | Earlier 10 seeds | New 20 seeds |
+|:---|:---|:---|:---|
+| F16 | RE | — | ABC |
+| F22 | EDBF | ABC | ABC |
+
 **Two-sided exact paired sign tests, Holm correction for 4 contrasts:**
 
 | Function | Contrast | ABC W/L/T | Holm p |
