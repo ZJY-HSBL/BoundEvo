@@ -1811,7 +1811,6 @@ def paper_budget_trajectory_svg(env: dict, history: list[dict]) -> str:
             f'font-weight="700" fill="#334155">F{fid}</text>'
         )
         for power in range(lower, upper + 1):
-            tick = 10 ** power
             yy = top + (upper - power) / (upper - lower) * height
             parts.append(
                 f'<line x1="{x0}" y1="{yy:.2f}" x2="{x0 + width}" '
