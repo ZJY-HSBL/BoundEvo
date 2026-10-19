@@ -1,0 +1,140 @@
+name: CEC2017 Adaptive 20-seed 100k-FE Continuation
+
+on:
+  push:
+    paths:
+      - ".github/workflows/paper-budget-20seed.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  experiments:
+    name: F${{ matrix.function_id }} seeds ${{ matrix.suffix }} 100k FE
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {function_id: 16, start: 5, stop: 10, suffix: "05-09"}
+          - {function_id: 16, start: 10, stop: 15, suffix: "10-14"}
+          - {function_id: 16, start: 15, stop: 20, suffix: "15-19"}
+          - {function_id: 22, start: 5, stop: 10, suffix: "05-09"}
+          - {function_id: 22, start: 10, stop: 15, suffix: "10-14"}
+          - {function_id: 22, start: 15, stop: 20, suffix: "15-19"}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install fixed optimizer and C-derived objective reference
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+          python -m pip install "git+https://github.com/tilleyd/cec2017-py.git@424a9fa2757914c3e4cfdd8f59a268b1aeb3197f"
+      - name: Continue only untested 100k seeds and verify every actual 10k prefix
+        run: |
+          python -u scripts/run_paper_budget_case.py \
+            --function-id ${{ matrix.function_id }} \
+            --repeat-start ${{ matrix.start }} \
+            --repeat-stop ${{ matrix.stop }} \
+            --output-dir /tmp/seed100k/f${{ matrix.function_id }}-r${{ matrix.suffix }}
+      - name: Archive completed and partial experimental evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: boundevo-100k-f${{ matrix.function_id }}-r${{ matrix.suffix }}
+          path: /tmp/seed100k/
+          retention-days: 90
+          if-no-files-found: warn
+
+  merge:
+    name: Verify 120 real trials, publish adaptive 100k comparison
+    needs: [experiments]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install regression and statistical dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+      - name: Recover six raw continuation shards
+        uses: actions/download-artifact@v4
+        with:
+          pattern: boundevo-100k-f*
+          merge-multiple: true
+          path: /tmp/seed100k
+      - name: Validate all 120 exact 10k/100k continuations and perform statistics
+        run: |
+          python scripts/aggregate_paper_budget_20seed.py \
+            --shard-dir /tmp/seed100k \
+            --output-dir docs/experiments/cec2017-paperbudget-30d-100k-20seeds-2026-10-19
+      - name: Generate scientific trajectories and bilingual results from measured data
+        run: |
+          python scripts/update_readme_results.py
+          python scripts/update_readme_results.py --check
+      - name: Verify source-provenance and complete data-derived publication
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+          from xml.etree import ElementTree
+
+          root = Path("docs/experiments/cec2017-paperbudget-30d-100k-20seeds-2026-10-19")
+          with (root / "trials.csv").open(newline="") as handle:
+              trials = list(csv.DictReader(handle))
+          with (root / "history.csv").open(newline="") as handle:
+              states = list(csv.DictReader(handle))
+          with (root / "paired_tests.csv").open(newline="") as handle:
+              tests = list(csv.DictReader(handle))
+          env = json.loads((root / "environment.json").read_text())
+          assert env["trials"] == 120 and len(trials) == 120
+          assert env["repeats"] == 20 and env["evaluations"] == 100000
+          assert env["adaptive_extension"] is True
+          assert env["history_rows"] == len(states) and len(states) > 3360
+          assert len(env["source_manifests"]) == 7
+          assert len(tests) == 4
+          assert len({(int(r["function_id"]), int(r["repeat"]), r["method"]) for r in trials}) == 120
+          figure = "cec2017-f16-f22-100k-20seed-trajectories.svg"
+          svg = Path("docs/figures") / figure
+          assert svg.stat().st_size > 2500
+          assert ElementTree.parse(svg).getroot().tag.endswith("svg")
+          for name in ("README.md", "README_CN.md"):
+              text = Path(name).read_text(encoding="utf-8")
+              assert figure in text
+              assert "cec2017-paperbudget-30d-100k-20seeds-2026-10-19/trials.csv" in text
+          print("Verified 120 original 100k runs, complete trajectories and Holm results.")
+          PY
+      - name: Regression and style gates
+        run: |
+          python -m pytest -q
+          python -m ruff check .
+      - name: Archive verified adaptive study
+        uses: actions/upload-artifact@v4
+        with:
+          name: boundevo-f16-f22-100k-20seed-validated
+          path: |
+            docs/experiments/cec2017-paperbudget-30d-100k-20seeds-2026-10-19/
+            docs/figures/cec2017-f16-f22-100k-20seed-trajectories.svg
+          retention-days: 90
+      - name: Publish only when every verification gate passes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/experiments/cec2017-paperbudget-30d-100k-20seeds-2026-10-19/
+          git add docs/figures/ README.md README_CN.md
+          if git diff --cached --quiet; then
+            echo "Verified adaptive evidence is already published."
+            exit 0
+          fi
+          git commit -m "data: publish 120 validated matched-seed 100k-FE continuation trials"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
