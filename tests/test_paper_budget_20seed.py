@@ -136,8 +136,20 @@ def test_exact_sign_controls_and_bootstrap():
 
 def test_rejects_missing_shards_or_falsified_prefix(tmp_path):
     shards, original, historical = cohort(tmp_path)
-    with pytest.raises(ValueError, match="incomplete published five-seed"):
+    rows, histories, manifests = merger.validate(shards, original, historical)
+    assert len(rows) == 120
+    assert len(histories) == 3360 + 90 * 3
+    assert len(manifests) == 7
+
+    data = merger.read(historical)
+    data[0]["error"] = "1234567"
+    save(historical, data)
+    with pytest.raises(ValueError, match="100k trial's numerical evidence"):
         merger.validate(shards, original, historical)
-    data = merger.read(original / "history.csv")
-    # The malformed synthetic historical state count must never pass.
-    assert len(data) != 3360
+
+    data[0]["error"] = "20.0"
+    save(historical, data)
+    missing = shards / "f22-r15-19" / "trials.csv"
+    missing.unlink()
+    with pytest.raises(ValueError, match="missing original experimental evidence"):
+        merger.validate(shards, original, historical)
