@@ -37,6 +37,33 @@ Source: [raw trials](docs/experiments/cec2017-reference-30d-2026-10-17/trials.cs
 
 **Interpretation:** ABC has the lowest mean error on F1, F3, and F30; **EDBF is slightly better on F10**. These exploratory results do not establish universal superiority. The C-derived Python benchmark is an independent reference, not the original official C binary. The 58/58 finite/optimum preflight checks were sampled-point checks, not exhaustive validation. The 3,000-evaluation budget is much smaller than a full paper-level experiment.
 
+### 100k evaluation budget — adaptive 20-seed continuation
+
+**120 actual optimizer trials.** F16/F22, 30D, ABC/EDBF/RE, 20 matched seeds continued from the earlier 10k experiment. The first 5 repeats reuse the already verified 100k runs; only repeats 5–19 were newly computed.
+
+![20-seed actual convergence trajectories](docs/figures/cec2017-f16-f22-100k-20seed-trajectories.svg)
+
+| Function | Method | 10k mean error | 100k mean error | Bootstrap 95% CI |
+|:---|:---|---:|---:|:---|
+| F16 | ABC | 2,050.7 | 1,509.1 | [1,362.9, 1,640.2] |
+| F16 | EDBF | 2,636.3 | 2,094.0 | [2,018.6, 2,161.9] |
+| F16 | RE | 2,391.3 | 1,817.9 | [1,775.1, 1,863.5] |
+| F22 | ABC | 5,755.3 | 4,900.7 | [3,701.8, 6,024.3] |
+| F22 | EDBF | 7,571.2 | 6,087.9 | [5,183.5, 6,830.4] |
+| F22 | RE | 7,791.6 | 5,012.8 | [3,737.3, 6,205.7] |
+
+| Function | Paired contrast | ABC wins/losses/ties | Holm-adjusted p |
+|:---|:---|---:|---:|
+| F16 | abc_vs_edbf | 20/0/0 | 7.62939e-06 |
+| F16 | abc_vs_re | 18/2/0 | 0.00120735 |
+| F22 | abc_vs_edbf | 12/8/0 | 1 |
+| F22 | abc_vs_re | 9/11/0 | 1 |
+
+**Exploratory, adaptive evidence:** the decision to extend from 5 to 20 seeds was made after seeing F22's high-variance results. These are NOT new independent test seeds; a Holm correction for four within-extension tests does not erase earlier selection.
+
+[120 raw trials](docs/experiments/cec2017-paperbudget-30d-100k-20seeds-2026-10-19/trials.csv) · [convergence history](docs/experiments/cec2017-paperbudget-30d-100k-20seeds-2026-10-19/history.csv) · [Holm comparisons](docs/experiments/cec2017-paperbudget-30d-100k-20seeds-2026-10-19/paired_tests.csv) · [report](docs/experiments/cec2017-paperbudget-30d-100k-20seeds-2026-10-19/report.md)
+
+
 ### Toward the source-paper budget: 100,000 evaluations
 
 **30 actual optimization trials** on F16/F22, D=30; ABC/EDBF/RE each use 5 seeds taken from the prior 20-seed holdout. Every 10k checkpoint must reproduce its previously measured result exactly.
