@@ -1,0 +1,33 @@
+{
+  "functions": [
+    16,
+    22
+  ],
+  "methods": [
+    "abc",
+    "edbf",
+    "re"
+  ],
+  "dimension": 30,
+  "repeats": 5,
+  "evaluations": 100000,
+  "baseline_evaluations": 10000,
+  "base_seed": 20261037,
+  "source_holdout_seed_subset": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "reference_commit": "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f",
+  "trials": 30,
+  "history_rows": 3360,
+  "source_git_shas": [
+    "66a5c36288772260543ec59cacbb37edfd5f8b14",
+    "66a5c36288772260543ec59cacbb37edfd5f8b14"
+  ],
+  "python": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]",
+  "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "timestamp_utc": "2026-10-19T08:06:32.996958+00:00"
+}

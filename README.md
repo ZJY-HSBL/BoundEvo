@@ -37,6 +37,25 @@ Source: [raw trials](docs/experiments/cec2017-reference-30d-2026-10-17/trials.cs
 
 **Interpretation:** ABC has the lowest mean error on F1, F3, and F30; **EDBF is slightly better on F10**. These exploratory results do not establish universal superiority. The C-derived Python benchmark is an independent reference, not the original official C binary. The 58/58 finite/optimum preflight checks were sampled-point checks, not exhaustive validation. The 3,000-evaluation budget is much smaller than a full paper-level experiment.
 
+### Toward the source-paper budget: 100,000 evaluations
+
+**30 actual optimization trials** on F16/F22, D=30; ABC/EDBF/RE each use 5 seeds taken from the prior 20-seed holdout. Every 10k checkpoint must reproduce its previously measured result exactly.
+
+![Source paper budget objective trajectories](docs/figures/cec2017-f16-f22-100k-trajectories.svg)
+
+| Function | Method | 10k mean error | 100k mean error | Change |
+|:---|:---|---:|---:|---:|
+| F16 | ABC | 2,341.1 | 1,732.4 | +26.00% |
+| F16 | EDBF | 2,577.7 | 2,076.1 | +19.46% |
+| F16 | RE | 2,381.9 | 1,797.7 | +24.53% |
+| F22 | ABC | 6,170.2 | 5,780.2 | +6.32% |
+| F22 | EDBF | 7,879.7 | 7,155.4 | +9.19% |
+| F22 | RE | 7,981.5 | 5,180.4 | +35.10% |
+
+[30 raw 100k-FE trials](docs/experiments/cec2017-paperbudget-30d-100k-2026-10-18/trials.csv) · [actual convergence checkpoints](docs/experiments/cec2017-paperbudget-30d-100k-2026-10-18/history.csv) · [source verification](docs/experiments/cec2017-paperbudget-30d-100k-2026-10-18/environment.json) · [analysis](docs/experiments/cec2017-paperbudget-30d-100k-2026-10-18/report.md)
+
+**Scope:** Only two functions and five matched seeds. The 100k-FE cap matches the source paper's upper budget, but this does not replicate its full 29-function experimental suite.
+
 ### F16/F22: 20 new seeds to test the unstable rankings
 
 **120 new measured trials** on F16/F22, D=30, 10,000 function evaluations, with 20 seed values not reused in previous studies. ABC/EDBF/RE have matched initial seeds for each repeat.
