@@ -8,6 +8,7 @@ from pathlib import Path
 import pytest
 
 from boundevo.cec2017 import REFERENCE_COMMIT
+
 ROOT = Path(__file__).resolve().parents[1]
 PATH = ROOT / "scripts" / "aggregate_paper_budget_20seed.py"
 SPEC = importlib.util.spec_from_file_location("aggregate_paper_budget_20seed", PATH)
