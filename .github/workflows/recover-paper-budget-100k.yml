@@ -1,0 +1,157 @@
+name: Recover completed F16/F22 100k-FE evidence
+
+on:
+  push:
+    paths:
+      - ".github/workflows/recover-paper-budget-100k.yml"
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: recover-paper-budget-100k
+  cancel-in-progress: false
+
+jobs:
+  recover:
+    name: Revalidate and publish original 30 completed 100k-FE trials
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install development/test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: Restore immutable artifacts from the completed original experiment
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 39138906053
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: boundevo-paper-budget-f*
+          merge-multiple: true
+          path: /tmp/boundevo-original-100k
+
+      - name: Check all original trial manifests and paired historical prefixes
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          import math
+          from pathlib import Path
+          from scripts.run_paper_budget_case import baseline_holdout
+
+          root = Path("/tmp/boundevo-original-100k")
+          prior = Path("docs/experiments/cec2017-holdout-30d-10k-2026-10-17/trials.csv")
+          original_commit = "66a5c36288772260543ec59cacbb37edfd5f8b14"
+          for fid in (16, 22):
+              folder = root / f"f{fid}"
+              manifest = json.loads((folder / "manifest.json").read_text())
+              assert manifest["git_sha"] == original_commit, (
+                  "artifact not produced by the original preregistered run"
+              )
+              historical = baseline_holdout(prior, fid)
+              with (folder / "trials.csv").open(newline="") as handle:
+                  trials = list(csv.DictReader(handle))
+              with (folder / "history.csv").open(newline="") as handle:
+                  history = list(csv.DictReader(handle))
+              assert len(trials) == 15, f"F{fid} missing completed trials"
+              assert len({(int(t["repeat"]), t["method"]) for t in trials}) == 15
+              for trial in trials:
+                  key = (int(trial["repeat"]), trial["method"])
+                  matches = [
+                      h for h in history
+                      if int(h["repeat"]) == key[0]
+                      and h["method"] == key[1]
+                      and int(h["evaluations"]) == 10000
+                  ]
+                  assert len(matches) == 1
+                  measured = float(matches[0]["best_error"])
+                  baseline = float(trial["baseline_10k_error"])
+                  assert math.isclose(baseline, historical[key], rel_tol=1e-9, abs_tol=1e-6)
+                  assert math.isclose(measured, historical[key], rel_tol=1e-9, abs_tol=1e-6)
+                  assert int(trial["evaluations"]) == 100000
+              print(f"Verified F{fid}: 15 original 100k trials and historical 10k prefixes")
+          PY
+
+      - name: Aggregate verified original data
+        run: |
+          python scripts/aggregate_paper_budget.py \
+            --input-dir /tmp/boundevo-original-100k \
+            --output-dir docs/experiments/cec2017-paperbudget-30d-100k-2026-10-18
+
+      - name: Regenerate real-data scientific SVGs and bilingual README
+        run: |
+          python scripts/update_readme_results.py
+          python scripts/update_readme_results.py --check
+
+      - name: Independently verify the complete dataset, SVG and README links
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+          from xml.etree import ElementTree
+
+          base = Path("docs/experiments/cec2017-paperbudget-30d-100k-2026-10-18")
+          with (base / "trials.csv").open(newline="") as handle:
+              trials = list(csv.DictReader(handle))
+          with (base / "history.csv").open(newline="") as handle:
+              history = list(csv.DictReader(handle))
+          env = json.loads((base / "environment.json").read_text())
+          assert env["trials"] == 30 and len(trials) == 30
+          assert env["evaluations"] == 100000 and env["repeats"] == 5
+          assert env["source_git_shas"] == [
+              "66a5c36288772260543ec59cacbb37edfd5f8b14",
+              "66a5c36288772260543ec59cacbb37edfd5f8b14",
+          ]
+          assert len(history) == env["history_rows"] == 3360
+          assert all(int(row["evaluations"]) == 100000 for row in trials)
+          figure = "cec2017-f16-f22-100k-trajectories.svg"
+          image = Path("docs/figures") / figure
+          assert image.stat().st_size > 2500
+          assert ElementTree.parse(image).getroot().tag.endswith("svg")
+          for readme_name in ("README.md", "README_CN.md"):
+              readme = Path(readme_name).read_text(encoding="utf-8")
+              assert figure in readme
+              assert "cec2017-paperbudget-30d-100k-2026-10-18/trials.csv" in readme
+          print("Verified 30 real trials, 3360 history rows, SVG and bilingual README")
+          PY
+
+      - name: Run regression and style checks before publication
+        run: |
+          python -m pytest -q
+          python -m ruff check .
+
+      - name: Preserve final source evidence as a downloadable workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: boundevo-f16-f22-100k-validated-recovered
+          path: |
+            docs/experiments/cec2017-paperbudget-30d-100k-2026-10-18/
+            docs/figures/cec2017-f16-f22-100k-trajectories.svg
+          retention-days: 90
+
+      - name: Publish only if every scientific and CI check passed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/experiments/cec2017-paperbudget-30d-100k-2026-10-18/
+          git add README.md README_CN.md docs/figures/
+          if git diff --cached --quiet; then
+            echo "The verified research evidence is already published."
+            exit 0
+          fi
+          git commit -m "data: recover verified F16 F22 100k-FE trajectories from original run"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
