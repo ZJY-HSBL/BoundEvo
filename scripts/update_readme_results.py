@@ -1753,6 +1753,153 @@ def load_paper_budget() -> tuple[Path, dict, list[dict], list[dict]] | None:
     return folder, env, summaries, history
 
 
+
+def load_paper_budget_twenty() -> tuple[Path, dict, list[dict], list[dict], list[dict]] | None:
+    """Read verified 20-seed adaptive-budget results only when fully published."""
+
+    cfg = json.loads(CONFIG.read_text(encoding="utf-8"))
+    destination = cfg.get("paper_budget_20seed_experiment")
+    if not destination:
+        return None
+    folder = ROOT / destination
+    if not (folder / "summary.csv").is_file():
+        return None
+    env = json.loads((folder / "environment.json").read_text(encoding="utf-8"))
+    if (
+        env.get("functions") != [16, 22] or env.get("dimension") != 30
+        or env.get("repeats") != 20 or env.get("evaluations") != 100000
+        or env.get("baseline_evaluations") != 10000
+        or env.get("base_seed") != 20261037 or env.get("trials") != 120
+        or env.get("adaptive_extension") is not True
+        or env.get("reference_commit") != "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f"
+    ):
+        raise ValueError("unsupported adaptive 20-seed paper-budget README cohort")
+
+    def read_table(name: str) -> list[dict]:
+        with (folder / name).open(newline="", encoding="utf-8") as handle:
+            return list(csv.DictReader(handle))
+
+    summaries = read_table("summary.csv")
+    tests = read_table("paired_tests.csv")
+    trials = read_table("trials.csv")
+    history = read_table("history.csv")
+    if (
+        len(summaries) != 6 or len(tests) != 4 or len(trials) != 120
+        or len(history) != env.get("history_rows")
+    ):
+        raise ValueError("incomplete adaptive 100k evidence")
+
+    expected = {(fid, rep, method) for fid in (16, 22)
+                for rep in range(20) for method in METHODS}
+    actual = {(int(t["function_id"]), int(t["repeat"]), t["method"]) for t in trials}
+    if actual != expected or len(actual) != len(trials):
+        raise ValueError("20-seed README evidence has duplicate or missing trial keys")
+    indexed = {(int(row["function_id"]), row["method"]): row for row in summaries}
+    if set(indexed) != {(fid, method) for fid in (16, 22) for method in METHODS}:
+        raise ValueError("incomplete 20-seed method summaries")
+    for fid, method in indexed:
+        items = [t for t in trials
+                 if int(t["function_id"]) == fid and t["method"] == method]
+        before = statistics.fmean(float(t["baseline_10k_error"]) for t in items)
+        after = statistics.fmean(float(t["error"]) for t in items)
+        row = indexed[(fid, method)]
+        if not (
+            math.isclose(before, float(row["mean_error_10k"]), rel_tol=1e-10)
+            and math.isclose(after, float(row["mean_error_100k"]), rel_tol=1e-10)
+        ):
+            raise ValueError("adaptive README means are not derived from raw trials")
+    expected_contrasts = {(fid, "abc_vs_" + method)
+                          for fid in (16, 22) for method in ("edbf", "re")}
+    if {(int(t["function_id"]), t["contrast"]) for t in tests} != expected_contrasts:
+        raise ValueError("missing corrected paired tests for the 20-seed study")
+    return folder, env, summaries, history, tests
+
+
+def paper_budget_twenty_markdown(
+    folder: Path, summaries: list[dict], tests: list[dict], language: str
+) -> str:
+    """Explain the adaptive extension and link only verified original data."""
+
+    en = language == "en"
+    prefix = folder.relative_to(ROOT).as_posix()
+    lines = [
+        (
+            "### 100k evaluation budget — adaptive 20-seed continuation"
+            if en else "### 100k 评价预算：20 配对种子扩展验证"
+        ),
+        "",
+        (
+            "**120 actual optimizer trials.** F16/F22, 30D, ABC/EDBF/RE, "
+            "20 matched seeds continued from the earlier 10k experiment. "
+            "The first 5 repeats reuse the already verified 100k runs; "
+            "only repeats 5–19 were newly computed."
+            if en else
+            "**120 次真实优化试验。** F16/F22、30 维、ABC/EDBF/RE、每法 "
+            "20 个配对种子，由此前 10k 实测轨迹扩展到 100k；前 5 种子复用 "
+            "已经验证的 100k 试验，仅新计算编号 5–19。"
+        ),
+        "",
+        "![20-seed actual convergence trajectories]"
+        "(docs/figures/cec2017-f16-f22-100k-20seed-trajectories.svg)",
+        "",
+        (
+            "| Function | Method | 10k mean error | 100k mean error | Bootstrap 95% CI |"
+            if en else
+            "| 函数 | 方法 | 10k 均值误差 | 100k 均值误差 | Bootstrap 95% 区间 |"
+        ),
+        "|:---|:---|---:|---:|:---|",
+    ]
+    for row in summaries:
+        lines.append(
+            f"| F{row['function_id']} | {row['method'].upper()} | "
+            f"{fmt_error(float(row['mean_error_10k']))} | "
+            f"{fmt_error(float(row['mean_error_100k']))} | "
+            f"[{fmt_error(float(row['bootstrap_mean_error_ci95_low']))}, "
+            f"{fmt_error(float(row['bootstrap_mean_error_ci95_high']))}] |"
+        )
+    lines.extend([
+        "",
+        (
+            "| Function | Paired contrast | ABC wins/losses/ties | Holm-adjusted p |"
+            if en else "| 函数 | 配对比较 | ABC 胜/负/平 | Holm 校正 p |"
+        ),
+        "|:---|:---|---:|---:|",
+    ])
+    for row in tests:
+        lines.append(
+            f"| F{row['function_id']} | {row['contrast']} | "
+            f"{row['abc_wins']}/{row['abc_losses']}/{row['ties']} | "
+            f"{float(row['p_sign_holm']):.6g} |"
+        )
+    lines.extend([
+        "",
+        (
+            "**Exploratory, adaptive evidence:** the decision to extend from "
+            "5 to 20 seeds was made after seeing F22's high-variance results. "
+            "These are NOT new independent test seeds; a Holm correction for "
+            "four within-extension tests does not erase earlier selection."
+            if en else
+            "**研究边界：**在观察到 F22 的五种子结果离散程度很高之后才决定 "
+            "从 5 种子扩展到 20 种子。因此这属于自适应探索，不是新的 "
+            "独立测试种子；本轮四项比较的 Holm 校正不能消除此前选题与扩容偏差。"
+        ),
+        "",
+        (
+            f"[120 raw trials]({prefix}/trials.csv) · "
+            f"[convergence history]({prefix}/history.csv) · "
+            f"[Holm comparisons]({prefix}/paired_tests.csv) · "
+            f"[report]({prefix}/report.md)"
+            if en else
+            f"[120 条原始数据]({prefix}/trials.csv) · "
+            f"[收敛轨迹]({prefix}/history.csv) · "
+            f"[Holm 检验]({prefix}/paired_tests.csv) · "
+            f"[完整分析]({prefix}/report.md)"
+        ),
+        "",
+    ])
+    return "\n".join(lines)
+
+
 def paper_budget_trajectory_svg(env: dict, history: list[dict]) -> str:
     """Render mean best-so-far CEC2017 error at its actual recorded budgets."""
 
@@ -1769,7 +1916,7 @@ def paper_budget_trajectory_svg(env: dict, history: list[dict]) -> str:
             budgets = sorted(fe for f, m, fe in grouped if f == fid and m == method)
             if not budgets or budgets[0] != 100 or budgets[-1] != 100000 or 10000 not in budgets:
                 raise ValueError("missing source-paper FE milestones")
-            if any(len(grouped[(fid, method, fe)]) != 5 for fe in budgets):
+            if any(len(grouped[(fid, method, fe)]) != env["repeats"] for fe in budgets):
                 raise ValueError("missing paired convergence samples")
             series[(fid, method)] = [
                 (fe, statistics.fmean(grouped[(fid, method, fe)])) for fe in budgets
@@ -1792,7 +1939,7 @@ def paper_budget_trajectory_svg(env: dict, history: list[dict]) -> str:
         '<text x="65" y="76" font-family="Arial,sans-serif" font-size="26" '
         'font-weight="700" fill="#0f172a">CEC2017 | 100,000-FE trajectory check</text>',
         '<text x="65" y="108" font-family="Arial,sans-serif" font-size="15" '
-        'fill="#64748b">D=30 · same 5 paired seeds as the 10k-FE holdout '
+        f'fill="#64748b">D=30 · same {env["repeats"]} paired seeds as the 10k-FE holdout '
         '· mean best-so-far error · log y-axis</text>',
     ]
     for idx, method in enumerate(METHODS):
@@ -1962,6 +2109,12 @@ def main() -> None:
     full_suite = load_full_suite()
     fresh_holdout = load_fresh_seed_holdout()
     paper_budget = load_paper_budget()
+    paper_twenty = load_paper_budget_twenty()
+    if paper_twenty is not None:
+        _, twenty_env, _, twenty_history, _ = paper_twenty
+        outputs[FIGURES / "cec2017-f16-f22-100k-20seed-trajectories.svg"] = (
+            paper_budget_trajectory_svg(twenty_env, twenty_history)
+        )
     if paper_budget is not None:
         _, paper_env, paper_summary, paper_history = paper_budget
         outputs[FIGURES / "cec2017-f16-f22-100k-trajectories.svg"] = (
@@ -2007,6 +2160,13 @@ def main() -> None:
         path = ROOT / name
         markdown = section(primary, secondary, env, summary, language)
         sections = []
+        if paper_twenty is not None:
+            folder, _, twenty_summary, _, twenty_tests = paper_twenty
+            sections.append(
+                paper_budget_twenty_markdown(
+                    folder, twenty_summary, twenty_tests, language
+                )
+            )
         if paper_budget is not None:
             folder, paper_env, paper_summary, _ = paper_budget
             sections.append(
