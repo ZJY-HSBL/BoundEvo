@@ -25,7 +25,9 @@ BUDGET = 100_000
 REPEATS = 5
 
 
-def baseline_holdout(path: Path, fid: int) -> dict[tuple[int, str], float]:
+def baseline_holdout(
+    path: Path, fid: int, *, start: int = 0, stop: int = REPEATS
+) -> dict[tuple[int, str], float]:
     if not path.is_file():
         raise ValueError(f"missing committed 10k-FE baseline: {path}")
     with path.open(newline="", encoding="utf-8") as handle:
@@ -37,7 +39,7 @@ def baseline_holdout(path: Path, fid: int) -> dict[tuple[int, str], float]:
         function_id = int(row["function_id"])
         repeat = int(row["repeat"])
         method = row["method"]
-        if function_id == fid and 0 <= repeat < REPEATS:
+        if function_id == fid and start <= repeat < stop:
             if method not in METHODS or (repeat, method) in selected:
                 raise ValueError("duplicate or invalid prior trial")
             if (
@@ -49,7 +51,7 @@ def baseline_holdout(path: Path, fid: int) -> dict[tuple[int, str], float]:
             if not math.isfinite(value) or value < 0:
                 raise ValueError("prior experiment has an invalid objective gap")
             selected[(repeat, method)] = value
-    if set(selected) != {(repeat, method) for repeat in range(REPEATS) for method in METHODS}:
+    if set(selected) != {(repeat, method) for repeat in range(start, stop) for method in METHODS}:
         raise ValueError("prior F16/F22 holdout is incomplete")
     return selected
 
@@ -78,16 +80,24 @@ def main() -> None:
             "docs/experiments/cec2017-holdout-30d-10k-2026-10-17/trials.csv"
         ),
     )
+    parser.add_argument("--repeat-start", type=int, default=0)
+    parser.add_argument("--repeat-stop", type=int, default=REPEATS)
     args = parser.parse_args()
+    if not 0 <= args.repeat_start < args.repeat_stop <= 20:
+        parser.error("repeat range must satisfy 0 <= start < stop <= 20")
     fid = args.function_id
-    initial = baseline_holdout(args.prior_trials, fid)
+    initial = baseline_holdout(
+        args.prior_trials, fid, start=args.repeat_start, stop=args.repeat_stop
+    )
     out = args.output_dir
     out.mkdir(parents=True, exist_ok=True)
     manifest = {
         "function_id": fid,
         "dimension": 30,
         "methods": list(METHODS),
-        "repeats": REPEATS,
+        "repeats": args.repeat_stop - args.repeat_start,
+        "repeat_start": args.repeat_start,
+        "repeat_stop": args.repeat_stop,
         "evaluations": BUDGET,
         "baseline_evaluations": 10000,
         "base_seed": BASE_SEED,
@@ -111,7 +121,7 @@ def main() -> None:
         writer.writeheader()
         history_writer.writeheader()
         case = make_cec2017_case(fid, 30, backend="reference")
-        for repeat in range(REPEATS):
+        for repeat in range(args.repeat_start, args.repeat_stop):
             seed = BASE_SEED + fid * 10000 + repeat
             for method in METHODS:
                 states: list[HistoryRecord] = []
