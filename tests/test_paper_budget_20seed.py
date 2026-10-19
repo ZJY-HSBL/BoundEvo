@@ -70,8 +70,6 @@ def cohort(tmp_path):
                 else:
                     start = 5 * (repeat // 5)
                     dest = shards / f"f{fid}-r{start:02d}-{start + 4:02d}"
-                    data_path = dest / "trials.csv"
-                    history_path = dest / "history.csv"
                     # Accumulate per-shard fixtures before writing.
                     if not hasattr(cohort, "_rows"):
                         cohort._rows = {}
