@@ -1,12 +1,19 @@
 """Synthetic fixtures test the 20-seed merger; never publish synthetic outputs."""
 
 import csv
+import importlib.util
 import json
+from pathlib import Path
 
 import pytest
 
 from boundevo.cec2017 import REFERENCE_COMMIT
-from scripts import aggregate_paper_budget_20seed as merger
+ROOT = Path(__file__).resolve().parents[1]
+PATH = ROOT / "scripts" / "aggregate_paper_budget_20seed.py"
+SPEC = importlib.util.spec_from_file_location("aggregate_paper_budget_20seed", PATH)
+assert SPEC is not None and SPEC.loader is not None
+merger = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(merger)
 
 
 def save(path, rows):
