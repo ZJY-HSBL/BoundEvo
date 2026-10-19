@@ -4,7 +4,16 @@ All notable changes to BoundEvo are documented here.
 
 ## [Unreleased]
 
-Development toward v0.11.0: targeted 100,000-function-evaluation budget experiments and cross-budget trajectory verification.
+## [0.11.0] - 2026-10-19
+
+### Matched 100k-budget optimization validation
+
+- Completed 120 real 100,000-FE CEC2017 F16/F22 optimization trajectories (30D, ABC/EDBF/RE, 20 paired seeds each), reusing 30 previously verified runs and newly computing 90 runs.
+- Independently checked every trajectory against its previously published exact 10k checkpoint; committed 13,440 convergence states with seed, provenance, budget and numerical invariants.
+- Reported 100k mean objective errors, bootstrap 95% intervals and four paired two-sided exact sign tests with Holm correction; ABC had the lowest observed F16/F22 mean but F22 pairwise superiority remained statistically unsupported.
+- Marked the 20-seed extension as exploratory/adaptive rather than independent confirmation; retained fixed C-derived reference backend and two-function generalization limits.
+- Published bilingual README comparisons, regenerated actual-data SVG curves, reproducibility records, and a six-shard experimental workflow with fail-closed evidence validation.
+- Built an auditable release package after Python 3.10–3.12 tests, linting, scientific consistency checks, and wheel/sdist validation.
 
 ## [0.10.0] - 2026-10-18
 
