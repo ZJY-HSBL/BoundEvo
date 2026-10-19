@@ -23,7 +23,6 @@ from pathlib import Path
 import numpy as np
 
 from boundevo.cec2017 import REFERENCE_COMMIT
-from scripts.aggregate_seed_holdout import exact_sign_p
 
 FUNCTIONS = (16, 22)
 METHODS = ("abc", "edbf", "re")
@@ -33,6 +32,15 @@ BUDGET = 100_000
 BOOTSTRAP_REPS = 10_000
 BOOTSTRAP_SEED = 20261019
 ORIGINAL_RUN_SHA = "66a5c36288772260543ec59cacbb37edfd5f8b14"
+
+
+def exact_sign_p(wins: int, losses: int) -> float:
+    """Exact two-sided binomial sign test, ignoring paired ties."""
+
+    n = wins + losses
+    if n == 0:
+        return 1.0
+    return min(1.0, 2 * sum(math.comb(n, j) for j in range(min(wins, losses) + 1)) / 2**n)
 
 
 def read(path: Path) -> list[dict]:
