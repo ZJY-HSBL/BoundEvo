@@ -7,5 +7,6 @@
   "full_suite_experiment": "docs/experiments/cec2017-fullsuite-30d-10k-2026-10-17",
   "full_suite_dataset_commit": "2e028c67a32b992c668a2f2f54a657880fd9bac5",
   "holdout_experiment": "docs/experiments/cec2017-holdout-30d-10k-2026-10-17",
-  "paper_budget_experiment": "docs/experiments/cec2017-paperbudget-30d-100k-2026-10-18"
+  "paper_budget_experiment": "docs/experiments/cec2017-paperbudget-30d-100k-2026-10-18",
+  "paper_budget_20seed_experiment": "docs/experiments/cec2017-paperbudget-30d-100k-20seeds-2026-10-19"
 }
