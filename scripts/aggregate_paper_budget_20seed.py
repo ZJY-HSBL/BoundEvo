@@ -4,6 +4,8 @@ This is an *adaptive extension* motivated by the high F22 variance observed
 in the initial five-seed 100k experiment. It is not a fresh independent cohort.
 """
 
+# ruff: noqa: ISC004
+
 from __future__ import annotations
 
 import argparse
