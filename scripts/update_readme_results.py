@@ -1797,12 +1797,11 @@ def load_paper_budget_twenty() -> tuple[Path, dict, list[dict], list[dict], list
     indexed = {(int(row["function_id"]), row["method"]): row for row in summaries}
     if set(indexed) != {(fid, method) for fid in (16, 22) for method in METHODS}:
         raise ValueError("incomplete 20-seed method summaries")
-    for fid, method in indexed:
+    for (fid, method), row in indexed.items():
         items = [t for t in trials
                  if int(t["function_id"]) == fid and t["method"] == method]
         before = statistics.fmean(float(t["baseline_10k_error"]) for t in items)
         after = statistics.fmean(float(t["error"]) for t in items)
-        row = indexed[(fid, method)]
         if not (
             math.isclose(before, float(row["mean_error_10k"]), rel_tol=1e-10)
             and math.isclose(after, float(row["mean_error_100k"]), rel_tol=1e-10)
