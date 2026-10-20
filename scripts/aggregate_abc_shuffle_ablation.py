@@ -167,7 +167,6 @@ def analyse(trials: list[dict]) -> tuple[list[dict], list[dict], dict]:
 
 
 def render_svg(tests: list[dict], deltas: dict) -> str:
-    from html import escape
     colors = ("#136392", "#d4842a", "#2b8a73", "#a35e92")
     largest = max(0.1, max(abs(x) for values in deltas.values() for x in values) * 1.10)
     x0, width = 310, 690
@@ -204,7 +203,7 @@ def render_svg(tests: list[dict], deltas: dict) -> str:
                    'stroke="#111827" stroke-width="4"/>')
         out.append(f'<circle cx="{pos(mean):.2f}" cy="{y+28}" r="5" fill="#111827"/>')
         out.append(f'<text x="1013" y="{y+2}" font-size="13" fill="#334155" '
-                   f'font-family="Arial">{escape(f"p={float(r["holm_sign_p"]):.3g}")}</text>')
+                   f'font-family="Arial">Holm p={float(r["holm_sign_p"]):.3g}</text>')
     for value in (-largest, 0, largest):
         out.append(f'<text x="{pos(value):.2f}" y="605" font-size="13" '
                    f'text-anchor="middle" font-family="Arial" fill="#475569">{value:+.2f}</text>')
