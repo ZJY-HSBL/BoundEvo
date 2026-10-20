@@ -539,6 +539,85 @@ def emit(path: Path, payload: str, check: bool) -> bool:
     return True
 
 
+
+def fresh_replication_svg(location: Path) -> str:
+    """Four function panels from 120 additional original trials (never demo data)."""
+    import json
+
+    def csv_rows(filename: str) -> list[dict]:
+        with (location / filename).open(encoding="utf-8", newline="") as handle:
+            return list(csv.DictReader(handle))
+
+    env = json.loads((location / "environment.json").read_text(encoding="utf-8"))
+    data = csv_rows("trials.csv")
+    summary = csv_rows("summary.csv")
+    tests = csv_rows("paired_tests.csv")
+    fs = (3, 10, 20, 30)
+    if (env.get("functions") != list(fs) or env.get("repeats") != 10
+            or env.get("trials") != 120 or env.get("evaluations") != 10_000
+            or len(data) != 120 or len(summary) != 12 or len(tests) != 8):
+        raise ValueError("cannot illustrate incomplete fresh-seed replication")
+    keys = {(int(r["function_id"]), int(r["repeat"]), r["method"]) for r in data}
+    expected = {(fid, i, m) for fid in fs for i in range(10) for m in METHODS}
+    if keys != expected:
+        raise ValueError("duplicate or absent fresh-seed replication records")
+    lookup = {(int(x["function_id"]), x["method"]): x for x in summary}
+    for fid in fs:
+        for m in METHODS:
+            raw = [float(x["error"]) for x in data
+                   if int(x["function_id"]) == fid and x["method"] == m]
+            if not math.isclose(
+                statistics.fmean(raw), float(lookup[(fid, m)]["mean_error"]), rel_tol=1e-9
+            ):
+                raise ValueError("fresh-seed chart cannot reconcile means with raw data")
+    out = svg_start(
+        1190, 755, "Independent random seeds | Four-function replication",
+        "CEC2017 · 30D · 10k FE · n=10 NEW paired seeds per function · means normalized within each function",
+    )
+    for col, fid in enumerate(fs):
+        x0, y0 = 76 + (col % 2) * 573, 175 + (col // 2) * 278
+        width, height = 470, 210
+        out.append(f'<rect x="{x0-20}" y="{y0-52}" width="{width+50}" '
+                   f'height="{height+55}" rx="14" fill="#ffffff" stroke="#e2e8f0"/>')
+        out.append(txt(x0, y0-26, f"F{fid} · fresh cohort", 20, weight="700"))
+        base = min(float(lookup[(fid, m)]["mean_error"]) for m in METHODS)
+        base = max(base, 1e-12)
+        scores = [
+            (
+                float(lookup[(fid, m)]["mean_error"])/base,
+                float(lookup[(fid, m)]["ci95_low"])/base,
+                float(lookup[(fid, m)]["ci95_high"])/base,
+            ) for m in METHODS
+        ]
+        top = max(1.5, max(hi for _, _, hi in scores)*1.10)
+        left = x0+108
+        right = x0+width-20
+        xp = lambda val: left+(right-left)*math.log1p(max(val, 0))/math.log1p(top)
+        for tick in (1, 2, 5, 10, 20, 50):
+            if tick > top:
+                continue
+            xx = xp(tick)
+            out.append(f'<line x1="{xx:.2f}" y1="{y0+2}" x2="{xx:.2f}" '
+                       f'y2="{y0+153}" stroke="#e7ecf2"/>')
+            out.append(txt(xx, y0+177, f"{tick}×", 12, anchor="middle"))
+        for row, m in enumerate(METHODS):
+            y = y0 + row*51+34
+            mean, lo, hi = scores[row]
+            out.append(txt(x0+9, y+5, m.upper(), 15, COLORS[m], weight="700"))
+            out.append(f'<line x1="{xp(lo):.2f}" y1="{y}" x2="{xp(hi):.2f}" '
+                       f'y2="{y}" stroke="{COLORS[m]}" stroke-width="4"/>')
+            for v in (lo, hi):
+                out.append(f'<line x1="{xp(v):.2f}" y1="{y-8}" '
+                           f'x2="{xp(v):.2f}" y2="{y+8}" stroke="{COLORS[m]}" stroke-width="2"/>')
+            out.append(f'<circle cx="{xp(mean):.2f}" cy="{y}" r="6.5" '
+                       f'fill="{COLORS[m]}" stroke="white" stroke-width="1.5"/>')
+            out.append(txt(xp(mean)+10, y-11, f"{mean:.2f}×", 12, COLORS[m]))
+    out.append(txt(70, 734,
+                   "Ratio = mean error / lowest mean within function. Whiskers are bootstrap CIs, not paired significance tests.",
+                   13))
+    return "\n".join(out + ["</svg>"])+"\n"
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--check", action="store_true")
@@ -555,9 +634,10 @@ def main() -> None:
         FIGURES / "cec2017-100k-target-attainment.svg": svg_ecdf(profiles),
         FIGURES / "cec2017-100k-anytime-contrasts.svg": svg_auc(tests),
     }
-    fresh_exists = (
-        ROOT / "docs/experiments/cec2017-fresh-functions-30d-10k-2026-10-20/summary.csv"
-    ).is_file()
+    fresh_folder = ROOT / "docs/experiments/cec2017-fresh-functions-30d-10k-2026-10-20"
+    fresh_exists = (fresh_folder / "summary.csv").is_file()
+    if fresh_exists:
+        files[FIGURES / "cec2017-fresh-crossfunction-ci.svg"] = fresh_replication_svg(fresh_folder)
     for language, path in (("en", ROOT / "README.md"), ("cn", ROOT / "README_CN.md")):
         files[path] = patch_readme(
             path.read_text(encoding="utf-8"),
