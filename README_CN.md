@@ -8,10 +8,10 @@
 
 [![CI](https://github.com/ZJY-HSBL/BoundEvo/actions/workflows/ci.yml/badge.svg)](https://github.com/ZJY-HSBL/BoundEvo/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
-![Release](https://img.shields.io/badge/release-v0.11.1-2F6FEB)
+![Release](https://img.shields.io/badge/release-v0.12.0-2F6FEB)
 ![License](https://img.shields.io/badge/license-MIT-3DA639)
 
-[English](README.md) · [算法说明](docs/algorithm.md) · [实验复现](docs/reproduction.md) · [研究工作流](docs/research_workflow.md) · [实验索引与对比](docs/run_registry.md) · [v0.11.1 说明](docs/releases/v0.11.1.md)
+[English](README.md) · [算法说明](docs/algorithm.md) · [实验复现](docs/reproduction.md) · [研究工作流](docs/research_workflow.md) · [实验索引与对比](docs/run_registry.md) · [v0.12.0 说明](docs/releases/v0.12.0.md)
 
 </div>
 
