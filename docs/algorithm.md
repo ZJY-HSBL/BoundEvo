@@ -1,6 +1,6 @@
 # BoundEvo algorithm notes
 
-BoundEvo implements a real-coded, elite-preserving multi-parent evolutionary optimizer and three coefficient-vector generators: random exhaustive (RE), empirical-distribution based (EDBF), and adaptive boundary constraint (ABC).
+BoundEvo implements a real-coded, elite-preserving multi-parent evolutionary optimizer and three reference coefficient-vector generators: random exhaustive (RE), empirical-distribution based (EDBF), and adaptive boundary constraint (ABC), plus a separate ABC-Shuffle mechanism ablation.
 
 ## Coefficient constraints
 
@@ -44,3 +44,35 @@ The source flowchart prints a stopping test around `i == M-1` while also labelin
 6. Repeat until the population converges numerically or the evaluation budget is exhausted.
 
 Offspring outside the variable box are projected back to the box. This explicit repair policy is an implementation choice because the affine subspace can otherwise leave the bounded search domain.
+
+## ABC-Shuffle: coefficient-position / parent-rank coupling
+
+Selected parents are ordered as K elite individuals, followed by M-K
+randomly sampled non-elites. Original ABC constructs coefficients sequentially
+and does **not** permute coefficient positions. Thus coefficient index can
+interact with the elite-first rank ordering.
+
+The diagnostic `abc_shuffle` mode generates the original ABC coefficient
+vector, then draws an independent random permutation of its coordinates.
+The **coefficient multiset**, affine sum of one, coordinate bounds [-0.5, 1.5],
+and rejection-free one-attempt generation remain exactly conserved.
+Only the coefficient-to-parent positional mapping changes. The permutation
+also consumes RNG draws, so subsequent random streams can differ.
+
+This is an **exploratory mechanism ablation**, not a proven new optimizer.
+The [frozen study design](abc_shuffle_ablation_protocol.md) and
+[80 measured optimization runs](experiments/cec2017-abc-shuffle-30d-10k-2026-10-20/report.md)
+find that ABC has lower observed mean error than ABC-Shuffle on F10/F16/F20/F22
+at 10k function evaluations and 10 fresh paired seeds/function, but **none
+of the four paired sign tests were significant after Holm adjustment**.
+The rank-coupling hypothesis remains unconfirmed.
+
+## Research interpretation
+
+The separately published [120 fresh-seed cross-function trials](experiments/cec2017-fresh-functions-30d-10k-2026-10-20/report.md)
+show function-dependent ranking: ABC has lowest observed mean on F3/F20/F30
+whereas RE leads on F10, without Holm-significant F10 pairwise evidence.
+[Whole-trajectory anytime analysis](experiments/cec2017-anytime-30d-100k-20seeds-2026-10-20/report.md)
+also shows that endpoint rankings need not imply whole-trajectory statistical
+superiority. Function and long-budget analyses were selected adaptively, so
+these remain exploratory rather than independent universal validation.
