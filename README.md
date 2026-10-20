@@ -8,10 +8,10 @@ A compact, reproducible Python implementation of real-coded multi-parent evoluti
 
 [![CI](https://github.com/ZJY-HSBL/BoundEvo/actions/workflows/ci.yml/badge.svg)](https://github.com/ZJY-HSBL/BoundEvo/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
-![Release](https://img.shields.io/badge/release-v0.11.1-2F6FEB)
+![Release](https://img.shields.io/badge/release-v0.12.0-2F6FEB)
 ![License](https://img.shields.io/badge/license-MIT-3DA639)
 
-[中文说明](README_CN.md) · [Algorithm](docs/algorithm.md) · [Reproduction](docs/reproduction.md) · [Research Workflow](docs/research_workflow.md) · [Run Registry](docs/run_registry.md) · [v0.11.1 Notes](docs/releases/v0.11.1.md)
+[中文说明](README_CN.md) · [Algorithm](docs/algorithm.md) · [Reproduction](docs/reproduction.md) · [Research Workflow](docs/research_workflow.md) · [Run Registry](docs/run_registry.md) · [v0.12.0 Notes](docs/releases/v0.12.0.md)
 
 </div>
 
