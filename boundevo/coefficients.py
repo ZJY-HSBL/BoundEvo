@@ -19,7 +19,7 @@ from typing import Literal
 import numpy as np
 
 Array = np.ndarray
-Method = Literal["abc", "abc_shuffle", "re", "edbf"]
+Method = Literal["abc", "abc_shuffle", "abc_reverse", "re", "edbf"]
 
 
 @dataclass(frozen=True, slots=True)
@@ -184,6 +184,12 @@ def generate_coefficients(
         baseline = adaptive_boundary_coefficients(parent_count, generator)
         shuffled = generator.permutation(baseline.coefficients)
         return GenerationResult(shuffled, baseline.attempts)
+    if method == "abc_reverse":
+        # Stronger mechanistic control: reverse the original ABC coefficient
+        # vector WITHOUT any extra random draw. All values and their bounds,
+        # the affine sum, and the one-attempt feasibility are preserved.
+        baseline = adaptive_boundary_coefficients(parent_count, rng)
+        return GenerationResult(baseline.coefficients[::-1].copy(), baseline.attempts)
     if method == "re":
         return random_exhaustive_coefficients(parent_count, rng, max_attempts=max_attempts)
     if method == "edbf":
