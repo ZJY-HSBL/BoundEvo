@@ -19,7 +19,7 @@ from typing import Literal
 import numpy as np
 
 Array = np.ndarray
-Method = Literal["abc", "re", "edbf"]
+Method = Literal["abc", "abc_shuffle", "re", "edbf"]
 
 
 @dataclass(frozen=True, slots=True)
@@ -176,6 +176,14 @@ def generate_coefficients(
 
     if method == "abc":
         return adaptive_boundary_coefficients(parent_count, rng)
+    if method == "abc_shuffle":
+        # Diagnostic ablation: remove any alignment between coefficient order
+        # and the elite-first ordered parent indices, retaining the identical
+        # valid affine-coefficient multiset and sum constraint.
+        generator = rng if rng is not None else np.random.default_rng()
+        baseline = adaptive_boundary_coefficients(parent_count, generator)
+        shuffled = generator.permutation(baseline.coefficients)
+        return GenerationResult(shuffled, baseline.attempts)
     if method == "re":
         return random_exhaustive_coefficients(parent_count, rng, max_attempts=max_attempts)
     if method == "edbf":
