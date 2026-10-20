@@ -1,8 +1,8 @@
 """Validate the ABC coefficient-order experiment and publish paired scientific evidence."""
 
-from __future__ import annotations
-
 # ruff: noqa: ISC004
+
+from __future__ import annotations
 
 import argparse
 import csv
