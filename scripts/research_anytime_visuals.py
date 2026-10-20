@@ -453,7 +453,7 @@ def report(summary: list[dict], tests: list[dict], profiles: list[dict]) -> str:
 
 
 def readme_block(language: str, summary: list[dict], tests: list[dict],
-                 fresh_exists: bool) -> str:
+                 fresh_exists: bool, ablation_exists: bool) -> str:
     chinese = language == "cn"
     title = ("## 下一阶段研究：长预算过程表现与独立随机种子复核"
              if chinese else "## Next-stage research: anytime performance and fresh-seed replication")
@@ -499,6 +499,61 @@ def readme_block(language: str, summary: list[dict], tests: list[dict],
             "",
             ("[原始实验与报告](docs/experiments/cec2017-fresh-functions-30d-10k-2026-10-20/report.md)"
              if chinese else "[Source trials and full report](docs/experiments/cec2017-fresh-functions-30d-10k-2026-10-20/report.md)"),
+            "",
+        ]
+    if ablation_exists:
+        ablation = ROOT / "docs/experiments/cec2017-abc-shuffle-30d-10k-2026-10-20"
+        import json
+
+        env = json.loads((ablation / "environment.json").read_text(encoding="utf-8"))
+        with (ablation / "summary.csv").open(newline="", encoding="utf-8") as handle:
+            scores = list(csv.DictReader(handle))
+        with (ablation / "paired_tests.csv").open(newline="", encoding="utf-8") as handle:
+            comparisons = list(csv.DictReader(handle))
+        if (env.get("trials") != 80 or env.get("repeats") != 10
+                or env.get("functions") != [10, 16, 20, 22]
+                or len(scores) != 8 or len(comparisons) != 4):
+            raise ValueError("incomplete ABC-Shuffle ablation cannot appear in README")
+        score_lookup = {
+            (int(r["function_id"]), r["method"]): r for r in scores
+        }
+        test_lookup = {int(r["function_id"]): r for r in comparisons}
+        lines += [
+            ("### 新的机制消融：ABC 系数顺序是否影响性能？"
+             if chinese else "### Mechanism ablation: does ABC coefficient order matter?"),
+            "",
+            ("ABC-Shuffle 保留原 ABC 生成的所有系数，只随机置换它们在父代中的位置；"
+             "新随机种子、原配置、相同初始种群，80 次真实试验。"
+             if chinese else "ABC-Shuffle preserves the original ABC coefficient multiset "
+             "but permutes its alignment with elite-first ordered parents; "
+             "80 new trials with matched initial populations."),
+            "",
+            "![Measured coefficient-order paired effects]"
+            "(docs/figures/cec2017-abc-shuffle-paired-seeds.svg)",
+            "",
+            ("| 函数 | ABC 平均误差 | ABC-Shuffle 平均误差 | Holm p |"
+             if chinese else "| Function | ABC mean error | ABC-Shuffle mean error | Holm p |"),
+            "|:---|---:|---:|---:|",
+        ]
+        for fid in (10, 16, 20, 22):
+            a = float(score_lookup[(fid, "abc")]["mean_error"])
+            b = float(score_lookup[(fid, "abc_shuffle")]["mean_error"])
+            p = float(test_lookup[fid]["holm_sign_p"])
+            lines.append(f"| F{fid} | {a:,.2f} | {b:,.2f} | {p:.4g} |")
+        lines += [
+            "",
+            ("**解释限制：**四项平均误差均有利于原 ABC，但 Holm 校正的配对符号"
+             "检验均不显著。该机制尚未得到确证，且额外置换会改变后续随机数序列。"
+             if chinese else "**Interpretation:** Original ABC had smaller observed means on "
+             "all four functions, but none of the four paired sign tests is Holm-significant. "
+             "This does not prove a coefficient-rank mechanism; shuffle alters later RNG streams."),
+            "",
+            ("[消融设计](docs/abc_shuffle_ablation_protocol.md) · "
+             "[80 次原始记录及分析报告]"
+             "(docs/experiments/cec2017-abc-shuffle-30d-10k-2026-10-20/report.md)"
+             if chinese else "[Frozen ablation protocol](docs/abc_shuffle_ablation_protocol.md) · "
+             "[80 original trials and full report]"
+             "(docs/experiments/cec2017-abc-shuffle-30d-10k-2026-10-20/report.md)"),
             "",
         ]
     lines += [
@@ -639,10 +694,12 @@ def main() -> None:
     fresh_exists = (fresh_folder / "summary.csv").is_file()
     if fresh_exists:
         files[FIGURES / "cec2017-fresh-crossfunction-ci.svg"] = fresh_replication_svg(fresh_folder)
+    ablation_folder = ROOT / "docs/experiments/cec2017-abc-shuffle-30d-10k-2026-10-20"
+    ablation_exists = (ablation_folder / "paired_tests.csv").is_file()
     for language, path in (("en", ROOT / "README.md"), ("cn", ROOT / "README_CN.md")):
         files[path] = patch_readme(
             path.read_text(encoding="utf-8"),
-            readme_block(language, summary, tests, fresh_exists),
+            readme_block(language, summary, tests, fresh_exists, ablation_exists),
         )
     errors = [str(path.relative_to(ROOT)) for path, payload in files.items()
               if not emit(path, payload, args.check)]
