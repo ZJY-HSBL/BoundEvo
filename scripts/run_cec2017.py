@@ -31,7 +31,7 @@ def main() -> None:
     parser.add_argument(
         "--methods",
         nargs="+",
-        choices=("re", "edbf", "abc"),
+        choices=("re", "edbf", "abc", "abc_shuffle", "abc_reverse"),
         default=("re", "edbf", "abc"),
     )
     parser.add_argument("--repeats", type=int, default=1)
