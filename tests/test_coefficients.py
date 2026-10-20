@@ -44,3 +44,30 @@ def test_edbf_probabilities_are_valid(m: int) -> None:
 def test_dispatch_rejects_unknown_method() -> None:
     with pytest.raises(ValueError):
         generate_coefficients(4, method="missing")  # type: ignore[arg-type]
+
+
+@pytest.mark.parametrize("m", [1, 2, 5, 15, 30])
+def test_abc_shuffle_is_valid_and_reproduces_exact_coefficient_multiset(m: int) -> None:
+    for seed in range(20):
+        original_rng = np.random.default_rng(seed)
+        shuffle_rng = np.random.default_rng(seed)
+        expected = generate_coefficients(m, method="abc", rng=original_rng)
+        observed = generate_coefficients(m, method="abc_shuffle", rng=shuffle_rng)
+        assert expected.attempts == observed.attempts == 1
+        assert is_valid_coefficients(observed.coefficients)
+        np.testing.assert_array_equal(
+            np.sort(observed.coefficients), np.sort(expected.coefficients)
+        )
+        replay = generate_coefficients(
+            m, method="abc_shuffle", rng=np.random.default_rng(seed)
+        )
+        np.testing.assert_array_equal(observed.coefficients, replay.coefficients)
+
+
+def test_abc_shuffle_changes_coefficient_position_without_changing_values() -> None:
+    plain = generate_coefficients(15, method="abc", rng=np.random.default_rng(17))
+    shuffled = generate_coefficients(
+        15, method="abc_shuffle", rng=np.random.default_rng(17)
+    )
+    assert not np.array_equal(plain.coefficients, shuffled.coefficients)
+    np.testing.assert_array_equal(np.sort(plain.coefficients), np.sort(shuffled.coefficients))
