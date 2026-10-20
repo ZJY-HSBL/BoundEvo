@@ -4,6 +4,15 @@ All notable changes to BoundEvo are documented here.
 
 ## [Unreleased]
 
+### 2026-10-20: Independent-seed replication and coefficient-order ablation
+
+- Reanalysed the **existing 120 F16/F22 100k-FE optimizer trajectories** using integrated log-budget anytime loss, paired bootstrap confidence intervals and 10k baseline-derived empirical target-attainment profiles. Reused trajectories are not counted as new runs.
+- Executed and published **120 new, independent-seed, 10k-FE CEC2017 trials** on F3/F10/F20/F30 at 30D, comparing ABC/EDBF/RE with ten newly matched seeds/function, original checkpoints, eight Holm-adjusted paired tests and a measured-data four-panel bootstrap CI figure.
+- Found function-dependent performance: ABC achieved the smallest observed mean error on F3/F20/F30, and RE on F10. ABC's F3/F30 comparisons passed this study's Holm-adjusted exact sign tests; F10/F20 tests did not.
+- Added the **ABC-Shuffle** diagnostic generator, preserving the original ABC coefficient multiset but randomizing assignment to elite-first ordered parents, with validation and deterministic reproducibility tests.
+- Executed and published **80 additional real 10k-FE CEC2017 ablation trials** on F10/F16/F20/F22 with further unused matched seeds. ABC had smaller measured means than ABC-Shuffle across all four functions, but all Holm-adjusted paired sign tests remained nonsignificant.
+- Published **six new scientific, original-data-derived SVG figures**, archived paired-trial and checkpoint evidence, recorded methodological limits, and regenerated English/Chinese research sections. Recorded protocols distinguish new runs from post-hoc analysis and adaptive choice of functions. The v0.11.0 release tag remains unchanged.
+
 ## [0.11.0] - 2026-10-19
 
 ### Matched 100k-budget optimization validation
