@@ -1,0 +1,91 @@
+{
+  "functions": [
+    10,
+    16,
+    20,
+    22
+  ],
+  "methods": [
+    "abc",
+    "abc_shuffle"
+  ],
+  "repeats": 10,
+  "evaluations": 10000,
+  "dimension": 30,
+  "trials": 80,
+  "history_rows": 1840,
+  "base_seed": 20261121,
+  "reference_commit": "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f",
+  "bootstrap_resamples": 10000,
+  "study_type": "exploratory coefficient-rank decoupling ablation",
+  "source_manifests": [
+    {
+      "function_id": 10,
+      "methods": [
+        "abc",
+        "abc_shuffle"
+      ],
+      "dimension": 30,
+      "repeats": 10,
+      "evaluations": 10000,
+      "base_seed": 20261121,
+      "history_interval": 450,
+      "reference_commit": "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f",
+      "source_commit": "83e24dccdbe08f02ecb5aba63f9895f3e73f85f5",
+      "ablation": "coefficient permutation only; ABC parent ordering held fixed",
+      "interpretation": "exploratory mechanism study, fresh independent seeds"
+    },
+    {
+      "function_id": 16,
+      "methods": [
+        "abc",
+        "abc_shuffle"
+      ],
+      "dimension": 30,
+      "repeats": 10,
+      "evaluations": 10000,
+      "base_seed": 20261121,
+      "history_interval": 450,
+      "reference_commit": "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f",
+      "source_commit": "83e24dccdbe08f02ecb5aba63f9895f3e73f85f5",
+      "ablation": "coefficient permutation only; ABC parent ordering held fixed",
+      "interpretation": "exploratory mechanism study, fresh independent seeds"
+    },
+    {
+      "function_id": 20,
+      "methods": [
+        "abc",
+        "abc_shuffle"
+      ],
+      "dimension": 30,
+      "repeats": 10,
+      "evaluations": 10000,
+      "base_seed": 20261121,
+      "history_interval": 450,
+      "reference_commit": "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f",
+      "source_commit": "83e24dccdbe08f02ecb5aba63f9895f3e73f85f5",
+      "ablation": "coefficient permutation only; ABC parent ordering held fixed",
+      "interpretation": "exploratory mechanism study, fresh independent seeds"
+    },
+    {
+      "function_id": 22,
+      "methods": [
+        "abc",
+        "abc_shuffle"
+      ],
+      "dimension": 30,
+      "repeats": 10,
+      "evaluations": 10000,
+      "base_seed": 20261121,
+      "history_interval": 450,
+      "reference_commit": "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f",
+      "source_commit": "83e24dccdbe08f02ecb5aba63f9895f3e73f85f5",
+      "ablation": "coefficient permutation only; ABC parent ordering held fixed",
+      "interpretation": "exploratory mechanism study, fresh independent seeds"
+    }
+  ],
+  "python": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]",
+  "numpy": "2.5.4",
+  "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "generated_utc": "2026-10-20T03:03:58.341867+00:00"
+}
