@@ -249,6 +249,33 @@
 </details>
 <!-- BENCHMARK_RESULTS_END -->
 
+<!-- ADVANCED_RESEARCH_START -->
+## 下一阶段研究：长预算过程表现与独立随机种子复核
+
+这部分继续分析 **120 次真实 100k-FE 试验**，不把二次统计写成新的训练或实验次数。
+新的研究指标为对数评价预算上的样本保持积分，衡量 10k 到 100k 的全过程误差；越低越好。均值终点和全过程排名可能不同。
+
+![Real matched-seed convergence ribbons](docs/figures/cec2017-100k-anytime-ribbons.svg)
+
+![Paired seed endpoint comparisons](docs/figures/cec2017-100k-seed-scatter.svg)
+
+**全过程误差：平均 log1p 误差积分**
+
+| 函数 | ABC | EDBF | RE |
+|:---|---:|---:|---:|
+| F16 | **7.4796** | 7.7680 | 7.6524 |
+| F22 | **8.2842** | 8.8065 | 8.6216 |
+
+![Pooled 10k threshold attainment profiles](docs/figures/cec2017-100k-target-attainment.svg)
+
+![Paired anytime advantage and uncertainty](docs/figures/cec2017-100k-anytime-contrasts.svg)
+
+**边界：**F16/F22 的 20 种子扩容是观察初步结果后的适应性研究，新全过程统计不等于独立确认。目标阈值来自既有 10k 样本；所有比较均应按函数、评价预算分别解释。
+
+[全过程研究数据与统计报告](docs/experiments/cec2017-anytime-30d-100k-20seeds-2026-10-20/report.md)
+
+<!-- ADVANCED_RESEARCH_END -->
+
 ## 项目定位
 
 BoundEvo 解决多父体仿射重组中的一个核心问题：高效生成满足下列条件的系数向量。

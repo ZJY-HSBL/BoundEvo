@@ -249,6 +249,33 @@ Functions with the lowest observed average error: ABC 27, EDBF 0, RE 2.
 </details>
 <!-- BENCHMARK_RESULTS_END -->
 
+<!-- ADVANCED_RESEARCH_START -->
+## Next-stage research: anytime performance and fresh-seed replication
+
+New analyses of **120 actual 100k-FE runs**, not additional optimization runs.
+New log-budget, sample-and-hold anytime loss measures the whole 10k–100k trajectory; lower is better. Endpoint rankings need not match anytime rankings.
+
+![Real matched-seed convergence ribbons](docs/figures/cec2017-100k-anytime-ribbons.svg)
+
+![Paired seed endpoint comparisons](docs/figures/cec2017-100k-seed-scatter.svg)
+
+**Anytime performance: mean integrated log1p objective error**
+
+| Function | ABC | EDBF | RE |
+|:---|---:|---:|---:|
+| F16 | **7.4796** | 7.7680 | 7.6524 |
+| F22 | **8.2842** | 8.8065 | 8.6216 |
+
+![Pooled 10k threshold attainment profiles](docs/figures/cec2017-100k-target-attainment.svg)
+
+![Paired anytime advantage and uncertainty](docs/figures/cec2017-100k-anytime-contrasts.svg)
+
+**Limits:** The 20-seed F16/F22 extension was adaptively chosen; anytime analysis is not independent confirmation. Target thresholds are derived from observed 10k outcomes and results must be interpreted per function and budget.
+
+[Anytime data, bootstrap statistics and research report](docs/experiments/cec2017-anytime-30d-100k-20seeds-2026-10-20/report.md)
+
+<!-- ADVANCED_RESEARCH_END -->
+
 ## Overview
 
 BoundEvo focuses on a bottleneck in multi-parent affine recombination: efficiently generating coefficient vectors satisfying

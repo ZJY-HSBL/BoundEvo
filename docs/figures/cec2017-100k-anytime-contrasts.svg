@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="560" viewBox="0 0 1120 560" role="img" aria-label="Anytime loss | Paired advantage over ABC">
+<rect width="1120" height="560" fill="#f8fafc"/>
+<text x="54" y="56" font-size="27" font-weight="700" fill="#14263e" font-family="Arial,sans-serif">Anytime loss | Paired advantage over ABC</text>
+<text x="54" y="86" font-size="15" fill="#53657a" font-family="Arial,sans-serif">Difference = comparator minus ABC in log-budget-averaged log1p(error) · positive favors ABC</text>
+<line x1="665.0" y1="145" x2="665.0" y2="457" stroke="#475569" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="58.0" y="188.0" font-size="17" fill="#334155" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">F16 · ABC vs EDBF</text>
+<line x1="718.24" y1="182" x2="753.54" y2="182" stroke="#be6d2a" stroke-width="4"/>
+<line x1="718.24" y1="172" x2="718.24" y2="192" stroke="#be6d2a" stroke-width="3"/>
+<line x1="753.54" y1="172" x2="753.54" y2="192" stroke="#be6d2a" stroke-width="3"/>
+<circle cx="735.51" cy="182" r="7.5" fill="#be6d2a" stroke="#ffffff" stroke-width="2"/>
+<text x="958.0" y="188.0" font-size="14" fill="#334155" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">Holm p=0.00016</text>
+<text x="958.0" y="206.0" font-size="12" fill="#64748b" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">W/L 19/1</text>
+<text x="58.0" y="268.0" font-size="17" fill="#334155" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">F16 · ABC vs RE</text>
+<line x1="688.79" y1="262" x2="726.42" y2="262" stroke="#258473" stroke-width="4"/>
+<line x1="688.79" y1="252" x2="688.79" y2="272" stroke="#258473" stroke-width="3"/>
+<line x1="726.42" y1="252" x2="726.42" y2="272" stroke="#258473" stroke-width="3"/>
+<circle cx="707.24" cy="262" r="7.5" fill="#258473" stroke="#ffffff" stroke-width="2"/>
+<text x="958.0" y="268.0" font-size="14" fill="#334155" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">Holm p=0.124</text>
+<text x="958.0" y="286.0" font-size="12" fill="#64748b" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">W/L 15/5</text>
+<text x="58.0" y="348.0" font-size="17" fill="#334155" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">F22 · ABC vs EDBF</text>
+<line x1="703.47" y1="342" x2="894.17" y2="342" stroke="#be6d2a" stroke-width="4"/>
+<line x1="703.47" y1="332" x2="703.47" y2="352" stroke="#be6d2a" stroke-width="3"/>
+<line x1="894.17" y1="332" x2="894.17" y2="352" stroke="#be6d2a" stroke-width="3"/>
+<circle cx="792.72" cy="342" r="7.5" fill="#be6d2a" stroke="#ffffff" stroke-width="2"/>
+<text x="958.0" y="348.0" font-size="14" fill="#334155" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">Holm p=0.526</text>
+<text x="958.0" y="366.0" font-size="12" fill="#64748b" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">W/L 13/7</text>
+<text x="58.0" y="428.0" font-size="17" fill="#334155" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">F22 · ABC vs RE</text>
+<line x1="653.03" y1="422" x2="855.34" y2="422" stroke="#258473" stroke-width="4"/>
+<line x1="653.03" y1="412" x2="653.03" y2="432" stroke="#258473" stroke-width="3"/>
+<line x1="855.34" y1="412" x2="855.34" y2="432" stroke="#258473" stroke-width="3"/>
+<circle cx="747.51" cy="422" r="7.5" fill="#258473" stroke="#ffffff" stroke-width="2"/>
+<text x="958.0" y="428.0" font-size="14" fill="#334155" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">Holm p=0.824</text>
+<text x="958.0" y="446.0" font-size="12" fill="#64748b" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">W/L 11/9</text>
+<text x="390.0" y="479.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">-1.12</text>
+<text x="527.5" y="479.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">-0.56</text>
+<text x="665.0" y="479.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">+0.00</text>
+<text x="802.5" y="479.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">+0.56</text>
+<text x="940.0" y="479.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">+1.12</text>
+<text x="530.0" y="523.0" font-size="13" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">95% paired-seed bootstrap intervals · all four sign tests jointly Holm-adjusted</text>
+</svg>

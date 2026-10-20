@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1150" height="925" viewBox="0 0 1150 925" role="img" aria-label="Paired-seed endpoint comparison">
+<rect width="1150" height="925" fill="#f8fafc"/>
+<text x="54" y="56" font-size="27" font-weight="700" fill="#14263e" font-family="Arial,sans-serif">Paired-seed endpoint comparison</text>
+<text x="54" y="86" font-size="15" fill="#53657a" font-family="Arial,sans-serif">20 matched seeds · each dot is one actual paired trial · above diagonal = ABC lower error</text>
+<rect x="37" y="119" width="461" height="364" rx="14" fill="white" stroke="#e2e8f0"/>
+<text x="105.0" y="147.0" font-size="20" fill="#334155" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">F16  ·  ABC vs EDBF</text>
+<line x1="105" y1="437" x2="445" y2="177" stroke="#94a3b8" stroke-dasharray="7 5" stroke-width="2"/>
+<line x1="105.0" y1="437" x2="105.0" y2="443" stroke="#64748b"/>
+<line x1="99" y1="437.0" x2="105" y2="437.0" stroke="#64748b"/>
+<text x="105.0" y="462.0" font-size="11" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">0</text>
+<text x="96.0" y="441.0" font-size="11" fill="#334155" text-anchor="end" font-weight="400" font-family="Arial,sans-serif">0</text>
+<line x1="275.0" y1="437" x2="275.0" y2="443" stroke="#64748b"/>
+<line x1="99" y1="307.0" x2="105" y2="307.0" stroke="#64748b"/>
+<text x="275.0" y="462.0" font-size="11" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">1,265</text>
+<text x="96.0" y="311.0" font-size="11" fill="#334155" text-anchor="end" font-weight="400" font-family="Arial,sans-serif">1,265</text>
+<line x1="445.0" y1="437" x2="445.0" y2="443" stroke="#64748b"/>
+<line x1="99" y1="177.0" x2="105" y2="177.0" stroke="#64748b"/>
+<text x="445.0" y="462.0" font-size="11" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">2,531</text>
+<text x="96.0" y="181.0" font-size="11" fill="#334155" text-anchor="end" font-weight="400" font-family="Arial,sans-serif">2,531</text>
+<circle cx="371.59" cy="221.46" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="300.42" cy="219.37" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="327.79" cy="256.11" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="377.97" cy="206.02" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="311.04" cy="215.56" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="282.63" cy="204.52" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="278.25" cy="217.65" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="343.50" cy="229.90" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="334.99" cy="223.63" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="305.75" cy="212.22" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="282.61" cy="196.26" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="328.07" cy="246.47" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="275.81" cy="244.64" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="336.39" cy="222.03" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="172.64" cy="210.87" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="306.76" cy="216.93" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="279.51" cy="206.00" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="327.93" cy="225.57" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="331.13" cy="256.11" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="280.41" cy="205.77" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<text x="275.0" y="488.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">ABC endpoint error · ABC wins 20/20</text>
+<rect x="37" y="484" width="461" height="364" rx="14" fill="white" stroke="#e2e8f0"/>
+<text x="105.0" y="512.0" font-size="20" fill="#334155" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">F16  ·  ABC vs RE</text>
+<line x1="105" y1="802" x2="445" y2="542" stroke="#94a3b8" stroke-dasharray="7 5" stroke-width="2"/>
+<line x1="105.0" y1="802" x2="105.0" y2="808" stroke="#64748b"/>
+<line x1="99" y1="802.0" x2="105" y2="802.0" stroke="#64748b"/>
+<text x="105.0" y="827.0" font-size="11" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">0</text>
+<text x="96.0" y="806.0" font-size="11" fill="#334155" text-anchor="end" font-weight="400" font-family="Arial,sans-serif">0</text>
+<line x1="275.0" y1="802" x2="275.0" y2="808" stroke="#64748b"/>
+<line x1="99" y1="672.0" x2="105" y2="672.0" stroke="#64748b"/>
+<text x="275.0" y="827.0" font-size="11" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">1,112</text>
+<text x="96.0" y="676.0" font-size="11" fill="#334155" text-anchor="end" font-weight="400" font-family="Arial,sans-serif">1,112</text>
+<line x1="445.0" y1="802" x2="445.0" y2="808" stroke="#64748b"/>
+<line x1="99" y1="542.0" x2="105" y2="542.0" stroke="#64748b"/>
+<text x="445.0" y="827.0" font-size="11" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">2,223</text>
+<text x="96.0" y="546.0" font-size="11" fill="#334155" text-anchor="end" font-weight="400" font-family="Arial,sans-serif">2,223</text>
+<circle cx="408.44" cy="604.45" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="327.44" cy="569.60" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="358.59" cy="598.83" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="415.70" cy="594.25" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="339.52" cy="591.71" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="307.19" cy="588.68" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="302.21" cy="580.94" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="376.48" cy="579.08" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="366.79" cy="589.26" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="333.50" cy="607.40" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="307.17" cy="589.40" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="358.91" cy="590.76" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="299.43" cy="561.26" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="368.38" cy="598.38" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="182.00" cy="594.71" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="334.66" cy="597.26" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="303.63" cy="586.56" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="358.75" cy="606.27" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="362.39" cy="571.82" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="304.67" cy="587.52" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<text x="275.0" y="853.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">ABC endpoint error · ABC wins 18/20</text>
+<rect x="567" y="119" width="461" height="364" rx="14" fill="white" stroke="#e2e8f0"/>
+<text x="635.0" y="147.0" font-size="20" fill="#334155" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">F22  ·  ABC vs EDBF</text>
+<line x1="635" y1="437" x2="975" y2="177" stroke="#94a3b8" stroke-dasharray="7 5" stroke-width="2"/>
+<line x1="635.0" y1="437" x2="635.0" y2="443" stroke="#64748b"/>
+<line x1="629" y1="437.0" x2="635" y2="437.0" stroke="#64748b"/>
+<text x="635.0" y="462.0" font-size="11" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">0</text>
+<text x="626.0" y="441.0" font-size="11" fill="#334155" text-anchor="end" font-weight="400" font-family="Arial,sans-serif">0</text>
+<line x1="805.0" y1="437" x2="805.0" y2="443" stroke="#64748b"/>
+<line x1="629" y1="307.0" x2="635" y2="307.0" stroke="#64748b"/>
+<text x="805.0" y="462.0" font-size="11" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">4,148</text>
+<text x="626.0" y="311.0" font-size="11" fill="#334155" text-anchor="end" font-weight="400" font-family="Arial,sans-serif">4,148</text>
+<line x1="975.0" y1="437" x2="975.0" y2="443" stroke="#64748b"/>
+<line x1="629" y1="177.0" x2="635" y2="177.0" stroke="#64748b"/>
+<text x="975.0" y="462.0" font-size="11" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">8,296</text>
+<text x="626.0" y="181.0" font-size="11" fill="#334155" text-anchor="end" font-weight="400" font-family="Arial,sans-serif">8,296</text>
+<circle cx="907.11" cy="222.78" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="942.33" cy="215.37" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="660.16" cy="217.82" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="925.73" cy="203.83" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="924.17" cy="203.91" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="832.69" cy="256.89" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="823.04" cy="209.76" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="667.07" cy="202.41" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="831.76" cy="291.03" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="949.81" cy="251.97" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="941.27" cy="230.95" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="913.68" cy="281.25" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="896.04" cy="198.97" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="669.52" cy="397.81" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="868.12" cy="237.07" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="707.65" cy="418.41" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="932.93" cy="245.39" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="932.71" cy="227.82" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="681.99" cy="206.78" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="709.26" cy="203.76" r="5.5" fill="#be6d2a" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<text x="805.0" y="488.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">ABC endpoint error · ABC wins 12/20</text>
+<rect x="567" y="484" width="461" height="364" rx="14" fill="white" stroke="#e2e8f0"/>
+<text x="635.0" y="512.0" font-size="20" fill="#334155" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">F22  ·  ABC vs RE</text>
+<line x1="635" y1="802" x2="975" y2="542" stroke="#94a3b8" stroke-dasharray="7 5" stroke-width="2"/>
+<line x1="635.0" y1="802" x2="635.0" y2="808" stroke="#64748b"/>
+<line x1="629" y1="802.0" x2="635" y2="802.0" stroke="#64748b"/>
+<text x="635.0" y="827.0" font-size="11" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">0</text>
+<text x="626.0" y="806.0" font-size="11" fill="#334155" text-anchor="end" font-weight="400" font-family="Arial,sans-serif">0</text>
+<line x1="805.0" y1="802" x2="805.0" y2="808" stroke="#64748b"/>
+<line x1="629" y1="672.0" x2="635" y2="672.0" stroke="#64748b"/>
+<text x="805.0" y="827.0" font-size="11" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">4,368</text>
+<text x="626.0" y="676.0" font-size="11" fill="#334155" text-anchor="end" font-weight="400" font-family="Arial,sans-serif">4,368</text>
+<line x1="975.0" y1="802" x2="975.0" y2="808" stroke="#64748b"/>
+<line x1="629" y1="542.0" x2="635" y2="542.0" stroke="#64748b"/>
+<text x="975.0" y="827.0" font-size="11" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">8,736</text>
+<text x="626.0" y="546.0" font-size="11" fill="#334155" text-anchor="end" font-weight="400" font-family="Arial,sans-serif">8,736</text>
+<circle cx="893.40" cy="636.96" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="926.84" cy="786.53" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="658.90" cy="566.95" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="911.08" cy="595.61" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="909.60" cy="653.04" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="822.73" cy="591.31" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="813.57" cy="644.72" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="665.45" cy="588.07" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="821.85" cy="590.34" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="933.96" cy="784.47" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="925.84" cy="795.17" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="899.64" cy="574.36" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="882.89" cy="561.26" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="667.78" cy="791.19" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="856.37" cy="659.30" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="703.99" cy="792.35" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="917.92" cy="636.14" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="917.72" cy="592.83" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="679.62" cy="584.53" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<circle cx="705.52" cy="631.03" r="5.5" fill="#258473" fill-opacity="0.76" stroke="white" stroke-width="1"/>
+<text x="805.0" y="853.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">ABC endpoint error · ABC wins 9/20</text>
+<text x="65.0" y="907.0" font-size="13" fill="#334155" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">Dots above diagonal favor ABC; paired seed identity is preserved, not independently resampled.</text>
+</svg>

@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1170" height="625" viewBox="0 0 1170 625" role="img" aria-label="Target-attainment profiles | 10k–100k evaluations">
+<rect width="1170" height="625" fill="#f8fafc"/>
+<text x="54" y="56" font-size="27" font-weight="700" fill="#14263e" font-family="Arial,sans-serif">Target-attainment profiles | 10k–100k evaluations</text>
+<text x="54" y="86" font-size="15" fill="#53657a" font-family="Arial,sans-serif">Targets = pooled 10k error quartiles · 3 targets × 20 seeds per method · sampled first-hits</text>
+<rect x="57" y="117" width="510" height="452" rx="14" fill="white" stroke="#e2e8f0"/>
+<text x="78.0" y="143.0" font-size="20" fill="#334155" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">F16 · pooled 10k thresholds</text>
+<line x1="78" y1="516.0" x2="543" y2="516.0" stroke="#e8eef5"/>
+<text x="69.0" y="520.0" font-size="12" fill="#334155" text-anchor="end" font-weight="400" font-family="Arial,sans-serif">0%</text>
+<line x1="78" y1="428.5" x2="543" y2="428.5" stroke="#e8eef5"/>
+<text x="69.0" y="432.5" font-size="12" fill="#334155" text-anchor="end" font-weight="400" font-family="Arial,sans-serif">25%</text>
+<line x1="78" y1="341.0" x2="543" y2="341.0" stroke="#e8eef5"/>
+<text x="69.0" y="345.0" font-size="12" fill="#334155" text-anchor="end" font-weight="400" font-family="Arial,sans-serif">50%</text>
+<line x1="78" y1="253.5" x2="543" y2="253.5" stroke="#e8eef5"/>
+<text x="69.0" y="257.5" font-size="12" fill="#334155" text-anchor="end" font-weight="400" font-family="Arial,sans-serif">75%</text>
+<line x1="78" y1="166.0" x2="543" y2="166.0" stroke="#e8eef5"/>
+<text x="69.0" y="170.0" font-size="12" fill="#334155" text-anchor="end" font-weight="400" font-family="Arial,sans-serif">100%</text>
+<text x="78.0" y="542.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">10k</text>
+<text x="284.7" y="542.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">50k</text>
+<text x="543.0" y="542.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">100k</text>
+<path d="M78.00,218.50 L129.67,189.33 L181.33,177.67 L233.00,171.83 L284.67,171.83 L336.33,171.83 L388.00,166.00 L439.67,166.00 L491.33,166.00 L543.00,166.00" stroke="#12618a" fill="none" stroke-width="3.2" stroke-linejoin="round"/>
+<circle cx="78.0" cy="218.5" r="3.0" fill="#12618a"/>
+<circle cx="129.7" cy="189.3" r="3.0" fill="#12618a"/>
+<circle cx="181.3" cy="177.7" r="3.0" fill="#12618a"/>
+<circle cx="233.0" cy="171.8" r="3.0" fill="#12618a"/>
+<circle cx="284.7" cy="171.8" r="3.0" fill="#12618a"/>
+<circle cx="336.3" cy="171.8" r="3.0" fill="#12618a"/>
+<circle cx="388.0" cy="166.0" r="3.0" fill="#12618a"/>
+<circle cx="439.7" cy="166.0" r="3.0" fill="#12618a"/>
+<circle cx="491.3" cy="166.0" r="3.0" fill="#12618a"/>
+<circle cx="543.0" cy="166.0" r="3.0" fill="#12618a"/>
+<path d="M78.00,457.67 L129.67,399.33 L181.33,341.00 L233.00,288.50 L284.67,276.83 L336.33,265.17 L388.00,241.83 L439.67,236.00 L491.33,206.83 L543.00,206.83" stroke="#be6d2a" fill="none" stroke-width="3.2" stroke-linejoin="round"/>
+<circle cx="78.0" cy="457.7" r="3.0" fill="#be6d2a"/>
+<circle cx="129.7" cy="399.3" r="3.0" fill="#be6d2a"/>
+<circle cx="181.3" cy="341.0" r="3.0" fill="#be6d2a"/>
+<circle cx="233.0" cy="288.5" r="3.0" fill="#be6d2a"/>
+<circle cx="284.7" cy="276.8" r="3.0" fill="#be6d2a"/>
+<circle cx="336.3" cy="265.2" r="3.0" fill="#be6d2a"/>
+<circle cx="388.0" cy="241.8" r="3.0" fill="#be6d2a"/>
+<circle cx="439.7" cy="236.0" r="3.0" fill="#be6d2a"/>
+<circle cx="491.3" cy="206.8" r="3.0" fill="#be6d2a"/>
+<circle cx="543.0" cy="206.8" r="3.0" fill="#be6d2a"/>
+<path d="M78.00,346.83 L129.67,271.00 L181.33,247.67 L233.00,212.67 L284.67,201.00 L336.33,195.17 L388.00,189.33 L439.67,177.67 L491.33,166.00 L543.00,166.00" stroke="#258473" fill="none" stroke-width="3.2" stroke-linejoin="round"/>
+<circle cx="78.0" cy="346.8" r="3.0" fill="#258473"/>
+<circle cx="129.7" cy="271.0" r="3.0" fill="#258473"/>
+<circle cx="181.3" cy="247.7" r="3.0" fill="#258473"/>
+<circle cx="233.0" cy="212.7" r="3.0" fill="#258473"/>
+<circle cx="284.7" cy="201.0" r="3.0" fill="#258473"/>
+<circle cx="336.3" cy="195.2" r="3.0" fill="#258473"/>
+<circle cx="388.0" cy="189.3" r="3.0" fill="#258473"/>
+<circle cx="439.7" cy="177.7" r="3.0" fill="#258473"/>
+<circle cx="491.3" cy="166.0" r="3.0" fill="#258473"/>
+<circle cx="543.0" cy="166.0" r="3.0" fill="#258473"/>
+<text x="78.0" y="565.0" font-size="12" fill="#334155" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">Baseline targets: 2,179 / 2,378 / 2,594</text>
+<rect x="627" y="117" width="510" height="452" rx="14" fill="white" stroke="#e2e8f0"/>
+<text x="648.0" y="143.0" font-size="20" fill="#334155" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">F22 · pooled 10k thresholds</text>
+<line x1="648" y1="516.0" x2="1113" y2="516.0" stroke="#e8eef5"/>
+<text x="639.0" y="520.0" font-size="12" fill="#334155" text-anchor="end" font-weight="400" font-family="Arial,sans-serif">0%</text>
+<line x1="648" y1="428.5" x2="1113" y2="428.5" stroke="#e8eef5"/>
+<text x="639.0" y="432.5" font-size="12" fill="#334155" text-anchor="end" font-weight="400" font-family="Arial,sans-serif">25%</text>
+<line x1="648" y1="341.0" x2="1113" y2="341.0" stroke="#e8eef5"/>
+<text x="639.0" y="345.0" font-size="12" fill="#334155" text-anchor="end" font-weight="400" font-family="Arial,sans-serif">50%</text>
+<line x1="648" y1="253.5" x2="1113" y2="253.5" stroke="#e8eef5"/>
+<text x="639.0" y="257.5" font-size="12" fill="#334155" text-anchor="end" font-weight="400" font-family="Arial,sans-serif">75%</text>
+<line x1="648" y1="166.0" x2="1113" y2="166.0" stroke="#e8eef5"/>
+<text x="639.0" y="170.0" font-size="12" fill="#334155" text-anchor="end" font-weight="400" font-family="Arial,sans-serif">100%</text>
+<text x="648.0" y="542.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">10k</text>
+<text x="854.7" y="542.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">50k</text>
+<text x="1113.0" y="542.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">100k</text>
+<path d="M648.00,300.17 L699.67,230.17 L751.33,212.67 L803.00,212.67 L854.67,212.67 L906.33,195.17 L958.00,195.17 L1009.67,195.17 L1061.33,195.17 L1113.00,195.17" stroke="#12618a" fill="none" stroke-width="3.2" stroke-linejoin="round"/>
+<circle cx="648.0" cy="300.2" r="3.0" fill="#12618a"/>
+<circle cx="699.7" cy="230.2" r="3.0" fill="#12618a"/>
+<circle cx="751.3" cy="212.7" r="3.0" fill="#12618a"/>
+<circle cx="803.0" cy="212.7" r="3.0" fill="#12618a"/>
+<circle cx="854.7" cy="212.7" r="3.0" fill="#12618a"/>
+<circle cx="906.3" cy="195.2" r="3.0" fill="#12618a"/>
+<circle cx="958.0" cy="195.2" r="3.0" fill="#12618a"/>
+<circle cx="1009.7" cy="195.2" r="3.0" fill="#12618a"/>
+<circle cx="1061.3" cy="195.2" r="3.0" fill="#12618a"/>
+<circle cx="1113.0" cy="195.2" r="3.0" fill="#12618a"/>
+<path d="M648.00,335.17 L699.67,288.50 L751.33,265.17 L803.00,253.50 L854.67,247.67 L906.33,236.00 L958.00,224.33 L1009.67,212.67 L1061.33,206.83 L1113.00,206.83" stroke="#be6d2a" fill="none" stroke-width="3.2" stroke-linejoin="round"/>
+<circle cx="648.0" cy="335.2" r="3.0" fill="#be6d2a"/>
+<circle cx="699.7" cy="288.5" r="3.0" fill="#be6d2a"/>
+<circle cx="751.3" cy="265.2" r="3.0" fill="#be6d2a"/>
+<circle cx="803.0" cy="253.5" r="3.0" fill="#be6d2a"/>
+<circle cx="854.7" cy="247.7" r="3.0" fill="#be6d2a"/>
+<circle cx="906.3" cy="236.0" r="3.0" fill="#be6d2a"/>
+<circle cx="958.0" cy="224.3" r="3.0" fill="#be6d2a"/>
+<circle cx="1009.7" cy="212.7" r="3.0" fill="#be6d2a"/>
+<circle cx="1061.3" cy="206.8" r="3.0" fill="#be6d2a"/>
+<circle cx="1113.0" cy="206.8" r="3.0" fill="#be6d2a"/>
+<path d="M648.00,387.67 L699.67,306.00 L751.33,294.33 L803.00,253.50 L854.67,247.67 L906.33,218.50 L958.00,212.67 L1009.67,212.67 L1061.33,212.67 L1113.00,206.83" stroke="#258473" fill="none" stroke-width="3.2" stroke-linejoin="round"/>
+<circle cx="648.0" cy="387.7" r="3.0" fill="#258473"/>
+<circle cx="699.7" cy="306.0" r="3.0" fill="#258473"/>
+<circle cx="751.3" cy="294.3" r="3.0" fill="#258473"/>
+<circle cx="803.0" cy="253.5" r="3.0" fill="#258473"/>
+<circle cx="854.7" cy="247.7" r="3.0" fill="#258473"/>
+<circle cx="906.3" cy="218.5" r="3.0" fill="#258473"/>
+<circle cx="958.0" cy="212.7" r="3.0" fill="#258473"/>
+<circle cx="1009.7" cy="212.7" r="3.0" fill="#258473"/>
+<circle cx="1061.3" cy="212.7" r="3.0" fill="#258473"/>
+<circle cx="1113.0" cy="206.8" r="3.0" fill="#258473"/>
+<text x="648.0" y="565.0" font-size="12" fill="#334155" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">Baseline targets: 7,116 / 7,867 / 8,159</text>
+<line x1="353" y1="596" x2="384" y2="596" stroke="#12618a" stroke-width="4"/>
+<text x="391.0" y="601.0" font-size="14" fill="#334155" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">ABC</text>
+<line x1="531" y1="596" x2="562" y2="596" stroke="#be6d2a" stroke-width="4"/>
+<text x="569.0" y="601.0" font-size="14" fill="#334155" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">EDBF</text>
+<line x1="709" y1="596" x2="740" y2="596" stroke="#258473" stroke-width="4"/>
+<text x="747.0" y="601.0" font-size="14" fill="#334155" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">RE</text>
+</svg>
