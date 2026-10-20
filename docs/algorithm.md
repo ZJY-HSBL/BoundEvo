@@ -76,3 +76,33 @@ whereas RE leads on F10, without Holm-significant F10 pairwise evidence.
 also shows that endpoint rankings need not imply whole-trajectory statistical
 superiority. Function and long-budget analyses were selected adaptively, so
 these remain exploratory rather than independent universal validation.
+
+## ABC-Reverse: deterministic position control without additional RNG draws
+
+The `abc_reverse` coefficient-generation option draws the same valid ABC
+vector as unmodified ABC and returns the vector in **reversed index order**.
+For fixed parent count and RNG state, coefficient values are exactly
+preserved and the generator consumes **no additional random samples**.
+This is verified by unit tests comparing both the exact reversed vector
+and the next RNG output after the call.
+
+The original `abc_shuffle` permutes coefficients stochastically and therefore
+consumes additional RNG draws. Comparing ABC, ABC-Shuffle and ABC-Reverse
+helps distinguish a possible coefficient-index assignment effect from the
+extra RNG use in the earlier random-shuffle ablation.
+
+The [frozen three-arm protocol](abc_reverse_mechanism_protocol.md) tested
+F10/F16/F20/F22 with 12 previously unused paired seeds per function,
+three methods and 10k FE: **144 additional real optimizer runs**.
+[Full original results](experiments/cec2017-abc-reverse-30d-10k-2026-10-20/report.md)
+showed ABC-Reverse with larger mean error than ABC on all four functions.
+**None of eight exact paired sign tests survived Holm correction**.
+The experiment is therefore an exploratory mechanism probe, not proof
+of superiority or an established causal mechanism.
+
+A separate Monte Carlo diagnostic generated **50,000 valid ABC coefficient
+vectors** at parent count M=15. The first K=5 elite-aligned coefficient
+slots received an average **42.23%** of the within-vector absolute
+coefficient mass, compared with 33.33% of total coefficient positions.
+This is a descriptive positional distribution difference; it does not
+establish the optimizer's performance effect or generalizability.
