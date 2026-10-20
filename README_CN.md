@@ -278,6 +278,23 @@
 
 [原始实验与报告](docs/experiments/cec2017-fresh-functions-30d-10k-2026-10-20/report.md)
 
+### 新的机制消融：ABC 系数顺序是否影响性能？
+
+ABC-Shuffle 保留原 ABC 生成的所有系数，只随机置换它们在父代中的位置；新随机种子、原配置、相同初始种群，80 次真实试验。
+
+![Measured coefficient-order paired effects](docs/figures/cec2017-abc-shuffle-paired-seeds.svg)
+
+| 函数 | ABC 平均误差 | ABC-Shuffle 平均误差 | Holm p |
+|:---|---:|---:|---:|
+| F10 | 7,559.44 | 7,678.01 | 1 |
+| F16 | 1,995.37 | 2,177.90 | 1 |
+| F20 | 1,009.08 | 1,061.83 | 1 |
+| F22 | 5,484.03 | 7,523.93 | 1 |
+
+**解释限制：**四项平均误差均有利于原 ABC，但 Holm 校正的配对符号检验均不显著。该机制尚未得到确证，且额外置换会改变后续随机数序列。
+
+[消融设计](docs/abc_shuffle_ablation_protocol.md) · [80 次原始记录及分析报告](docs/experiments/cec2017-abc-shuffle-30d-10k-2026-10-20/report.md)
+
 **边界：**F16/F22 的 20 种子扩容是观察初步结果后的适应性研究，新全过程统计不等于独立确认。目标阈值来自既有 10k 样本；所有比较均应按函数、评价预算分别解释。
 
 [全过程研究数据与统计报告](docs/experiments/cec2017-anytime-30d-100k-20seeds-2026-10-20/report.md)

@@ -278,6 +278,23 @@ Separately from reused 100k trajectories: F3/F10/F20/F30, 10 new paired seeds/fu
 
 [Source trials and full report](docs/experiments/cec2017-fresh-functions-30d-10k-2026-10-20/report.md)
 
+### Mechanism ablation: does ABC coefficient order matter?
+
+ABC-Shuffle preserves the original ABC coefficient multiset but permutes its alignment with elite-first ordered parents; 80 new trials with matched initial populations.
+
+![Measured coefficient-order paired effects](docs/figures/cec2017-abc-shuffle-paired-seeds.svg)
+
+| Function | ABC mean error | ABC-Shuffle mean error | Holm p |
+|:---|---:|---:|---:|
+| F10 | 7,559.44 | 7,678.01 | 1 |
+| F16 | 1,995.37 | 2,177.90 | 1 |
+| F20 | 1,009.08 | 1,061.83 | 1 |
+| F22 | 5,484.03 | 7,523.93 | 1 |
+
+**Interpretation:** Original ABC had smaller observed means on all four functions, but none of the four paired sign tests is Holm-significant. This does not prove a coefficient-rank mechanism; shuffle alters later RNG streams.
+
+[Frozen ablation protocol](docs/abc_shuffle_ablation_protocol.md) · [80 original trials and full report](docs/experiments/cec2017-abc-shuffle-30d-10k-2026-10-20/report.md)
+
 **Limits:** The 20-seed F16/F22 extension was adaptively chosen; anytime analysis is not independent confirmation. Target thresholds are derived from observed 10k outcomes and results must be interpreted per function and budget.
 
 [Anytime data, bootstrap statistics and research report](docs/experiments/cec2017-anytime-30d-100k-20seeds-2026-10-20/report.md)
