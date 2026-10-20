@@ -1,6 +1,10 @@
 """Fail-closed assembly of four independent-seed CEC2017 replication shards."""
 
+# ruff: noqa: ISC004
+
 from __future__ import annotations
+
+from itertools import pairwise
 
 import argparse
 import csv
@@ -110,7 +114,7 @@ def verify(input_root: Path) -> tuple[list[dict], list[dict], list[dict]]:
         y = [float(r["best_error"]) for r in rows]
         if (x[0] != 100 or x[-1] != BUDGET or len(set(x)) != len(x)
                 or any(v < 0 for v in y)
-                or any(b > a + 1e-7 for a, b in zip(y, y[1:]))
+                or any(b > a + 1e-7 for a, b in pairwise(y))
                 or not math.isclose(y[-1], float(actual[key]["error"]), abs_tol=1e-6)):
             raise ValueError(f"invalid best-so-far trajectory {key}")
     for fid in FUNCTIONS:
