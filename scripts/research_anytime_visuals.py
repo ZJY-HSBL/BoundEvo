@@ -4,9 +4,9 @@ All analyses use 120 verified actual F16/F22 100k-FE optimizer trajectories.
 No surrogate/synthetic records are published. No optional plotting dependency.
 """
 
-from __future__ import annotations
+# ruff: noqa: ISC004
 
-from itertools import pairwise
+from __future__ import annotations
 
 import argparse
 import csv
@@ -15,6 +15,7 @@ import random
 import statistics
 from collections import defaultdict
 from html import escape
+from itertools import pairwise
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -218,8 +219,8 @@ def svg_ribbons(traces: dict, steps: list[int]) -> str:
         pad = max(1.0, (ymax-ymin)*0.12)
         ymin = max(0.0, ymin - pad)
         ymax += pad
-        fx = lambda fe: x0 + w * (math.log(fe/10_000) / math.log(10))
-        fy = lambda v: y0 + h * (ymax-v)/(ymax-ymin)
+        fx = lambda fe, x0=x0, w=w: x0 + w * (math.log(fe/10_000) / math.log(10))
+        fy = lambda v, y0=y0, h=h, ymax=ymax, ymin=ymin: y0 + h * (ymax-v)/(ymax-ymin)
         for k in range(5):
             value = ymin + (ymax-ymin)*k/4
             y = fy(value)
@@ -361,7 +362,7 @@ def svg_auc(tests: list[dict]) -> str:
 def write_csv(rows: list[dict]) -> str:
     import io
     stream = io.StringIO(newline="")
-    writer = csv.DictWriter(stream, fieldnames=list(rows[0]))
+    writer = csv.DictWriter(stream, fieldnames=list(rows[0]), lineterminator="\n")
     writer.writeheader()
     writer.writerows(rows)
     return stream.getvalue()
@@ -592,7 +593,7 @@ def fresh_replication_svg(location: Path) -> str:
         top = max(1.5, max(hi for _, _, hi in scores)*1.10)
         left = x0+108
         right = x0+width-20
-        xp = lambda val: left+(right-left)*math.log1p(max(val, 0))/math.log1p(top)
+        xp = lambda val, left=left, right=right, top=top: left+(right-left)*math.log1p(max(val, 0))/math.log1p(top)
         for tick in (1, 2, 5, 10, 20, 50):
             if tick > top:
                 continue
