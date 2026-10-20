@@ -6,6 +6,8 @@ Runs the same fixed paper-style optimizer with matched initial populations.
 
 from __future__ import annotations
 
+from itertools import pairwise
+
 import argparse
 import csv
 import json
@@ -70,7 +72,7 @@ def run(fid: int, destination: Path) -> None:
                     raise RuntimeError("final history and trial records disagree")
                 if any(
                     b.best_error > a.best_error + 1e-7
-                    for a, b in zip(states, states[1:])
+                    for a, b in pairwise(states)
                 ):
                     raise RuntimeError("best-so-far trace regressed")
                 writer.writerow(asdict(row))
