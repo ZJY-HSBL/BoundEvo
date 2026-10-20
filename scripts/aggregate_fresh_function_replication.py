@@ -4,8 +4,6 @@
 
 from __future__ import annotations
 
-from itertools import pairwise
-
 import argparse
 import csv
 import json
@@ -14,6 +12,7 @@ import platform
 import sys
 from collections import defaultdict
 from datetime import datetime, timezone
+from itertools import pairwise
 from pathlib import Path
 
 import numpy as np
