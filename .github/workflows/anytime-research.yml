@@ -1,4 +1,5 @@
 name: Publish measured anytime research and scientific charts
+# Refresh bilingual README evidence after real 80-trial ABC-Shuffle release data.
 # Run after data-only CSV line endings and import-style gates are fixed.
 
 on:
