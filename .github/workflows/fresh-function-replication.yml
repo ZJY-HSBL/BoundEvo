@@ -1,0 +1,132 @@
+name: CEC2017 Four-function Fresh-seed Replication
+
+on:
+  push:
+    paths:
+      - ".github/workflows/fresh-function-replication.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  experiment:
+    name: F${{ matrix.fid }} · 10 fresh paired seeds · 10k FE
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        fid: [3, 10, 20, 30]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install fixed package and pinned C-derived scientific objective functions
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+          python -m pip install "git+https://github.com/tilleyd/cec2017-py.git@424a9fa2757914c3e4cfdd8f59a268b1aeb3197f"
+      - name: Run 30 original trials with exact matched-initialization checks
+        run: |
+          python -u scripts/run_fresh_function_replication.py \
+            --function-id ${{ matrix.fid }} \
+            --output-dir /tmp/fresh/f${{ matrix.fid }}
+      - name: Archive completed original runs even on failure for diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: boundevo-fresh-f${{ matrix.fid }}
+          path: /tmp/fresh/
+          retention-days: 90
+          if-no-files-found: warn
+
+  merge:
+    name: Verify 120 fresh runs, scientific statistics, five SVG figures, bilingual README
+    needs: [experiment]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install statistics and regression requirements
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+      - name: Retrieve every real function shard
+        uses: actions/download-artifact@v4
+        with:
+          pattern: boundevo-fresh-f*
+          merge-multiple: true
+          path: /tmp/fresh
+      - name: Reject missing or nonreproducible scientific results, bootstrap and Holm
+        run: |
+          python scripts/aggregate_fresh_function_replication.py \
+            --input-dir /tmp/fresh \
+            --output-dir docs/experiments/cec2017-fresh-functions-30d-10k-2026-10-20
+      - name: Regenerate all four anytime charts and fresh four-panel SVG directly from data
+        run: |
+          python scripts/update_readme_results.py
+          python scripts/research_anytime_visuals.py
+          python scripts/update_readme_results.py --check
+          python scripts/research_anytime_visuals.py --check
+      - name: Fail-closed evidence gates
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+          from xml.etree import ElementTree
+
+          root = Path("docs/experiments/cec2017-fresh-functions-30d-10k-2026-10-20")
+          def read(name):
+              with (root / name).open(newline="") as fh:
+                  return list(csv.DictReader(fh))
+          trials = read("trials.csv")
+          summaries = read("summary.csv")
+          tests = read("paired_tests.csv")
+          history = read("history.csv")
+          env = json.loads((root / "environment.json").read_text())
+          assert env["trials"] == 120 and env["evaluations"] == 10_000
+          assert env["base_seed"] == 20261079 and env["repeats"] == 10
+          assert env["history_rows"] == len(history) and len(history) > 1200
+          assert len(trials) == 120 and len(summaries) == 12 and len(tests) == 8
+          assert len({(r["function_id"], r["method"], r["repeat"]) for r in trials}) == 120
+          svg = Path("docs/figures/cec2017-fresh-crossfunction-ci.svg")
+          assert svg.stat().st_size > 3000
+          assert ElementTree.parse(svg).getroot().tag.endswith("svg")
+          for name in ("README.md", "README_CN.md"):
+              text = Path(name).read_text(encoding="utf-8")
+              assert "cec2017-fresh-crossfunction-ci.svg" in text
+              assert "cec2017-100k-anytime-ribbons.svg" in text
+          print("Validated original 120 fresh-seed runs, paired statistics and research figures.")
+          PY
+          python -m pytest -q
+          python -m ruff check .
+      - name: Preserve scientific release evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: boundevo-fresh-4function-10k-120trials-verified
+          path: |
+            docs/experiments/cec2017-fresh-functions-30d-10k-2026-10-20/
+            docs/experiments/cec2017-anytime-30d-100k-20seeds-2026-10-20/
+            docs/figures/cec2017-fresh-crossfunction-ci.svg
+            docs/figures/cec2017-100k-anytime-ribbons.svg
+          retention-days: 90
+      - name: Publish only validated results and generated figures
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/experiments/cec2017-fresh-functions-30d-10k-2026-10-20/
+          git add docs/experiments/cec2017-anytime-30d-100k-20seeds-2026-10-20/
+          git add docs/figures/ README.md README_CN.md
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "research: publish 120 new paired-seed four-function CEC2017 trials and charts"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
