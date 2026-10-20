@@ -301,6 +301,43 @@ ABC-Shuffle 保留原 ABC 生成的所有系数，只随机置换它们在父代
 
 <!-- ADVANCED_RESEARCH_END -->
 
+<!-- REVERSE_MECHANISM_RESULTS_START -->
+## 系数顺序机制验证：ABC / 随机置换 / 确定性反序
+
+**144 次新的真实优化试验**：F10/F16/F20/F22、30维、10k评价预算、每函数12个全新配对种子。ABC-Reverse 保留全部原始系数，直接反转位置，**不额外消耗随机数**；可与随机置换版本对比，用于检验精英父代排序耦合假设。
+
+![Measured three-arm paired-seed effects](docs/figures/cec2017-coefficient-rank-144-paired-effects.svg)
+
+| 函数 | ABC 均值误差 | 随机置换均值误差 | 反序均值误差 |
+|:---|---:|---:|---:|
+| F10 | 7,701.73 | **7,504.50** | 7,965.95 |
+| F16 | **2,097.11** | 2,133.39 | 2,372.11 |
+| F20 | **965.09** | 989.04 | 1,062.09 |
+| F22 | **6,006.29** | 6,503.67 | 8,064.01 |
+
+**八项预先规定的配对符号检验（统一 Holm 校正）**：
+
+| 函数 | 对照方法 | 对照胜/ABC胜/平 | 校正 p |
+|:---|:---|---:|---:|
+| F10 | abc_shuffle | 7/5/0 | 1 |
+| F10 | abc_reverse | 6/6/0 | 1 |
+| F16 | abc_shuffle | 6/6/0 | 1 |
+| F16 | abc_reverse | 2/10/0 | 0.30859 |
+| F20 | abc_shuffle | 5/7/0 | 1 |
+| F20 | abc_reverse | 2/10/0 | 0.30859 |
+| F22 | abc_shuffle | 4/8/0 | 1 |
+| F22 | abc_reverse | 3/9/0 | 0.87598 |
+
+![Original ABC coefficient position marginal audit](docs/figures/cec2017-abc-50000-coefficient-position.svg)
+
+另对 **50,000 组真实 ABC 系数向量**进行位置分布审计。前5个精英父代槽位所占绝对权重总量的平均比例为 **42.23%**；该统计反映采样位置效应，不等于算法精度优势的因果证明。
+
+**科研边界**：函数仍是研究后自适应挑选的子集；反序只控制额外 RNG 调用，不能使后续搜索轨迹保持一致。结果是机制探索，不应宣传为29函数标准实验或已确认的新算法优势。
+
+[完整原始数据与分析](docs/experiments/cec2017-abc-reverse-30d-10k-2026-10-20/report.md) · [冻结实验方案](docs/abc_reverse_mechanism_protocol.md)
+
+<!-- REVERSE_MECHANISM_RESULTS_END -->
+
 ## 项目定位
 
 BoundEvo 解决多父体仿射重组中的一个核心问题：高效生成满足下列条件的系数向量。

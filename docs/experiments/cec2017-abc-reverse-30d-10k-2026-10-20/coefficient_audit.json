@@ -1,0 +1,9 @@
+{
+  "total_draws": 50000,
+  "rng_seed": 20261232,
+  "parents": 15,
+  "elite_parents": 5,
+  "mean_elite_absolute_mass": 2.0324181601152858,
+  "mean_nonelite_absolute_mass": 2.8220943047430938,
+  "mean_elite_share_absolute_mass": 0.42226209241916846
+}

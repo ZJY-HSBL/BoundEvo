@@ -301,6 +301,43 @@ ABC-Shuffle preserves the original ABC coefficient multiset but permutes its ali
 
 <!-- ADVANCED_RESEARCH_END -->
 
+<!-- REVERSE_MECHANISM_RESULTS_START -->
+## Coefficient-order mechanism: ABC / Shuffle / Reverse
+
+**144 additional real optimizer runs**: F10/F16/F20/F22, 30D, 10k function evaluations, 12 fresh paired seeds/function. ABC-Reverse reverses the original valid coefficient vector **without consuming extra RNG draws**; comparison to the random-shuffle control probes potential coefficient-index / elite-parent-rank coupling.
+
+![Measured three-arm paired-seed effects](docs/figures/cec2017-coefficient-rank-144-paired-effects.svg)
+
+| Function | ABC mean error | Shuffle mean error | Reverse mean error |
+|:---|---:|---:|---:|
+| F10 | 7,701.73 | **7,504.50** | 7,965.95 |
+| F16 | **2,097.11** | 2,133.39 | 2,372.11 |
+| F20 | **965.09** | 989.04 | 1,062.09 |
+| F22 | **6,006.29** | 6,503.67 | 8,064.01 |
+
+**Eight designated paired sign tests (one Holm family):**
+
+| Function | Control | Control wins / ABC wins / ties | Adjusted p |
+|:---|:---|---:|---:|
+| F10 | abc_shuffle | 7/5/0 | 1 |
+| F10 | abc_reverse | 6/6/0 | 1 |
+| F16 | abc_shuffle | 6/6/0 | 1 |
+| F16 | abc_reverse | 2/10/0 | 0.30859 |
+| F20 | abc_shuffle | 5/7/0 | 1 |
+| F20 | abc_reverse | 2/10/0 | 0.30859 |
+| F22 | abc_shuffle | 4/8/0 | 1 |
+| F22 | abc_reverse | 3/9/0 | 0.87598 |
+
+![Original ABC coefficient position marginal audit](docs/figures/cec2017-abc-50000-coefficient-position.svg)
+
+Separate Monte Carlo audit of **50,000 actual ABC vectors**: the first five elite-parent slots account for an average **42.23%** of total absolute coefficient mass. A marginal-position distribution does not establish a causal optimization benefit.
+
+**Scope:** functions were selected adaptively; reversal eliminates extra permutation RNG draws but cannot freeze future diverged trajectories. This is exploratory mechanistic evidence, not a complete 29-function benchmark or proven superiority.
+
+[All original records and statistical report](docs/experiments/cec2017-abc-reverse-30d-10k-2026-10-20/report.md) · [Frozen experiment protocol](docs/abc_reverse_mechanism_protocol.md)
+
+<!-- REVERSE_MECHANISM_RESULTS_END -->
+
 ## Overview
 
 BoundEvo focuses on a bottleneck in multi-parent affine recombination: efficiently generating coefficient vectors satisfying

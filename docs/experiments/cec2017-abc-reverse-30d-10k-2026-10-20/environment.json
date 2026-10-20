@@ -1,0 +1,98 @@
+{
+  "functions": [
+    10,
+    16,
+    20,
+    22
+  ],
+  "methods": [
+    "abc",
+    "abc_shuffle",
+    "abc_reverse"
+  ],
+  "evaluations": 10000,
+  "dimension": 30,
+  "repeats": 12,
+  "base_seed": 20261231,
+  "trials": 144,
+  "history_rows": 3312,
+  "reference_commit": "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f",
+  "audit_draws": 50000,
+  "audit_seed": 20261232,
+  "paired_bootstrap_resamples": 10000,
+  "source_manifests": [
+    {
+      "function_id": 10,
+      "methods": [
+        "abc",
+        "abc_shuffle",
+        "abc_reverse"
+      ],
+      "dimension": 30,
+      "repeats": 12,
+      "evaluations": 10000,
+      "base_seed": 20261231,
+      "history_interval": 450,
+      "reference_commit": "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f",
+      "source_commit": "db06c5dc92a2ad34252e8ded68e519e65265edc4",
+      "ablation": "ABC vs shuffle vs reversal of identical ABC coefficient multiset",
+      "interpretation": "frozen exploratory rank-position controls: reversal uses no extra RNG"
+    },
+    {
+      "function_id": 16,
+      "methods": [
+        "abc",
+        "abc_shuffle",
+        "abc_reverse"
+      ],
+      "dimension": 30,
+      "repeats": 12,
+      "evaluations": 10000,
+      "base_seed": 20261231,
+      "history_interval": 450,
+      "reference_commit": "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f",
+      "source_commit": "db06c5dc92a2ad34252e8ded68e519e65265edc4",
+      "ablation": "ABC vs shuffle vs reversal of identical ABC coefficient multiset",
+      "interpretation": "frozen exploratory rank-position controls: reversal uses no extra RNG"
+    },
+    {
+      "function_id": 20,
+      "methods": [
+        "abc",
+        "abc_shuffle",
+        "abc_reverse"
+      ],
+      "dimension": 30,
+      "repeats": 12,
+      "evaluations": 10000,
+      "base_seed": 20261231,
+      "history_interval": 450,
+      "reference_commit": "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f",
+      "source_commit": "db06c5dc92a2ad34252e8ded68e519e65265edc4",
+      "ablation": "ABC vs shuffle vs reversal of identical ABC coefficient multiset",
+      "interpretation": "frozen exploratory rank-position controls: reversal uses no extra RNG"
+    },
+    {
+      "function_id": 22,
+      "methods": [
+        "abc",
+        "abc_shuffle",
+        "abc_reverse"
+      ],
+      "dimension": 30,
+      "repeats": 12,
+      "evaluations": 10000,
+      "base_seed": 20261231,
+      "history_interval": 450,
+      "reference_commit": "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f",
+      "source_commit": "db06c5dc92a2ad34252e8ded68e519e65265edc4",
+      "ablation": "ABC vs shuffle vs reversal of identical ABC coefficient multiset",
+      "interpretation": "frozen exploratory rank-position controls: reversal uses no extra RNG"
+    }
+  ],
+  "study_type": "exploratory, prospective three-arm coefficient-order mechanism",
+  "python": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]",
+  "numpy": "2.5.4",
+  "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+  "generated_utc": "2026-10-20T15:03:53.401711+00:00"
+}

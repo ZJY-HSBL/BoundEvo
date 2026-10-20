@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="860" viewBox="0 0 1200 860" role="img" aria-label="Coefficient position | Paired seed effects">
+<rect width="1200" height="860" fill="#f8fafc"/>
+<text x="55" y="59" font-family="Arial" font-weight="700" font-size="27" fill="#172d46">Coefficient position | Paired seed effects</text>
+<text x="55" y="88" font-family="Arial" font-size="15" fill="#54657a">144 real 10k-FE optimization trials · 12 fresh matched seeds · positive favors the positional control</text>
+<rect x="50" y="118" width="1090" height="147" rx="15" fill="#ffffff" stroke="#e0e7ee"/>
+<text x="74" y="165" font-family="Arial" font-size="21" font-weight="700" fill="#17304b">F10</text>
+<line x1="659.00" y1="140" x2="659.00" y2="249" stroke="#94a3b8" stroke-dasharray="5 4"/>
+<text x="133" y="166" font-size="16" fill="#2a7f91" font-family="Arial" font-weight="700">ABC_SHUFFLE</text>
+<circle cx="668.17" cy="153.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="659.81" cy="157.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="691.34" cy="161.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="651.71" cy="165.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="677.92" cy="169.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="680.35" cy="153.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="640.34" cy="157.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="659.34" cy="161.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="650.47" cy="165.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="654.55" cy="169.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="667.46" cy="153.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="653.90" cy="157.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<line x1="655.49" y1="180" x2="671.15" y2="180" stroke="#0f172a" stroke-width="4"/>
+<circle cx="662.95" cy="180" r="5.5" fill="#0f172a"/>
+<text x="995" y="166" font-family="Arial" font-size="13" fill="#475569">Holm p=1</text>
+<text x="133" y="232" font-size="16" fill="#b86d3a" font-family="Arial" font-weight="700">ABC_REVERSE</text>
+<circle cx="659.67" cy="219.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="652.66" cy="223.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="663.90" cy="227.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="651.58" cy="231.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="648.98" cy="235.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="643.23" cy="219.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="640.61" cy="223.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="661.23" cy="227.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="646.67" cy="231.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="661.09" cy="235.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="660.17" cy="219.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="663.52" cy="223.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<line x1="649.90" y1="246" x2="658.70" y2="246" stroke="#0f172a" stroke-width="4"/>
+<circle cx="654.44" cy="246" r="5.5" fill="#0f172a"/>
+<text x="995" y="232" font-family="Arial" font-size="13" fill="#475569">Holm p=1</text>
+<rect x="50" y="275" width="1090" height="147" rx="15" fill="#ffffff" stroke="#e0e7ee"/>
+<text x="74" y="322" font-family="Arial" font-size="21" font-weight="700" fill="#17304b">F16</text>
+<line x1="659.00" y1="297" x2="659.00" y2="406" stroke="#94a3b8" stroke-dasharray="5 4"/>
+<text x="133" y="323" font-size="16" fill="#2a7f91" font-family="Arial" font-weight="700">ABC_SHUFFLE</text>
+<circle cx="641.36" cy="310.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="661.95" cy="314.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="661.60" cy="318.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="655.10" cy="322.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="668.15" cy="326.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="661.86" cy="310.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="634.91" cy="314.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="685.41" cy="318.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="633.51" cy="322.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="674.88" cy="326.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="643.15" cy="310.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="648.78" cy="314.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<line x1="647.24" y1="337" x2="664.75" y2="337" stroke="#0f172a" stroke-width="4"/>
+<circle cx="655.89" cy="337" r="5.5" fill="#0f172a"/>
+<text x="995" y="323" font-family="Arial" font-size="13" fill="#475569">Holm p=1</text>
+<text x="133" y="389" font-size="16" fill="#b86d3a" font-family="Arial" font-weight="700">ABC_REVERSE</text>
+<circle cx="610.25" cy="376.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="636.86" cy="380.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="680.02" cy="384.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="644.18" cy="388.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="649.82" cy="392.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="648.63" cy="376.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="604.13" cy="380.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="655.45" cy="384.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="608.15" cy="388.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="671.47" cy="392.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="655.77" cy="376.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="640.39" cy="380.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<line x1="628.90" y1="403" x2="654.87" y2="403" stroke="#0f172a" stroke-width="4"/>
+<circle cx="642.09" cy="403" r="5.5" fill="#0f172a"/>
+<text x="995" y="389" font-family="Arial" font-size="13" fill="#475569">Holm p=0.309</text>
+<rect x="50" y="432" width="1090" height="147" rx="15" fill="#ffffff" stroke="#e0e7ee"/>
+<text x="74" y="479" font-family="Arial" font-size="21" font-weight="700" fill="#17304b">F20</text>
+<line x1="659.00" y1="454" x2="659.00" y2="563" stroke="#94a3b8" stroke-dasharray="5 4"/>
+<text x="133" y="480" font-size="16" fill="#2a7f91" font-family="Arial" font-weight="700">ABC_SHUFFLE</text>
+<circle cx="656.08" cy="467.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="643.26" cy="471.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="686.20" cy="475.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="626.67" cy="479.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="629.84" cy="483.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="653.16" cy="467.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="656.13" cy="471.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="663.85" cy="475.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="674.19" cy="479.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="664.69" cy="483.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="644.81" cy="467.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="666.97" cy="471.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<line x1="645.81" y1="494" x2="664.65" y2="494" stroke="#0f172a" stroke-width="4"/>
+<circle cx="655.49" cy="494" r="5.5" fill="#0f172a"/>
+<text x="995" y="480" font-family="Arial" font-size="13" fill="#475569">Holm p=1</text>
+<text x="133" y="546" font-size="16" fill="#b86d3a" font-family="Arial" font-weight="700">ABC_REVERSE</text>
+<circle cx="645.29" cy="533.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="689.98" cy="537.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="654.63" cy="541.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="621.54" cy="545.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="653.67" cy="549.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="567.78" cy="533.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="653.69" cy="537.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="635.24" cy="541.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="675.14" cy="545.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="647.67" cy="549.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="644.05" cy="533.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="655.17" cy="537.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<line x1="627.87" y1="560" x2="659.79" y2="560" stroke="#0f172a" stroke-width="4"/>
+<circle cx="645.32" cy="560" r="5.5" fill="#0f172a"/>
+<text x="995" y="546" font-family="Arial" font-size="13" fill="#475569">Holm p=0.309</text>
+<rect x="50" y="589" width="1090" height="147" rx="15" fill="#ffffff" stroke="#e0e7ee"/>
+<text x="74" y="636" font-family="Arial" font-size="21" font-weight="700" fill="#17304b">F22</text>
+<line x1="659.00" y1="611" x2="659.00" y2="720" stroke="#94a3b8" stroke-dasharray="5 4"/>
+<text x="133" y="637" font-size="16" fill="#2a7f91" font-family="Arial" font-weight="700">ABC_SHUFFLE</text>
+<circle cx="678.74" cy="624.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="702.19" cy="628.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="633.47" cy="632.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="642.75" cy="636.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="657.35" cy="640.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="653.12" cy="624.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="691.89" cy="628.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="652.28" cy="632.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="402.31" cy="636.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="669.28" cy="640.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="560.38" cy="624.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="644.74" cy="628.0" r="4.7" fill="#2a7f91" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<line x1="581.75" y1="651" x2="667.08" y2="651" stroke="#0f172a" stroke-width="4"/>
+<circle cx="632.37" cy="651" r="5.5" fill="#0f172a"/>
+<text x="995" y="637" font-family="Arial" font-size="13" fill="#475569">Holm p=1</text>
+<text x="133" y="703" font-size="16" fill="#b86d3a" font-family="Arial" font-weight="700">ABC_REVERSE</text>
+<circle cx="662.83" cy="690.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="633.89" cy="694.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="363.67" cy="698.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="650.50" cy="702.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="665.80" cy="706.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="653.14" cy="690.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="662.96" cy="694.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="653.00" cy="698.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="403.03" cy="702.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="632.49" cy="706.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="435.76" cy="690.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<circle cx="642.95" cy="694.0" r="4.7" fill="#b86d3a" fill-opacity="0.7" stroke="white" stroke-width="0.7"/>
+<line x1="519.93" y1="717" x2="647.88" y2="717" stroke="#0f172a" stroke-width="4"/>
+<circle cx="588.34" cy="717" r="5.5" fill="#0f172a"/>
+<text x="995" y="703" font-family="Arial" font-size="13" fill="#475569">Holm p=0.876</text>
+<text x="343.0" y="803" font-family="Arial" font-size="14" text-anchor="middle" fill="#475569">-2.39</text>
+<text x="659.0" y="803" font-family="Arial" font-size="14" text-anchor="middle" fill="#475569">+0.00</text>
+<text x="975.0" y="803" font-family="Arial" font-size="14" text-anchor="middle" fill="#475569">+2.39</text>
+<text x="56" y="838" font-family="Arial" font-size="13" fill="#64748b">Dots = paired seed log1p gains; black whisker = 95% paired bootstrap interval; Holm corrects eight tests.</text>
+</svg>

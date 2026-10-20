@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="690" viewBox="0 0 1220 690" role="img" aria-label="ABC coefficient position | Marginal distribution">
+<rect width="1220" height="690" fill="#f8fafc"/>
+<text x="55" y="59" font-family="Arial" font-weight="700" font-size="27" fill="#172d46">ABC coefficient position | Marginal distribution</text>
+<text x="55" y="88" font-family="Arial" font-size="15" fill="#54657a">50,000 valid vectors · M=15 parents · first 5 slots assigned to elites · descriptive Monte Carlo</text>
+<line x1="120" y1="521.10" x2="1130" y2="521.10" stroke="#e5edf4"/>
+<text x="108" y="525.10" font-family="Arial" font-size="13" text-anchor="end" fill="#64748b">-0.5</text>
+<line x1="120" y1="432.05" x2="1130" y2="432.05" stroke="#e5edf4"/>
+<text x="108" y="436.05" font-family="Arial" font-size="13" text-anchor="end" fill="#64748b">+0.0</text>
+<line x1="120" y1="343.00" x2="1130" y2="343.00" stroke="#e5edf4"/>
+<text x="108" y="347.00" font-family="Arial" font-size="13" text-anchor="end" fill="#64748b">+0.5</text>
+<line x1="120" y1="253.95" x2="1130" y2="253.95" stroke="#e5edf4"/>
+<text x="108" y="257.95" font-family="Arial" font-size="13" text-anchor="end" fill="#64748b">+1.0</text>
+<line x1="120" y1="164.90" x2="1130" y2="164.90" stroke="#e5edf4"/>
+<text x="108" y="168.90" font-family="Arial" font-size="13" text-anchor="end" fill="#64748b">+1.5</text>
+<line x1="153.67" y1="431.45" x2="153.67" y2="253.80" stroke="#216c8c" stroke-width="12" stroke-linecap="round" stroke-opacity="0.27"/>
+<line x1="142.67" y1="341.66" x2="164.67" y2="341.66" stroke="#216c8c" stroke-width="4"/>
+<circle cx="153.67" cy="342.41" r="5" fill="#216c8c" stroke="white" stroke-width="1.2"/>
+<text x="153.67" y="554" font-family="Arial" font-size="14" text-anchor="middle" fill="#475569">1</text>
+<line x1="221.00" y1="460.09" x2="221.00" y2="325.24" stroke="#216c8c" stroke-width="12" stroke-linecap="round" stroke-opacity="0.27"/>
+<line x1="210.00" y1="404.46" x2="232.00" y2="404.46" stroke="#216c8c" stroke-width="4"/>
+<circle cx="221.00" cy="387.36" r="5" fill="#216c8c" stroke="white" stroke-width="1.2"/>
+<text x="221.00" y="554" font-family="Arial" font-size="14" text-anchor="middle" fill="#475569">2</text>
+<line x1="288.33" y1="473.00" x2="288.33" y2="363.89" stroke="#216c8c" stroke-width="12" stroke-linecap="round" stroke-opacity="0.27"/>
+<line x1="277.33" y1="426.20" x2="299.33" y2="426.20" stroke="#216c8c" stroke-width="4"/>
+<circle cx="288.33" cy="410.30" r="5" fill="#216c8c" stroke="white" stroke-width="1.2"/>
+<text x="288.33" y="554" font-family="Arial" font-size="14" text-anchor="middle" fill="#475569">3</text>
+<line x1="355.67" y1="478.03" x2="355.67" y2="380.41" stroke="#216c8c" stroke-width="12" stroke-linecap="round" stroke-opacity="0.27"/>
+<line x1="344.67" y1="435.03" x2="366.67" y2="435.03" stroke="#216c8c" stroke-width="4"/>
+<circle cx="355.67" cy="421.46" r="5" fill="#216c8c" stroke="white" stroke-width="1.2"/>
+<text x="355.67" y="554" font-family="Arial" font-size="14" text-anchor="middle" fill="#475569">4</text>
+<line x1="423.00" y1="479.63" x2="423.00" y2="387.17" stroke="#216c8c" stroke-width="12" stroke-linecap="round" stroke-opacity="0.27"/>
+<line x1="412.00" y1="437.84" x2="434.00" y2="437.84" stroke="#216c8c" stroke-width="4"/>
+<circle cx="423.00" cy="426.29" r="5" fill="#216c8c" stroke="white" stroke-width="1.2"/>
+<text x="423.00" y="554" font-family="Arial" font-size="14" text-anchor="middle" fill="#475569">5</text>
+<line x1="490.33" y1="480.27" x2="490.33" y2="392.21" stroke="#b87537" stroke-width="12" stroke-linecap="round" stroke-opacity="0.27"/>
+<line x1="479.33" y1="439.94" x2="501.33" y2="439.94" stroke="#b87537" stroke-width="4"/>
+<circle cx="490.33" cy="429.42" r="5" fill="#b87537" stroke="white" stroke-width="1.2"/>
+<text x="490.33" y="554" font-family="Arial" font-size="14" text-anchor="middle" fill="#475569">6</text>
+<line x1="557.67" y1="481.19" x2="557.67" y2="393.71" stroke="#b87537" stroke-width="12" stroke-linecap="round" stroke-opacity="0.27"/>
+<line x1="546.67" y1="440.95" x2="568.67" y2="440.95" stroke="#b87537" stroke-width="4"/>
+<circle cx="557.67" cy="430.77" r="5" fill="#b87537" stroke="white" stroke-width="1.2"/>
+<text x="557.67" y="554" font-family="Arial" font-size="14" text-anchor="middle" fill="#475569">7</text>
+<line x1="625.00" y1="481.25" x2="625.00" y2="394.51" stroke="#b87537" stroke-width="12" stroke-linecap="round" stroke-opacity="0.27"/>
+<line x1="614.00" y1="441.74" x2="636.00" y2="441.74" stroke="#b87537" stroke-width="4"/>
+<circle cx="625.00" cy="431.43" r="5" fill="#b87537" stroke="white" stroke-width="1.2"/>
+<text x="625.00" y="554" font-family="Arial" font-size="14" text-anchor="middle" fill="#475569">8</text>
+<line x1="692.33" y1="481.56" x2="692.33" y2="394.45" stroke="#b87537" stroke-width="12" stroke-linecap="round" stroke-opacity="0.27"/>
+<line x1="681.33" y1="441.35" x2="703.33" y2="441.35" stroke="#b87537" stroke-width="4"/>
+<circle cx="692.33" cy="431.74" r="5" fill="#b87537" stroke="white" stroke-width="1.2"/>
+<text x="692.33" y="554" font-family="Arial" font-size="14" text-anchor="middle" fill="#475569">9</text>
+<line x1="759.67" y1="481.38" x2="759.67" y2="394.37" stroke="#b87537" stroke-width="12" stroke-linecap="round" stroke-opacity="0.27"/>
+<line x1="748.67" y1="441.51" x2="770.67" y2="441.51" stroke="#b87537" stroke-width="4"/>
+<circle cx="759.67" cy="431.58" r="5" fill="#b87537" stroke="white" stroke-width="1.2"/>
+<text x="759.67" y="554" font-family="Arial" font-size="14" text-anchor="middle" fill="#475569">10</text>
+<line x1="827.00" y1="480.98" x2="827.00" y2="395.43" stroke="#b87537" stroke-width="12" stroke-linecap="round" stroke-opacity="0.27"/>
+<line x1="816.00" y1="441.55" x2="838.00" y2="441.55" stroke="#b87537" stroke-width="4"/>
+<circle cx="827.00" cy="432.04" r="5" fill="#b87537" stroke="white" stroke-width="1.2"/>
+<text x="827.00" y="554" font-family="Arial" font-size="14" text-anchor="middle" fill="#475569">11</text>
+<line x1="894.33" y1="480.94" x2="894.33" y2="394.62" stroke="#b87537" stroke-width="12" stroke-linecap="round" stroke-opacity="0.27"/>
+<line x1="883.33" y1="441.30" x2="905.33" y2="441.30" stroke="#b87537" stroke-width="4"/>
+<circle cx="894.33" cy="431.70" r="5" fill="#b87537" stroke="white" stroke-width="1.2"/>
+<text x="894.33" y="554" font-family="Arial" font-size="14" text-anchor="middle" fill="#475569">12</text>
+<line x1="961.67" y1="481.17" x2="961.67" y2="394.83" stroke="#b87537" stroke-width="12" stroke-linecap="round" stroke-opacity="0.27"/>
+<line x1="950.67" y1="441.32" x2="972.67" y2="441.32" stroke="#b87537" stroke-width="4"/>
+<circle cx="961.67" cy="431.58" r="5" fill="#b87537" stroke="white" stroke-width="1.2"/>
+<text x="961.67" y="554" font-family="Arial" font-size="14" text-anchor="middle" fill="#475569">13</text>
+<line x1="1029.00" y1="482.00" x2="1029.00" y2="396.34" stroke="#b87537" stroke-width="12" stroke-linecap="round" stroke-opacity="0.27"/>
+<line x1="1018.00" y1="442.24" x2="1040.00" y2="442.24" stroke="#b87537" stroke-width="4"/>
+<circle cx="1029.00" cy="432.91" r="5" fill="#b87537" stroke="white" stroke-width="1.2"/>
+<text x="1029.00" y="554" font-family="Arial" font-size="14" text-anchor="middle" fill="#475569">14</text>
+<line x1="1096.33" y1="480.76" x2="1096.33" y2="394.81" stroke="#b87537" stroke-width="12" stroke-linecap="round" stroke-opacity="0.27"/>
+<line x1="1085.33" y1="441.29" x2="1107.33" y2="441.29" stroke="#b87537" stroke-width="4"/>
+<circle cx="1096.33" cy="431.64" r="5" fill="#b87537" stroke="white" stroke-width="1.2"/>
+<text x="1096.33" y="554" font-family="Arial" font-size="14" text-anchor="middle" fill="#475569">15</text>
+<line x1="456.67" y1="142" x2="456.67" y2="565" stroke="#a3b5c8" stroke-width="1.6" stroke-dasharray="5 4"/>
+<text x="235" y="610" font-family="Arial" font-weight="700" fill="#216c8c" font-size="15">Elite-parent positions (1–5)</text>
+<text x="695" y="610" font-family="Arial" font-weight="700" fill="#b87537" font-size="15">Non-elite positions (6–15)</text>
+<text x="69" y="650" font-family="Arial" font-size="14" fill="#334155">Elite share of total absolute coefficient mass: 0.422 (descriptive; not causal)</text>
+<text x="69" y="675" font-family="Arial" font-size="13" fill="#64748b">Thick strokes: 25–75% range · horizontal ticks: medians · dots: means · all vectors pass affine feasibility.</text>
+</svg>
