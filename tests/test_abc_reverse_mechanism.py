@@ -45,8 +45,9 @@ def test_three_arm_mechanism_svg_parses_with_controlled_test_fixture() -> None:
 
 
 def test_coefficient_position_distribution_figure_and_sampling_integrity() -> None:
-    from boundevo.coefficients import adaptive_boundary_coefficients, is_valid_coefficients
     import numpy as np
+
+    from boundevo.coefficients import adaptive_boundary_coefficients, is_valid_coefficients
 
     rng = np.random.default_rng(study.AUDIT_SEED)
     for _ in range(300):
