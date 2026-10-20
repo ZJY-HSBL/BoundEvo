@@ -1,0 +1,98 @@
+{
+  "functions": [
+    3,
+    10,
+    20,
+    30
+  ],
+  "methods": [
+    "abc",
+    "edbf",
+    "re"
+  ],
+  "dimension": 30,
+  "repeats": 10,
+  "evaluations": 10000,
+  "base_seed": 20261079,
+  "trials": 120,
+  "history_rows": 2760,
+  "reference_commit": "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f",
+  "bootstrap_samples": 10000,
+  "bootstrap_seed": 20261021,
+  "exploratory_function_selection": true,
+  "seed_independent_of_previous_cohorts": true,
+  "source_manifests": [
+    {
+      "function_id": 3,
+      "dimension": 30,
+      "methods": [
+        "abc",
+        "edbf",
+        "re"
+      ],
+      "repeats": 10,
+      "base_seed": 20261079,
+      "evaluations": 10000,
+      "history_interval": 450,
+      "reference_commit": "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f",
+      "source_commit": "c1ad6caa0340d3816a96b8b851d088f51462de73",
+      "independent_of": "cec2017-holdout-30d-10k-2026-10-17",
+      "cohort_design": "fresh random seeds; functions chosen after older suite inspection"
+    },
+    {
+      "function_id": 10,
+      "dimension": 30,
+      "methods": [
+        "abc",
+        "edbf",
+        "re"
+      ],
+      "repeats": 10,
+      "base_seed": 20261079,
+      "evaluations": 10000,
+      "history_interval": 450,
+      "reference_commit": "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f",
+      "source_commit": "c1ad6caa0340d3816a96b8b851d088f51462de73",
+      "independent_of": "cec2017-holdout-30d-10k-2026-10-17",
+      "cohort_design": "fresh random seeds; functions chosen after older suite inspection"
+    },
+    {
+      "function_id": 20,
+      "dimension": 30,
+      "methods": [
+        "abc",
+        "edbf",
+        "re"
+      ],
+      "repeats": 10,
+      "base_seed": 20261079,
+      "evaluations": 10000,
+      "history_interval": 450,
+      "reference_commit": "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f",
+      "source_commit": "c1ad6caa0340d3816a96b8b851d088f51462de73",
+      "independent_of": "cec2017-holdout-30d-10k-2026-10-17",
+      "cohort_design": "fresh random seeds; functions chosen after older suite inspection"
+    },
+    {
+      "function_id": 30,
+      "dimension": 30,
+      "methods": [
+        "abc",
+        "edbf",
+        "re"
+      ],
+      "repeats": 10,
+      "base_seed": 20261079,
+      "evaluations": 10000,
+      "history_interval": 450,
+      "reference_commit": "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f",
+      "source_commit": "c1ad6caa0340d3816a96b8b851d088f51462de73",
+      "independent_of": "cec2017-holdout-30d-10k-2026-10-17",
+      "cohort_design": "fresh random seeds; functions chosen after older suite inspection"
+    }
+  ],
+  "python": "3.12.15 (main, Oct  1 2026, 02:35:59) [GCC 13.3.0]",
+  "numpy": "2.5.4",
+  "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39",
+  "generated_utc": "2026-10-20T03:03:37.054581+00:00"
+}

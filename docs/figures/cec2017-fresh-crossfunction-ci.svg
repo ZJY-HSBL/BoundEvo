@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1190" height="755" viewBox="0 0 1190 755" role="img" aria-label="Independent random seeds | Four-function replication">
+<rect width="1190" height="755" fill="#f8fafc"/>
+<text x="54" y="56" font-size="27" font-weight="700" fill="#14263e" font-family="Arial,sans-serif">Independent random seeds | Four-function replication</text>
+<text x="54" y="86" font-size="15" fill="#53657a" font-family="Arial,sans-serif">CEC2017 · 30D · 10k FE · n=10 NEW paired seeds per function · means normalized within each function</text>
+<rect x="56" y="123" width="520" height="265" rx="14" fill="#ffffff" stroke="#e2e8f0"/>
+<text x="76.0" y="149.0" font-size="20" fill="#334155" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">F3 · fresh cohort</text>
+<line x1="302.72" y1="177" x2="302.72" y2="328" stroke="#e7ecf2"/>
+<text x="302.7" y="352.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">1×</text>
+<line x1="372.17" y1="177" x2="372.17" y2="328" stroke="#e7ecf2"/>
+<text x="372.2" y="352.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">2×</text>
+<line x1="490.90" y1="177" x2="490.90" y2="328" stroke="#e7ecf2"/>
+<text x="490.9" y="352.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">5×</text>
+<text x="85.0" y="214.0" font-size="15" fill="#12618a" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">ABC</text>
+<line x1="285.13" y1="209" x2="319.03" y2="209" stroke="#12618a" stroke-width="4"/>
+<line x1="285.13" y1="201" x2="285.13" y2="217" stroke="#12618a" stroke-width="2"/>
+<line x1="319.03" y1="201" x2="319.03" y2="217" stroke="#12618a" stroke-width="2"/>
+<circle cx="302.72" cy="209" r="6.5" fill="#12618a" stroke="white" stroke-width="1.5"/>
+<text x="312.7" y="198.0" font-size="12" fill="#12618a" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">1.00×</text>
+<text x="85.0" y="265.0" font-size="15" fill="#be6d2a" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">EDBF</text>
+<line x1="483.51" y1="260" x2="511.99" y2="260" stroke="#be6d2a" stroke-width="4"/>
+<line x1="483.51" y1="252" x2="483.51" y2="268" stroke="#be6d2a" stroke-width="2"/>
+<line x1="511.99" y1="252" x2="511.99" y2="268" stroke="#be6d2a" stroke-width="2"/>
+<circle cx="498.17" cy="260" r="6.5" fill="#be6d2a" stroke="white" stroke-width="1.5"/>
+<text x="508.2" y="249.0" font-size="12" fill="#be6d2a" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">5.26×</text>
+<text x="85.0" y="316.0" font-size="15" fill="#258473" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">RE</text>
+<line x1="425.23" y1="311" x2="454.08" y2="311" stroke="#258473" stroke-width="4"/>
+<line x1="425.23" y1="303" x2="425.23" y2="319" stroke="#258473" stroke-width="2"/>
+<line x1="454.08" y1="303" x2="454.08" y2="319" stroke="#258473" stroke-width="2"/>
+<circle cx="439.83" cy="311" r="6.5" fill="#258473" stroke="white" stroke-width="1.5"/>
+<text x="449.8" y="300.0" font-size="12" fill="#258473" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">3.45×</text>
+<rect x="629" y="123" width="520" height="265" rx="14" fill="#ffffff" stroke="#e2e8f0"/>
+<text x="649.0" y="149.0" font-size="20" fill="#334155" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">F10 · fresh cohort</text>
+<line x1="1015.71" y1="177" x2="1015.71" y2="328" stroke="#e7ecf2"/>
+<text x="1015.7" y="352.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">1×</text>
+<text x="658.0" y="214.0" font-size="15" fill="#12618a" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">ABC</text>
+<line x1="1020.44" y1="209" x2="1029.72" y2="209" stroke="#12618a" stroke-width="4"/>
+<line x1="1020.44" y1="201" x2="1020.44" y2="217" stroke="#12618a" stroke-width="2"/>
+<line x1="1029.72" y1="201" x2="1029.72" y2="217" stroke="#12618a" stroke-width="2"/>
+<circle cx="1025.23" cy="209" r="6.5" fill="#12618a" stroke="white" stroke-width="1.5"/>
+<text x="1035.2" y="198.0" font-size="12" fill="#12618a" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">1.05×</text>
+<text x="658.0" y="265.0" font-size="15" fill="#be6d2a" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">EDBF</text>
+<line x1="1010.56" y1="260" x2="1023.97" y2="260" stroke="#be6d2a" stroke-width="4"/>
+<line x1="1010.56" y1="252" x2="1010.56" y2="268" stroke="#be6d2a" stroke-width="2"/>
+<line x1="1023.97" y1="252" x2="1023.97" y2="268" stroke="#be6d2a" stroke-width="2"/>
+<circle cx="1017.55" cy="260" r="6.5" fill="#be6d2a" stroke="white" stroke-width="1.5"/>
+<text x="1027.6" y="249.0" font-size="12" fill="#be6d2a" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">1.01×</text>
+<text x="658.0" y="316.0" font-size="15" fill="#258473" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">RE</text>
+<line x1="1005.52" y1="311" x2="1025.08" y2="311" stroke="#258473" stroke-width="4"/>
+<line x1="1005.52" y1="303" x2="1005.52" y2="319" stroke="#258473" stroke-width="2"/>
+<line x1="1025.08" y1="303" x2="1025.08" y2="319" stroke="#258473" stroke-width="2"/>
+<circle cx="1015.71" cy="311" r="6.5" fill="#258473" stroke="white" stroke-width="1.5"/>
+<text x="1025.7" y="300.0" font-size="12" fill="#258473" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">1.00×</text>
+<rect x="56" y="401" width="520" height="265" rx="14" fill="#ffffff" stroke="#e2e8f0"/>
+<text x="76.0" y="427.0" font-size="20" fill="#334155" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">F20 · fresh cohort</text>
+<line x1="442.71" y1="455" x2="442.71" y2="606" stroke="#e7ecf2"/>
+<text x="442.7" y="630.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">1×</text>
+<text x="85.0" y="492.0" font-size="15" fill="#12618a" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">ABC</text>
+<line x1="420.89" y1="487" x2="460.81" y2="487" stroke="#12618a" stroke-width="4"/>
+<line x1="420.89" y1="479" x2="420.89" y2="495" stroke="#12618a" stroke-width="2"/>
+<line x1="460.81" y1="479" x2="460.81" y2="495" stroke="#12618a" stroke-width="2"/>
+<circle cx="442.71" cy="487" r="6.5" fill="#12618a" stroke="white" stroke-width="1.5"/>
+<text x="452.7" y="476.0" font-size="12" fill="#12618a" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">1.00×</text>
+<text x="85.0" y="543.0" font-size="15" fill="#be6d2a" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">EDBF</text>
+<line x1="438.43" y1="538" x2="462.75" y2="538" stroke="#be6d2a" stroke-width="4"/>
+<line x1="438.43" y1="530" x2="438.43" y2="546" stroke="#be6d2a" stroke-width="2"/>
+<line x1="462.75" y1="530" x2="462.75" y2="546" stroke="#be6d2a" stroke-width="2"/>
+<circle cx="450.77" cy="538" r="6.5" fill="#be6d2a" stroke="white" stroke-width="1.5"/>
+<text x="460.8" y="527.0" font-size="12" fill="#be6d2a" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">1.04×</text>
+<text x="85.0" y="594.0" font-size="15" fill="#258473" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">RE</text>
+<line x1="432.13" y1="589" x2="463.35" y2="589" stroke="#258473" stroke-width="4"/>
+<line x1="432.13" y1="581" x2="432.13" y2="597" stroke="#258473" stroke-width="2"/>
+<line x1="463.35" y1="581" x2="463.35" y2="597" stroke="#258473" stroke-width="2"/>
+<circle cx="448.42" cy="589" r="6.5" fill="#258473" stroke="white" stroke-width="1.5"/>
+<text x="458.4" y="578.0" font-size="12" fill="#258473" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">1.03×</text>
+<rect x="629" y="401" width="520" height="265" rx="14" fill="#ffffff" stroke="#e2e8f0"/>
+<text x="649.0" y="427.0" font-size="20" fill="#334155" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">F30 · fresh cohort</text>
+<line x1="791.63" y1="455" x2="791.63" y2="606" stroke="#e7ecf2"/>
+<text x="791.6" y="630.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">1×</text>
+<line x1="811.89" y1="455" x2="811.89" y2="606" stroke="#e7ecf2"/>
+<text x="811.9" y="630.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">2×</text>
+<line x1="846.52" y1="455" x2="846.52" y2="606" stroke="#e7ecf2"/>
+<text x="846.5" y="630.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">5×</text>
+<line x1="876.81" y1="455" x2="876.81" y2="606" stroke="#e7ecf2"/>
+<text x="876.8" y="630.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">10×</text>
+<line x1="909.12" y1="455" x2="909.12" y2="606" stroke="#e7ecf2"/>
+<text x="909.1" y="630.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">20×</text>
+<line x1="953.45" y1="455" x2="953.45" y2="606" stroke="#e7ecf2"/>
+<text x="953.5" y="630.0" font-size="12" fill="#334155" text-anchor="middle" font-weight="400" font-family="Arial,sans-serif">50×</text>
+<text x="658.0" y="492.0" font-size="15" fill="#12618a" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">ABC</text>
+<line x1="771.64" y1="487" x2="808.66" y2="487" stroke="#12618a" stroke-width="4"/>
+<line x1="771.64" y1="479" x2="771.64" y2="495" stroke="#12618a" stroke-width="2"/>
+<line x1="808.66" y1="479" x2="808.66" y2="495" stroke="#12618a" stroke-width="2"/>
+<circle cx="791.63" cy="487" r="6.5" fill="#12618a" stroke="white" stroke-width="1.5"/>
+<text x="801.6" y="476.0" font-size="12" fill="#12618a" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">1.00×</text>
+<text x="658.0" y="543.0" font-size="15" fill="#be6d2a" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">EDBF</text>
+<line x1="1054.05" y1="538" x2="1094.24" y2="538" stroke="#be6d2a" stroke-width="4"/>
+<line x1="1054.05" y1="530" x2="1054.05" y2="546" stroke="#be6d2a" stroke-width="2"/>
+<line x1="1094.24" y1="530" x2="1094.24" y2="546" stroke="#be6d2a" stroke-width="2"/>
+<circle cx="1076.04" cy="538" r="6.5" fill="#be6d2a" stroke="white" stroke-width="1.5"/>
+<text x="1086.0" y="527.0" font-size="12" fill="#be6d2a" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">592.07×</text>
+<text x="658.0" y="594.0" font-size="15" fill="#258473" text-anchor="start" font-weight="700" font-family="Arial,sans-serif">RE</text>
+<line x1="946.39" y1="589" x2="976.89" y2="589" stroke="#258473" stroke-width="4"/>
+<line x1="946.39" y1="581" x2="946.39" y2="597" stroke="#258473" stroke-width="2"/>
+<line x1="976.89" y1="581" x2="976.89" y2="597" stroke="#258473" stroke-width="2"/>
+<circle cx="964.03" cy="589" r="6.5" fill="#258473" stroke="white" stroke-width="1.5"/>
+<text x="974.0" y="578.0" font-size="12" fill="#258473" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">62.02×</text>
+<text x="70.0" y="734.0" font-size="13" fill="#334155" text-anchor="start" font-weight="400" font-family="Arial,sans-serif">Ratio = mean error / lowest mean within function. Whiskers are bootstrap CIs, not paired significance tests.</text>
+</svg>

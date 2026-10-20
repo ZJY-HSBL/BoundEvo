@@ -270,6 +270,14 @@
 
 ![Paired anytime advantage and uncertainty](docs/figures/cec2017-100k-anytime-contrasts.svg)
 
+### 全新随机种子：四函数复核（10k FE）
+
+本组新实验与上述已完成的 100k 轨迹分析严格分开：F3/F10/F20/F30，每函数 10 个全新配对种子，三种方法，共 120 次额外真实试验。
+
+![Fresh seed function replication](docs/figures/cec2017-fresh-crossfunction-ci.svg)
+
+[原始实验与报告](docs/experiments/cec2017-fresh-functions-30d-10k-2026-10-20/report.md)
+
 **边界：**F16/F22 的 20 种子扩容是观察初步结果后的适应性研究，新全过程统计不等于独立确认。目标阈值来自既有 10k 样本；所有比较均应按函数、评价预算分别解释。
 
 [全过程研究数据与统计报告](docs/experiments/cec2017-anytime-30d-100k-20seeds-2026-10-20/report.md)

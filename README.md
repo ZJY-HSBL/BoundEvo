@@ -270,6 +270,14 @@ New log-budget, sample-and-hold anytime loss measures the whole 10k–100k traje
 
 ![Paired anytime advantage and uncertainty](docs/figures/cec2017-100k-anytime-contrasts.svg)
 
+### Fresh-seed four-function replication (10k FE)
+
+Separately from reused 100k trajectories: F3/F10/F20/F30, 10 new paired seeds/function, three methods; 120 **additional** original 10k-FE runs.
+
+![Fresh seed function replication](docs/figures/cec2017-fresh-crossfunction-ci.svg)
+
+[Source trials and full report](docs/experiments/cec2017-fresh-functions-30d-10k-2026-10-20/report.md)
+
 **Limits:** The 20-seed F16/F22 extension was adaptively chosen; anytime analysis is not independent confirmation. Target thresholds are derived from observed 10k outcomes and results must be interpreted per function and budget.
 
 [Anytime data, bootstrap statistics and research report](docs/experiments/cec2017-anytime-30d-100k-20seeds-2026-10-20/report.md)
