@@ -6,12 +6,13 @@ No surrogate/synthetic records are published. No optional plotting dependency.
 
 from __future__ import annotations
 
+from itertools import pairwise
+
 import argparse
 import csv
 import math
 import random
 import statistics
-import sys
 from collections import defaultdict
 from html import escape
 from pathlib import Path
@@ -59,7 +60,7 @@ def anytime_loss(points: list[tuple[int, float]]) -> float:
         raise ValueError("need exact 10k and 100k historical evaluation records")
     width = math.log(10)
     total = 0.0
-    for (left, previous), (right, current) in zip(sub, sub[1:]):
+    for (left, previous), (right, current) in pairwise(sub):
         if not (left < right and 0 <= current <= previous + 1e-7):
             raise ValueError("nonmonotone or duplicate sample-and-hold trace")
         total += math.log1p(previous) * math.log(right / left)
@@ -94,7 +95,7 @@ def verify() -> tuple[dict, dict, list[int]]:
         if (series[0][0] != 100 or series[-1][0] != 100_000
                 or len(series) != 112 or len({p[0] for p in series}) != len(series)
                 or any(e < 0 or not math.isfinite(e) for _, e in series)
-                or any(b[1] > a[1] + 1e-7 for a, b in zip(series, series[1:]))):
+                or any(b[1] > a[1] + 1e-7 for a, b in pairwise(series))):
             raise ValueError(f"invalid real best-so-far series {k}")
         reference = float(record["baseline_10k_error"])
         midpoint = [v for x, v in series if x == 10_000]
