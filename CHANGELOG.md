@@ -4,6 +4,17 @@ All notable changes to BoundEvo are documented here.
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-10-20
+
+### Deterministic ABC-Reverse mechanism study and 144 new optimizer trials
+
+- Introduced `abc_reverse`, a deterministic positional reversal of the exact ABC coefficient vector. The control conserves the full coefficient multiset, bounded affine sum, one-attempt feasibility, and RNG usage at each coefficient-generation call.
+- Completed **144 new real matched-seed CEC2017 runs** (F10/F16/F20/F22 at 30D and 10k FE, ABC vs ABC-Shuffle vs ABC-Reverse, 12 fresh paired seeds each) and archived 3,312 original convergence checkpoints with complete provenance checks.
+- Calculated method summaries, 10,000 paired-bootstrap intervals and 8 exact paired sign tests jointly corrected by Holm. Original ABC had lower mean errors than ABC-Reverse on all four functions, but **none of the eight corrected pairwise tests was significant**; F10 ABC-Shuffle had the smallest mean error.
+- Audited **50,000 valid ABC coefficient vectors** and documented the observed **42.23% elite-slot share of absolute coefficient weight** for the first five of 15 parent slots, a positional diagnostic rather than proof of optimization benefit.
+- Added two new original-data SVG charts, a frozen mechanism protocol, verified data-derived bilingual README results and a four-shard fail-closed CI experiment workflow.
+- Existing v0.11.1 studies of 200 additional runs are retained; earlier 120 long-budget anytime trajectories are not counted as new trials.
+
 ## [0.11.1] - 2026-10-20
 
 ### 2026-10-20: Independent-seed replication and coefficient-order ablation
