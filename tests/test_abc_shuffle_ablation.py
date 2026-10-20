@@ -33,6 +33,6 @@ def test_svg_is_valid_and_seed_effects_are_not_invented():
     ]
     svg = analysis.render_svg(tests, effects)
     assert ElementTree.fromstring(svg).tag.endswith("svg")
-    assert "80" not in svg
+    assert "10 new paired seeds" in svg
     assert "F10" in svg and "F22" in svg
     assert len(svg) > 3500
