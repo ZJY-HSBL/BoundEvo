@@ -71,3 +71,26 @@ def test_abc_shuffle_changes_coefficient_position_without_changing_values() -> N
     )
     assert not np.array_equal(plain.coefficients, shuffled.coefficients)
     np.testing.assert_array_equal(np.sort(plain.coefficients), np.sort(shuffled.coefficients))
+
+
+@pytest.mark.parametrize("m", [1, 2, 5, 15, 30])
+def test_abc_reverse_preserves_coefficients_and_rng_state(m: int) -> None:
+    # The deterministic positional reversal draws exactly the same coefficient
+    # values as ABC and MUST NOT consume additional random numbers.
+    for seed in range(16):
+        left_rng, right_rng = np.random.default_rng(seed), np.random.default_rng(seed)
+        abc = generate_coefficients(m, method="abc", rng=left_rng)
+        reverse = generate_coefficients(m, method="abc_reverse", rng=right_rng)
+        assert abc.attempts == reverse.attempts == 1
+        assert is_valid_coefficients(reverse.coefficients)
+        np.testing.assert_array_equal(abc.coefficients[::-1], reverse.coefficients)
+        assert left_rng.random() == right_rng.random()
+
+
+def test_abc_reverse_is_actual_position_change_for_m15() -> None:
+    abc = generate_coefficients(15, method="abc", rng=np.random.default_rng(20261232))
+    reverse = generate_coefficients(
+        15, method="abc_reverse", rng=np.random.default_rng(20261232)
+    )
+    assert not np.array_equal(abc.coefficients, reverse.coefficients)
+    np.testing.assert_array_equal(np.sort(abc.coefficients), np.sort(reverse.coefficients))
