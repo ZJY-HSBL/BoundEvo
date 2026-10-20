@@ -4,6 +4,8 @@ All notable changes to BoundEvo are documented here.
 
 ## [Unreleased]
 
+## [0.11.1] - 2026-10-20
+
 ### 2026-10-20: Independent-seed replication and coefficient-order ablation
 
 - Reanalysed the **existing 120 F16/F22 100k-FE optimizer trajectories** using integrated log-budget anytime loss, paired bootstrap confidence intervals and 10k baseline-derived empirical target-attainment profiles. Reused trajectories are not counted as new runs.
