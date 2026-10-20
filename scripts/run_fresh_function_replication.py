@@ -6,14 +6,13 @@ Runs the same fixed paper-style optimizer with matched initial populations.
 
 from __future__ import annotations
 
-from itertools import pairwise
-
 import argparse
 import csv
 import json
 import math
 import os
 from dataclasses import asdict, fields
+from itertools import pairwise
 from pathlib import Path
 
 from boundevo.cec2017 import REFERENCE_COMMIT, make_cec2017_case
