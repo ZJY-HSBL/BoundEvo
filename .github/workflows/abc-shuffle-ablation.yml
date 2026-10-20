@@ -1,0 +1,111 @@
+name: ABC-Shuffle Coefficient-Rank Ablation
+
+on:
+  push:
+    paths:
+      - ".github/workflows/abc-shuffle-ablation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  experiment:
+    name: F${{ matrix.fid }} · ABC vs ABC-Shuffle · new 10 seeds
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        fid: [10, 16, 20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install optimizer and fixed reference backend
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+          python -m pip install "git+https://github.com/tilleyd/cec2017-py.git@424a9fa2757914c3e4cfdd8f59a268b1aeb3197f"
+      - name: Run actual 20 paired original trials and test initial seed equivalence
+        run: |
+          python -u scripts/run_abc_shuffle_ablation.py \
+            --function-id ${{ matrix.fid }} \
+            --output-dir /tmp/ablation/f${{ matrix.fid }}
+      - name: Preserve original (including partial) diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: boundevo-abc-shuffle-f${{ matrix.fid }}
+          path: /tmp/ablation/
+          retention-days: 90
+          if-no-files-found: warn
+
+  merge:
+    name: Validate 80 real ablation trials and data-derived paired figure
+    needs: [experiment]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install statistical and test requirements
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: boundevo-abc-shuffle-f*
+          merge-multiple: true
+          path: /tmp/ablation
+      - name: Verify actual trial paths, run matched analysis and generate original-data plot
+        run: |
+          python scripts/aggregate_abc_shuffle_ablation.py \
+            --input-dir /tmp/ablation \
+            --output-dir docs/experiments/cec2017-abc-shuffle-30d-10k-2026-10-20 \
+            --figure docs/figures/cec2017-abc-shuffle-paired-seeds.svg
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+          from xml.etree import ElementTree
+
+          d = Path("docs/experiments/cec2017-abc-shuffle-30d-10k-2026-10-20")
+          def table(filename):
+              with (d / filename).open(newline="") as f:
+                  return list(csv.DictReader(f))
+          env = json.loads((d / "environment.json").read_text())
+          assert env["trials"] == len(table("trials.csv")) == 80
+          assert env["history_rows"] == len(table("history.csv")) > 800
+          assert len(table("summary.csv")) == 8 and len(table("paired_tests.csv")) == 4
+          assert env["reference_commit"] == "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f"
+          figure = Path("docs/figures/cec2017-abc-shuffle-paired-seeds.svg")
+          assert figure.stat().st_size > 4000
+          assert ElementTree.parse(figure).getroot().tag.endswith("svg")
+          PY
+          python -m pytest -q
+          python -m ruff check .
+      - name: Archive original and analyzed ablation evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: boundevo-abc-shuffle-80-verified
+          path: |
+            docs/experiments/cec2017-abc-shuffle-30d-10k-2026-10-20/
+            docs/figures/cec2017-abc-shuffle-paired-seeds.svg
+          retention-days: 90
+      - name: Commit only when four experiments and all validation gates succeed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/experiments/cec2017-abc-shuffle-30d-10k-2026-10-20/
+          git add docs/figures/cec2017-abc-shuffle-paired-seeds.svg
+          git diff --cached --quiet && exit 0
+          git commit -m "research: publish measured 80-trial ABC-Shuffle rank-order ablation"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
