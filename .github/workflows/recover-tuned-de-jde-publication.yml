@@ -1,6 +1,9 @@
 name: Recover scientifically complete tuned-DE/jDE evidence after merge failure
 
 on:
+  push:
+    paths:
+      - ".github/workflows/recover-tuned-de-jde-publication.yml"
   workflow_run:
     workflows:
       - Recover prior DE calibration then evaluate fresh-seed jDE
@@ -15,7 +18,7 @@ permissions:
 jobs:
   publish:
     name: Validate all 822 originals, 82200 states, 4 charts and bilingual science
-    if: github.event.workflow_run.conclusion == 'failure'
+    if: github.event_name == 'push' || github.event.workflow_run.conclusion == 'failure'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -33,20 +36,18 @@ jobs:
         with:
           run-id: 39600572276
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          run-id: 39600572276
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           pattern: boundevo-de-dev-f*
           merge-multiple: true
           path: /tmp/calib
       - uses: actions/download-artifact@v4
         with:
-          run-id: ${{ github.event.workflow_run.id }}
+          run-id: ${{ github.event.workflow_run.id || 39601263045 }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           name: boundevo-de-frozen-selection
           path: /tmp/choice
       - uses: actions/download-artifact@v4
         with:
-          run-id: ${{ github.event.workflow_run.id }}
+          run-id: ${{ github.event.workflow_run.id || 39601263045 }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           pattern: boundevo-de-eval-shard*
           merge-multiple: true
