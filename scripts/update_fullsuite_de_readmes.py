@@ -145,7 +145,7 @@ def main() -> None:
     parser=argparse.ArgumentParser()
     parser.add_argument("--check",action="store_true")
     args=parser.parse_args()
-    stats,summary,tests=validate()
+    stats,_summary,tests=validate()
     for language,filename in ((False,"README.md"),(True,"README_CN.md")):
         path=ROOT/filename
         rendered=update(path.read_text(encoding="utf-8"),content(language,stats,tests))
