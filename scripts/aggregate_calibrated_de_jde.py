@@ -19,7 +19,6 @@ from pathlib import Path
 from xml.etree import ElementTree
 
 import numpy as np
-
 from run_tuned_de_jde import (
     BUDGET,
     DEV_FUNCTIONS,
