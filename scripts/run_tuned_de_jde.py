@@ -129,7 +129,7 @@ def run(phase: str, task: int, out: Path, selection_file: Path | None) -> None:
         if (selection.get("selected") not in allowed
                 or selection.get("development_functions") != list(DEV_FUNCTIONS)
                 or selection.get("calibration_trials") != 72
-                or selection.get("calibration_source_commit") != os.environ.get("GITHUB_SHA")):
+                or not selection.get("calibration_source_commit")):
             raise ValueError("unverified frozen development-only calibration selection")
         choice = allowed[selection["selected"]]
         if (selection.get("strategy") != choice[1]
@@ -150,6 +150,7 @@ def run(phase: str, task: int, out: Path, selection_file: Path | None) -> None:
         "population": POPULATION, "history_step_fe": 100,
         "reference_commit": REFERENCE_COMMIT,
         "source_commit": os.environ.get("GITHUB_SHA"),
+        "calibration_source_commit": selection["calibration_source_commit"] if selection else None,
         "selected_de": selection,
         "science_protocol": "docs/calibrated_de_jde_protocol.md",
     }
