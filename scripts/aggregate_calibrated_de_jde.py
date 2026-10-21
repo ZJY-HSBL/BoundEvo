@@ -20,12 +20,17 @@ from xml.etree import ElementTree
 
 import numpy as np
 
-from boundevo.cec2017 import REFERENCE_COMMIT
 from run_tuned_de_jde import (
-    BUDGET, DEV_FUNCTIONS, EVAL_METHODS, TEST_FUNCTIONS, TEST_SEED,
+    BUDGET,
+    DEV_FUNCTIONS,
+    EVAL_METHODS,
+    TEST_FUNCTIONS,
+    TEST_SEED,
     TEST_SHARDS,
 )
 from select_de_calibration import calibrate
+
+from boundevo.cec2017 import REFERENCE_COMMIT
 
 METHODS=EVAL_METHODS
 SAMPLES=10_000
@@ -385,9 +390,9 @@ def convergence_svg(history:list[dict])->str:
         ranges=[math.log10(1+v) for m in METHODS for i in range(10)
                 for v in seen[(fid,m,i)].values()]
         ylo=max(0.,min(ranges)-.1); yhi=max(ranges)+.1
-        def fx(fe:int)->float:
+        def fx(fe:int,left=left,width=width)->float:
             return left+width*(fe-100)/9900
-        def fy(val:float)->float:
+        def fy(val:float,top=top,height=height,yhi=yhi,ylo=ylo)->float:
             return top+height*(yhi-val)/(yhi-ylo)
         for step in range(5):
             val=ylo+(yhi-ylo)*step/4
