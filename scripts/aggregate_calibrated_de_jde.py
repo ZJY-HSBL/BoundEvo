@@ -67,6 +67,7 @@ def verify(
         raise ValueError("calibration selection differs from actual 72 original trials")
     original,history,manifests=[],[],[]
     sha=chosen["calibration_source_commit"]
+    evaluation_sha=None
     for shard,fids in enumerate(TEST_SHARDS):
         directory=holdout_dir/f"shard{shard}"
         manifest=json.loads((directory/"manifest.json").read_text(encoding="utf-8"))
@@ -75,11 +76,17 @@ def verify(
             "methods":list(METHODS),"dimension":30,"repeats":10,
             "seed_base":TEST_SEED,"evaluations":BUDGET,
             "population":100,"history_step_fe":100,
-            "reference_commit":REFERENCE_COMMIT,"source_commit":sha,
+            "reference_commit":REFERENCE_COMMIT,
+            "calibration_source_commit":sha,
             "selected_de":chosen,
         }
         if any(manifest.get(k)!=v for k,v in expected.items()):
             raise ValueError(f"incorrect frozen holdout settings in shard {shard}")
+        if not manifest.get("source_commit") or (
+            evaluation_sha is not None and evaluation_sha!=manifest["source_commit"]
+        ):
+            raise ValueError("holdout jobs must share one exact source commit")
+        evaluation_sha=manifest["source_commit"]
         trials=csv_read(directory/"trials.csv")
         curve=csv_read(directory/"history.csv")
         if len(trials)!=len(fids)*30 or len(curve)!=len(fids)*3000:
@@ -573,6 +580,7 @@ def main()->None:
             "reference_commit":REFERENCE_COMMIT,
             "selected":selected["selected"],
             "calibration_source_commit":selected["calibration_source_commit"],
+            "evaluation_source_commit":evaluation_manifests[0]["source_commit"],
             "calibration_data_sha256":selected["calibration_data_sha256"],
             "development_manifests":dev_manifests,
             "evaluation_manifests":evaluation_manifests,
