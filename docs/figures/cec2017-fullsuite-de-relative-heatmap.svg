@@ -1,0 +1,229 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1150" height="1550" viewBox="0 0 1150 1550" role="img" aria-label="Full CEC2017 | Relative mean-error heatmap">
+<rect width="1150" height="1550" fill="#f8fafc"/>
+<text x="56" y="58" font-size="27" font-weight="700" font-family="Arial,sans-serif" fill="#19314a">Full CEC2017 | Relative mean-error heatmap</text>
+<text x="56" y="89" font-size="15" font-family="Arial,sans-serif" fill="#586c80">29/29 retained functions · 30D · five NEW paired seeds · 10k FE · 435 true optimizer runs</text>
+<rect x="56" y="115" width="1038" height="1357" rx="13" fill="#ffffff" stroke="#dfe8ef"/>
+<text x="435.0" y="158.0" font-size="18" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#25618b">ABC</text>
+<text x="685.0" y="158.0" font-size="18" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#c17a39">ABC-REVERSE</text>
+<text x="935.0" y="158.0" font-size="18" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#258c78">DE-RAND1BIN</text>
+<text x="86.0" y="158.0" font-size="17" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">CEC2017</text>
+<rect x="72" y="170" width="996" height="42" fill="#f7f9fc"/>
+<text x="104.0" y="196.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F1</text>
+<rect x="330" y="170" width="212" height="34" rx="5" fill="rgb(219,231,239)"/>
+<text x="436.0" y="192.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.70×</text>
+<rect x="580" y="170" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="686.0" y="192.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="830" y="170" width="212" height="34" rx="5" fill="rgb(208,217,228)"/>
+<text x="936.0" y="192.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">3.43×</text>
+<text x="104.0" y="238.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F3</text>
+<rect x="330" y="212" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="234.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="212" width="212" height="34" rx="5" fill="rgb(206,215,226)"/>
+<text x="686.0" y="234.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">3.93×</text>
+<rect x="830" y="212" width="212" height="34" rx="5" fill="rgb(197,204,217)"/>
+<text x="936.0" y="234.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">6.90×</text>
+<rect x="72" y="254" width="996" height="42" fill="#f7f9fc"/>
+<text x="104.0" y="280.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F4</text>
+<rect x="330" y="254" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="276.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="254" width="212" height="34" rx="5" fill="rgb(218,230,238)"/>
+<text x="686.0" y="276.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.84×</text>
+<rect x="830" y="254" width="212" height="34" rx="5" fill="rgb(207,217,228)"/>
+<text x="936.0" y="276.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">3.49×</text>
+<text x="104.0" y="322.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F5</text>
+<rect x="330" y="296" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="318.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="296" width="212" height="34" rx="5" fill="rgb(226,240,246)"/>
+<text x="686.0" y="318.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.08×</text>
+<rect x="830" y="296" width="212" height="34" rx="5" fill="rgb(222,235,242)"/>
+<text x="936.0" y="318.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.38×</text>
+<rect x="72" y="338" width="996" height="42" fill="#f7f9fc"/>
+<text x="104.0" y="364.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F6</text>
+<rect x="330" y="338" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="360.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="338" width="212" height="34" rx="5" fill="rgb(224,237,244)"/>
+<text x="686.0" y="360.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.23×</text>
+<rect x="830" y="338" width="212" height="34" rx="5" fill="rgb(218,230,238)"/>
+<text x="936.0" y="360.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.81×</text>
+<text x="104.0" y="406.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F7</text>
+<rect x="330" y="380" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="402.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="380" width="212" height="34" rx="5" fill="rgb(225,238,245)"/>
+<text x="686.0" y="402.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.19×</text>
+<rect x="830" y="380" width="212" height="34" rx="5" fill="rgb(206,215,226)"/>
+<text x="936.0" y="402.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">3.89×</text>
+<rect x="72" y="422" width="996" height="42" fill="#f7f9fc"/>
+<text x="104.0" y="448.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F8</text>
+<rect x="330" y="422" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="444.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="422" width="212" height="34" rx="5" fill="rgb(226,239,246)"/>
+<text x="686.0" y="444.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.13×</text>
+<rect x="830" y="422" width="212" height="34" rx="5" fill="rgb(222,235,242)"/>
+<text x="936.0" y="444.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.41×</text>
+<text x="104.0" y="490.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F9</text>
+<rect x="330" y="464" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="486.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="464" width="212" height="34" rx="5" fill="rgb(224,237,244)"/>
+<text x="686.0" y="486.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.28×</text>
+<rect x="830" y="464" width="212" height="34" rx="5" fill="rgb(208,218,228)"/>
+<text x="936.0" y="486.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">3.38×</text>
+<rect x="72" y="506" width="996" height="42" fill="#f7f9fc"/>
+<text x="104.0" y="532.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F10</text>
+<rect x="330" y="506" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="528.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="506" width="212" height="34" rx="5" fill="rgb(227,241,247)"/>
+<text x="686.0" y="528.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.01×</text>
+<rect x="830" y="506" width="212" height="34" rx="5" fill="rgb(227,241,247)"/>
+<text x="936.0" y="528.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.05×</text>
+<text x="104.0" y="574.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F11</text>
+<rect x="330" y="548" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="570.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="548" width="212" height="34" rx="5" fill="rgb(218,230,239)"/>
+<text x="686.0" y="570.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.76×</text>
+<rect x="830" y="548" width="212" height="34" rx="5" fill="rgb(189,194,210)"/>
+<text x="936.0" y="570.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">11.03×</text>
+<rect x="72" y="590" width="996" height="42" fill="#f7f9fc"/>
+<text x="104.0" y="616.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F12</text>
+<rect x="330" y="590" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="612.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="590" width="212" height="34" rx="5" fill="rgb(177,180,198)"/>
+<text x="686.0" y="612.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">23.50×</text>
+<rect x="830" y="590" width="212" height="34" rx="5" fill="rgb(140,134,162)"/>
+<text x="936.0" y="612.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">233.68×</text>
+<text x="104.0" y="658.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F13</text>
+<rect x="330" y="632" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="654.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="632" width="212" height="34" rx="5" fill="rgb(125,116,147)"/>
+<text x="686.0" y="654.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">624.48×</text>
+<rect x="830" y="632" width="212" height="34" rx="5" fill="rgb(125,116,147)"/>
+<text x="936.0" y="654.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">125,803.51×</text>
+<rect x="72" y="674" width="996" height="42" fill="#f7f9fc"/>
+<text x="104.0" y="700.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F14</text>
+<rect x="330" y="674" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="696.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="674" width="212" height="34" rx="5" fill="rgb(224,237,244)"/>
+<text x="686.0" y="696.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.27×</text>
+<rect x="830" y="674" width="212" height="34" rx="5" fill="rgb(143,138,164)"/>
+<text x="936.0" y="696.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">196.55×</text>
+<text x="104.0" y="742.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F15</text>
+<rect x="330" y="716" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="738.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="716" width="212" height="34" rx="5" fill="rgb(177,179,198)"/>
+<text x="686.0" y="738.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">23.87×</text>
+<rect x="830" y="716" width="212" height="34" rx="5" fill="rgb(125,116,147)"/>
+<text x="936.0" y="738.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">69,869.00×</text>
+<rect x="72" y="758" width="996" height="42" fill="#f7f9fc"/>
+<text x="104.0" y="784.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F16</text>
+<rect x="330" y="758" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="780.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="758" width="212" height="34" rx="5" fill="rgb(227,241,247)"/>
+<text x="686.0" y="780.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.00×</text>
+<rect x="830" y="758" width="212" height="34" rx="5" fill="rgb(226,239,246)"/>
+<text x="936.0" y="780.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.13×</text>
+<text x="104.0" y="826.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F17</text>
+<rect x="330" y="800" width="212" height="34" rx="5" fill="rgb(227,241,247)"/>
+<text x="436.0" y="822.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.04×</text>
+<rect x="580" y="800" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="686.0" y="822.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="830" y="800" width="212" height="34" rx="5" fill="rgb(223,236,243)"/>
+<text x="936.0" y="822.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.35×</text>
+<rect x="72" y="842" width="996" height="42" fill="#f7f9fc"/>
+<text x="104.0" y="868.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F18</text>
+<rect x="330" y="842" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="864.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="842" width="212" height="34" rx="5" fill="rgb(141,136,163)"/>
+<text x="686.0" y="864.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">215.19×</text>
+<rect x="830" y="842" width="212" height="34" rx="5" fill="rgb(125,116,147)"/>
+<text x="936.0" y="864.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">21,542.78×</text>
+<text x="104.0" y="910.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F19</text>
+<rect x="330" y="884" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="906.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="884" width="212" height="34" rx="5" fill="rgb(125,116,147)"/>
+<text x="686.0" y="906.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1,167.97×</text>
+<rect x="830" y="884" width="212" height="34" rx="5" fill="rgb(125,116,147)"/>
+<text x="936.0" y="906.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1,090,831.46×</text>
+<rect x="72" y="926" width="996" height="42" fill="#f7f9fc"/>
+<text x="104.0" y="952.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F20</text>
+<rect x="330" y="926" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="948.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="926" width="212" height="34" rx="5" fill="rgb(223,236,243)"/>
+<text x="686.0" y="948.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.36×</text>
+<rect x="830" y="926" width="212" height="34" rx="5" fill="rgb(225,238,245)"/>
+<text x="936.0" y="948.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.18×</text>
+<text x="104.0" y="994.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F21</text>
+<rect x="330" y="968" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="990.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="968" width="212" height="34" rx="5" fill="rgb(226,240,246)"/>
+<text x="686.0" y="990.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.07×</text>
+<rect x="830" y="968" width="212" height="34" rx="5" fill="rgb(224,238,244)"/>
+<text x="936.0" y="990.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.22×</text>
+<rect x="72" y="1010" width="996" height="42" fill="#f7f9fc"/>
+<text x="104.0" y="1036.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F22</text>
+<rect x="330" y="1010" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="1032.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="1010" width="212" height="34" rx="5" fill="rgb(215,226,235)"/>
+<text x="686.0" y="1032.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">2.19×</text>
+<rect x="830" y="1010" width="212" height="34" rx="5" fill="rgb(215,227,236)"/>
+<text x="936.0" y="1032.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">2.13×</text>
+<text x="104.0" y="1078.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F23</text>
+<rect x="330" y="1052" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="1074.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="1052" width="212" height="34" rx="5" fill="rgb(225,238,245)"/>
+<text x="686.0" y="1074.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.20×</text>
+<rect x="830" y="1052" width="212" height="34" rx="5" fill="rgb(227,240,247)"/>
+<text x="936.0" y="1074.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.06×</text>
+<rect x="72" y="1094" width="996" height="42" fill="#f7f9fc"/>
+<text x="104.0" y="1120.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F24</text>
+<rect x="330" y="1094" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="1116.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="1094" width="212" height="34" rx="5" fill="rgb(224,238,244)"/>
+<text x="686.0" y="1116.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.22×</text>
+<rect x="830" y="1094" width="212" height="34" rx="5" fill="rgb(226,240,246)"/>
+<text x="936.0" y="1116.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.07×</text>
+<text x="104.0" y="1162.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F25</text>
+<rect x="330" y="1136" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="1158.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="1136" width="212" height="34" rx="5" fill="rgb(225,239,246)"/>
+<text x="686.0" y="1158.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.13×</text>
+<rect x="830" y="1136" width="212" height="34" rx="5" fill="rgb(206,216,227)"/>
+<text x="936.0" y="1158.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">3.70×</text>
+<rect x="72" y="1178" width="996" height="42" fill="#f7f9fc"/>
+<text x="104.0" y="1204.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F26</text>
+<rect x="330" y="1178" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="1200.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="1178" width="212" height="34" rx="5" fill="rgb(227,241,247)"/>
+<text x="686.0" y="1200.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.03×</text>
+<rect x="830" y="1178" width="212" height="34" rx="5" fill="rgb(226,239,246)"/>
+<text x="936.0" y="1200.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.12×</text>
+<text x="104.0" y="1246.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F27</text>
+<rect x="330" y="1220" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="1242.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="1220" width="212" height="34" rx="5" fill="rgb(224,238,245)"/>
+<text x="686.0" y="1242.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.21×</text>
+<rect x="830" y="1220" width="212" height="34" rx="5" fill="rgb(225,238,245)"/>
+<text x="936.0" y="1242.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.20×</text>
+<rect x="72" y="1262" width="996" height="42" fill="#f7f9fc"/>
+<text x="104.0" y="1288.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F28</text>
+<rect x="330" y="1262" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="1284.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="1262" width="212" height="34" rx="5" fill="rgb(221,234,241)"/>
+<text x="686.0" y="1284.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.50×</text>
+<rect x="830" y="1262" width="212" height="34" rx="5" fill="rgb(211,221,231)"/>
+<text x="936.0" y="1284.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">2.78×</text>
+<text x="104.0" y="1330.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F29</text>
+<rect x="330" y="1304" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="1326.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="1304" width="212" height="34" rx="5" fill="rgb(226,240,246)"/>
+<text x="686.0" y="1326.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.07×</text>
+<rect x="830" y="1304" width="212" height="34" rx="5" fill="rgb(224,238,245)"/>
+<text x="936.0" y="1326.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">1.21×</text>
+<rect x="72" y="1346" width="996" height="42" fill="#f7f9fc"/>
+<text x="104.0" y="1372.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">F30</text>
+<rect x="330" y="1346" width="212" height="34" rx="5" fill="rgb(228,242,248)"/>
+<text x="436.0" y="1368.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="700" fill="#21354c">1.00×</text>
+<rect x="580" y="1346" width="212" height="34" rx="5" fill="rgb(155,153,177)"/>
+<text x="686.0" y="1368.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">90.56×</text>
+<rect x="830" y="1346" width="212" height="34" rx="5" fill="rgb(125,116,147)"/>
+<text x="936.0" y="1368.0" font-size="15" font-family="Arial,sans-serif" text-anchor="middle" font-weight="400" fill="#21354c">2,546.48×</text>
+<text x="74.0" y="1518.0" font-size="13" font-family="Arial,sans-serif" text-anchor="start" font-weight="400" fill="#334155">Cell = (1 + method mean error) / (1 + best method mean error) within each function. Lower = better.</text>
+</svg>

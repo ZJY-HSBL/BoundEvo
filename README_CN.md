@@ -338,6 +338,37 @@ ABC-Shuffle 保留原 ABC 生成的所有系数，只随机置换它们在父代
 
 <!-- REVERSE_MECHANISM_RESULTS_END -->
 
+<!-- FULLSUITE_DE_RESULTS_START -->
+## 29 函数独立复核：ABC 与标准差分进化
+
+**435 次新运行**，覆盖 CEC2017 所有29个保留函数（F1、F3–F30），30维，每函数每方法5个全新配对种子，统一10,000次函数评价；三种算法采用完全相同的初始种群，保留43,500条真实收敛记录。
+
+![All-function empirical relative-error heatmap](docs/figures/cec2017-fullsuite-de-relative-heatmap.svg)
+
+![Actual function-block rank and win distribution](docs/figures/cec2017-fullsuite-de-ranks.svg)
+
+| 算法 | 29函数平均排名（越低越好） | 最优函数数量 |
+|:---|---:|---:|
+| ABC | 1.069 | 27/29 |
+| ABC-Reverse | 2.103 | 2/29 |
+| DE/rand/1/bin | 2.828 | 0/29 |
+
+函数分组 Friedman 秩统计量 Q=45.3103；20,000次随机标签置换 p=4.9998e-05。
+
+![Measured median/IQR convergence on four preset functions](docs/figures/cec2017-fullsuite-de-four-convergence.svg)
+
+| 跨函数配对 | 方法A胜/方法B胜/平 | Holm校正 p |
+|:---|---:|---:|
+| ABC vs DE/rand/1/bin | 29/0/0 | 1.1176e-08 |
+| ABC vs ABC-Reverse | 27/2/0 | 3.2485e-06 |
+| ABC-Reverse vs DE/rand/1/bin | 24/5/0 | 0.00054611 |
+
+**限制：**DE 是未经超参数搜索的标准配置（F=0.8、CR=0.9、NP=100），仅5种子/函数，不可据此断言每个函数上的小幅优势。CEC2017并非所有问题的随机样本；等评价次数不等运行时间。后端为 C 源码衍生 Python 参考实现，不是赛事官方 C 可执行程序。
+
+[全29函数原始统计与实验报告](docs/experiments/cec2017-fullsuite-de-30d-10k-2026-10-21/report.md) · [实验前冻结方案](docs/fullsuite_de_protocol.md)
+
+<!-- FULLSUITE_DE_RESULTS_END -->
+
 ## 项目定位
 
 BoundEvo 解决多父体仿射重组中的一个核心问题：高效生成满足下列条件的系数向量。

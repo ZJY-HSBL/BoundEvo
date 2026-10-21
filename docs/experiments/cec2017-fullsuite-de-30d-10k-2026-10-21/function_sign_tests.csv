@@ -1,0 +1,4 @@
+method_a,method_b,a_function_wins,a_function_losses,ties,exact_function_sign_p,holm_function_sign_p
+abc,de_rand1bin,29,0,0,3.725290298461914e-09,1.1175870895385742e-08
+abc,abc_reverse,27,2,0,1.6242265701293945e-06,3.248453140258789e-06
+abc_reverse,de_rand1bin,24,5,0,0.0005461126565933228,0.0005461126565933228

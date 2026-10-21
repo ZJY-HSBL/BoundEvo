@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1130" height="650" viewBox="0 0 1130 650" role="img" aria-label="Across 29 functions | Algorithm ranks and wins">
+<rect width="1130" height="650" fill="#f8fafc"/>
+<text x="56" y="58" font-size="27" font-weight="700" font-family="Arial,sans-serif" fill="#19314a">Across 29 functions | Algorithm ranks and wins</text>
+<text x="56" y="89" font-size="15" font-family="Arial,sans-serif" fill="#586c80">Function-block evaluation · fixed 10k FE · rank 1 = smallest mean error · exploratory</text>
+<rect x="56" y="117" width="1010" height="437" rx="16" fill="#ffffff" stroke="#dfe8ef"/>
+<text x="94.0" y="162.0" font-size="19" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">Average rank, 29 function blocks</text>
+<text x="665.0" y="162.0" font-size="19" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">Best mean error on N functions</text>
+<text x="95.0" y="237.0" font-size="15" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#25618b">ABC</text>
+<rect x="260" y="218" width="300" height="28" rx="5" fill="#e9eff5"/>
+<rect x="260" y="218" width="289.66" height="28" rx="5" fill="#25618b" opacity="0.88"/>
+<text x="570.0" y="239.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">1.069</text>
+<rect x="780" y="218" width="190" height="28" rx="5" fill="#edf2f7"/>
+<rect x="780" y="218" width="176.90" height="28" rx="5" fill="#25618b" opacity="0.88"/>
+<text x="984.0" y="240.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">27/29</text>
+<text x="95.0" y="338.0" font-size="15" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#c17a39">ABC-REVERSE</text>
+<rect x="260" y="319" width="300" height="28" rx="5" fill="#e9eff5"/>
+<rect x="260" y="319" width="134.48" height="28" rx="5" fill="#c17a39" opacity="0.88"/>
+<text x="570.0" y="340.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">2.103</text>
+<rect x="780" y="319" width="190" height="28" rx="5" fill="#edf2f7"/>
+<rect x="780" y="319" width="13.10" height="28" rx="5" fill="#c17a39" opacity="0.88"/>
+<text x="984.0" y="341.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">2/29</text>
+<text x="95.0" y="439.0" font-size="15" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#258c78">DE-RAND1BIN</text>
+<rect x="260" y="420" width="300" height="28" rx="5" fill="#e9eff5"/>
+<rect x="260" y="420" width="25.86" height="28" rx="5" fill="#258c78" opacity="0.88"/>
+<text x="570.0" y="441.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">2.828</text>
+<rect x="780" y="420" width="190" height="28" rx="5" fill="#edf2f7"/>
+<rect x="780" y="420" width="0.00" height="28" rx="5" fill="#258c78" opacity="0.88"/>
+<text x="984.0" y="442.0" font-size="16" font-family="Arial,sans-serif" text-anchor="start" font-weight="700" fill="#334155">0/29</text>
+<text x="72.0" y="590.0" font-size="15" font-family="Arial,sans-serif" text-anchor="start" font-weight="400" fill="#334155">Function-label permutation Friedman Q = 45.3103; Monte Carlo p = 4.9998e-05 (20,000 permutations)</text>
+<text x="72.0" y="625.0" font-size="13" font-family="Arial,sans-serif" text-anchor="start" font-weight="400" fill="#334155">Function-level rank inference is exploratory; five paired seeds per function and benchmark selection limit generalization.</text>
+</svg>

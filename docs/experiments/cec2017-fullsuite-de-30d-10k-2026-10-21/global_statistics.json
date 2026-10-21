@@ -1,0 +1,27 @@
+{
+  "functions": 29,
+  "algorithms": [
+    "abc",
+    "abc_reverse",
+    "de_rand1bin"
+  ],
+  "seeds_per_function": 5,
+  "trials": 435,
+  "history_rows": 43500,
+  "function_block_mean_ranks": {
+    "abc": 1.0689655172413792,
+    "abc_reverse": 2.103448275862069,
+    "de_rand1bin": 2.8275862068965516
+  },
+  "function_best_mean_error_counts": {
+    "abc": 27,
+    "abc_reverse": 2,
+    "de_rand1bin": 0
+  },
+  "friedman_rank_statistic": 45.310344827586206,
+  "permutation_iterations": 20000,
+  "permutation_exceedances": 0,
+  "permutation_p": 4.999750012499375e-05,
+  "bootstrap_resamples": 10000,
+  "note": "Exploratory function-block label permutation, not an unbiased sample of all tasks"
+}

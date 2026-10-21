@@ -338,6 +338,37 @@ Separate Monte Carlo audit of **50,000 actual ABC vectors**: the first five elit
 
 <!-- REVERSE_MECHANISM_RESULTS_END -->
 
+<!-- FULLSUITE_DE_RESULTS_START -->
+## Complete 29-function replication with differential evolution
+
+**435 NEW real optimizer trials** spanning all 29 retained CEC2017 tasks (F1, F3–F30), 30D, five fresh paired seeds and 10,000 evaluations per algorithm/function. All three methods share identical initial populations; 43,500 authentic convergence checkpoints have been archived.
+
+![All-function empirical relative-error heatmap](docs/figures/cec2017-fullsuite-de-relative-heatmap.svg)
+
+![Actual function-block rank and win distribution](docs/figures/cec2017-fullsuite-de-ranks.svg)
+
+| Method | Mean rank over 29 functions (lower better) | Best-mean functions |
+|:---|---:|---:|
+| ABC | 1.069 | 27/29 |
+| ABC-Reverse | 2.103 | 2/29 |
+| DE/rand/1/bin | 2.828 | 0/29 |
+
+Function-block Friedman Q=45.3103; 20,000-label-permutation p=4.9998e-05.
+
+![Measured median/IQR convergence on four preset functions](docs/figures/cec2017-fullsuite-de-four-convergence.svg)
+
+| Across-function pair | A wins/B wins/ties | Holm p |
+|:---|---:|---:|
+| ABC vs DE/rand/1/bin | 29/0/0 | 1.1176e-08 |
+| ABC vs ABC-Reverse | 27/2/0 | 3.2485e-06 |
+| ABC-Reverse vs DE/rand/1/bin | 24/5/0 | 0.00054611 |
+
+**Limits:** DE was not hyperparameter-tuned (fixed F=0.8, CR=0.9, NP=100). Five seeds/function cannot resolve small individual-function effects. Curated CEC2017 functions are not a random population of optimization problems; equal FE is not equal runtime. The backend is a C-derived Python port, not the official C executable.
+
+[All 29 function results and original scientific evidence](docs/experiments/cec2017-fullsuite-de-30d-10k-2026-10-21/report.md) · [Frozen protocol](docs/fullsuite_de_protocol.md)
+
+<!-- FULLSUITE_DE_RESULTS_END -->
+
 ## Overview
 
 BoundEvo focuses on a bottleneck in multi-parent affine recombination: efficiently generating coefficient vectors satisfying
