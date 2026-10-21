@@ -1,0 +1,219 @@
+name: Recover prior DE calibration then evaluate fresh-seed jDE
+
+on:
+  push:
+    paths:
+      - ".github/workflows/recover-calibrated-de-jde.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  select:
+    name: Recover all 72 originals and independently select development-only DE
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify core optimizer and reference backend match original calibration revision
+        run: |
+          git fetch origin 9abde86a657c363df398c002fb13f38af3a02d7d
+          for path in boundevo/de_baseline.py boundevo/optimizer.py boundevo/coefficients.py boundevo/cec2017.py boundevo/problem.py; do
+            git show 9abde86a657c363df398c002fb13f38af3a02d7d:"$path" > /tmp/original-optimizer-module.py
+            cmp "$path" /tmp/original-optimizer-module.py
+          done
+          echo "Core optimization implementations are byte-identical across calibration and evaluation source revisions."
+      - run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+      - name: Recover four completed development shards without repeated optimization
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 39600572276
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: boundevo-de-dev-f*
+          merge-multiple: true
+          path: /tmp/calib
+      - name: Recompute and freeze DE settings from original 72 development trials
+        run: |
+          python scripts/select_de_calibration.py \
+            --input-dir /tmp/calib \
+            --output-dir /tmp/choice
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          j=json.loads(Path("/tmp/choice/selection.json").read_text())
+          assert j["calibration_trials"] == 72
+          assert j["calibration_histories"] == 7200
+          assert j["calibration_source_commit"] == "9abde86a657c363df398c002fb13f38af3a02d7d"
+          assert len(j["all_candidate_mean_ranks"]) == 6
+          print("Development-only selected:",j["selected"])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: boundevo-de-frozen-selection
+          path: /tmp/choice/
+          retention-days: 90
+
+  evaluate:
+    name: Evaluation shard ${{ matrix.shard }} · 150 true ABC/tuned-DE/jDE runs
+    needs: [select]
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install optimizer and immutable reference benchmark
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+          python -m pip install "git+https://github.com/tilleyd/cec2017-py.git@424a9fa2757914c3e4cfdd8f59a268b1aeb3197f"
+      - uses: actions/download-artifact@v4
+        with:
+          name: boundevo-de-frozen-selection
+          path: /tmp/choice
+      - name: Evaluate ORIGINAL fresh seed cohort without consulting development outcomes
+        run: |
+          python -u scripts/run_tuned_de_jde.py \
+            --phase evaluation \
+            --task ${{ matrix.shard }} \
+            --selection /tmp/choice/selection.json \
+            --output-dir /tmp/eval/shard${{ matrix.shard }}
+      - name: Preserve original evaluation evidence even if a shard fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: boundevo-de-eval-shard${{ matrix.shard }}
+          path: /tmp/eval/
+          if-no-files-found: warn
+          retention-days: 90
+
+  publish:
+    name: Validate all 822 originals, 82200 states, 4 charts and bilingual science
+    needs: [evaluate]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned source-independent statistical tools and tests
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 39600572276
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: boundevo-de-dev-f*
+          merge-multiple: true
+          path: /tmp/calib
+      - uses: actions/download-artifact@v4
+        with:
+          name: boundevo-de-frozen-selection
+          path: /tmp/choice
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: boundevo-de-eval-shard*
+          merge-multiple: true
+          path: /tmp/eval
+      - name: Recalculate frozen selection and independently reconcile all real optimizer runs
+        run: |
+          python scripts/aggregate_calibrated_de_jde.py \
+            --calibration-dir /tmp/calib \
+            --evaluation-dir /tmp/eval \
+            --selection /tmp/choice/selection.json \
+            --output-dir docs/experiments/cec2017-calibrated-de-jde-30d-10k-2026-10-21 \
+            --figure-dir docs/figures
+      - name: Generate bilingual README results and four ORIGINAL-data scientific figures
+        run: |
+          python scripts/update_readme_results.py
+          python scripts/research_anytime_visuals.py
+          python scripts/update_mechanism_readmes.py
+          python scripts/update_fullsuite_de_readmes.py
+          python scripts/update_calibrated_de_readmes.py
+          python scripts/update_readme_results.py --check
+          python scripts/research_anytime_visuals.py --check
+          python scripts/update_mechanism_readmes.py --check
+          python scripts/update_fullsuite_de_readmes.py --check
+          python scripts/update_calibrated_de_readmes.py --check
+      - name: Reject scientific integrity failures or regression/test regressions
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+          from xml.etree import ElementTree
+
+          root = Path("docs/experiments/cec2017-calibrated-de-jde-30d-10k-2026-10-21")
+          def table(name):
+              with (root/name).open(newline="") as stream:
+                  return list(csv.DictReader(stream))
+          env = json.loads((root/"environment.json").read_text())
+          stats = json.loads((root/"global_statistics.json").read_text())
+          selected = json.loads((root/"calibration_selection.json").read_text())
+          assert env["calibration_trials"] == len(table("calibration_trials.csv")) == 72
+          assert len(table("calibration_history.csv")) == 7200
+          assert env["evaluation_trials"] == len(table("evaluation_trials.csv")) == 750
+          assert len(table("evaluation_history.csv")) == 75000
+          assert len(table("summary.csv")) == 75
+          assert len(table("function_ranks.csv")) == 75
+          assert len(table("function_sign_tests.csv")) == 2
+          assert stats["evaluation_function_count"] == 25
+          assert stats["permutation_samples"] == 20000
+          assert len(env["development_manifests"]) == 4
+          assert len(env["evaluation_manifests"]) == 5
+          assert {m["source_commit"] for m in env["evaluation_manifests"]} == {
+              env["evaluation_source_commit"]
+          }
+          assert selected["calibration_data_sha256"] == env["calibration_data_sha256"]
+          charts = (
+              "cec2017-tuned-de-development-ranks.svg",
+              "cec2017-tuned-de-holdout-heatmap.svg",
+              "cec2017-tuned-de-holdout-ranks.svg",
+              "cec2017-tuned-de-holdout-convergence.svg",
+          )
+          for chart in charts:
+              path = Path("docs/figures")/chart
+              assert path.stat().st_size > 600
+              assert ElementTree.parse(path).getroot().tag.endswith("svg")
+              for readme in ("README.md","README_CN.md"):
+                  assert chart in Path(readme).read_text(encoding="utf-8")
+          print("Verified 72 calibration and 750 evaluation runs, 82200 real checkpoints.")
+          PY
+          python -m pytest -q
+          python -m ruff check .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: boundevo-calibrated-de-jde-822-real-trials-verified
+          path: |
+            docs/experiments/cec2017-calibrated-de-jde-30d-10k-2026-10-21/
+            docs/figures/cec2017-tuned-de-*.svg
+          retention-days: 90
+      - name: Publish completed source-validated scientific evidence only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/experiments/cec2017-calibrated-de-jde-30d-10k-2026-10-21/
+          git add docs/figures/cec2017-tuned-de-*.svg README.md README_CN.md
+          git diff --cached --quiet && exit 0
+          git commit -m "research: publish 822 genuine calibrated-DE/jDE optimizer trials and four evidence plots"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
