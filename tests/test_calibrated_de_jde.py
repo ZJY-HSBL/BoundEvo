@@ -22,11 +22,16 @@ SPEC.loader.exec_module(analysis)
 
 
 def test_frozen_calibration_holdout_functions_and_disjoint_seed_cohorts() -> None:
-    from boundevo.cec2017 import PAPER_FUNCTION_IDS
     from run_tuned_de_jde import (
-        CANDIDATES,DEV_FUNCTIONS,DEV_SEED,TEST_FUNCTIONS,TEST_SEED,
+        CANDIDATES,
+        DEV_FUNCTIONS,
+        DEV_SEED,
+        TEST_FUNCTIONS,
+        TEST_SEED,
         TEST_SHARDS,
     )
+
+    from boundevo.cec2017 import PAPER_FUNCTION_IDS
 
     assert len(CANDIDATES)==6
     assert DEV_FUNCTIONS==(3,10,20,30)
