@@ -1,6 +1,9 @@
 name: Recover and publish verified full CEC2017 DE evidence
 
 on:
+  push:
+    paths:
+      - ".github/workflows/recover-fullsuite-de-29.yml"
   workflow_run:
     workflows:
       - CEC2017 Full 29-Function ABC vs DE Replication
