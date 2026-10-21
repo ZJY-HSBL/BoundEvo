@@ -1,5 +1,7 @@
 """Bilingual README results derived solely from sealed calibrated-DE evidence."""
 
+# ruff: noqa: ISC004
+
 from __future__ import annotations
 
 import argparse
