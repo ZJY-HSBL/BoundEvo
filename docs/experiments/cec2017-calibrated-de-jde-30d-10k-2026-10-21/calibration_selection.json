@@ -1,0 +1,128 @@
+{
+  "selected": "best050cr090",
+  "strategy": "best1bin",
+  "mutation": 0.5,
+  "crossover": 0.9,
+  "development_functions": [
+    3,
+    10,
+    20,
+    30
+  ],
+  "calibration_trials": 72,
+  "calibration_histories": 7200,
+  "calibration_seed_base": 20262101,
+  "calibration_source_commit": "9abde86a657c363df398c002fb13f38af3a02d7d",
+  "calibration_data_sha256": "27f8f33549cb86f92fc16797937efed5dd46f6692ea32c0ddedecc3e02c223cd",
+  "selection_rule": "minimize mean of four per-function mean-error ranks; tied IDs by fixed candidate order",
+  "source_manifests": [
+    {
+      "phase": "development",
+      "task_id": 3,
+      "functions": [
+        3
+      ],
+      "methods": [
+        "rand050cr090",
+        "rand080cr030",
+        "rand080cr090",
+        "best050cr090",
+        "best080cr030",
+        "best080cr090"
+      ],
+      "dimension": 30,
+      "repeats": 3,
+      "seed_base": 20262101,
+      "evaluations": 10000,
+      "population": 100,
+      "history_step_fe": 100,
+      "reference_commit": "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f",
+      "source_commit": "9abde86a657c363df398c002fb13f38af3a02d7d",
+      "selected_de": null,
+      "science_protocol": "docs/calibrated_de_jde_protocol.md"
+    },
+    {
+      "phase": "development",
+      "task_id": 10,
+      "functions": [
+        10
+      ],
+      "methods": [
+        "rand050cr090",
+        "rand080cr030",
+        "rand080cr090",
+        "best050cr090",
+        "best080cr030",
+        "best080cr090"
+      ],
+      "dimension": 30,
+      "repeats": 3,
+      "seed_base": 20262101,
+      "evaluations": 10000,
+      "population": 100,
+      "history_step_fe": 100,
+      "reference_commit": "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f",
+      "source_commit": "9abde86a657c363df398c002fb13f38af3a02d7d",
+      "selected_de": null,
+      "science_protocol": "docs/calibrated_de_jde_protocol.md"
+    },
+    {
+      "phase": "development",
+      "task_id": 20,
+      "functions": [
+        20
+      ],
+      "methods": [
+        "rand050cr090",
+        "rand080cr030",
+        "rand080cr090",
+        "best050cr090",
+        "best080cr030",
+        "best080cr090"
+      ],
+      "dimension": 30,
+      "repeats": 3,
+      "seed_base": 20262101,
+      "evaluations": 10000,
+      "population": 100,
+      "history_step_fe": 100,
+      "reference_commit": "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f",
+      "source_commit": "9abde86a657c363df398c002fb13f38af3a02d7d",
+      "selected_de": null,
+      "science_protocol": "docs/calibrated_de_jde_protocol.md"
+    },
+    {
+      "phase": "development",
+      "task_id": 30,
+      "functions": [
+        30
+      ],
+      "methods": [
+        "rand050cr090",
+        "rand080cr030",
+        "rand080cr090",
+        "best050cr090",
+        "best080cr030",
+        "best080cr090"
+      ],
+      "dimension": 30,
+      "repeats": 3,
+      "seed_base": 20262101,
+      "evaluations": 10000,
+      "population": 100,
+      "history_step_fe": 100,
+      "reference_commit": "424a9fa2757914c3e4cfdd8f59a268b1aeb3197f",
+      "source_commit": "9abde86a657c363df398c002fb13f38af3a02d7d",
+      "selected_de": null,
+      "science_protocol": "docs/calibrated_de_jde_protocol.md"
+    }
+  ],
+  "all_candidate_mean_ranks": {
+    "rand050cr090": 3.5,
+    "rand080cr030": 4.25,
+    "rand080cr090": 5.75,
+    "best050cr090": 1.5,
+    "best080cr030": 3.25,
+    "best080cr090": 2.75
+  }
+}

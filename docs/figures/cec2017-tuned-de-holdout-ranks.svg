@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1150" height="680" viewBox="0 0 1150 680" role="img" aria-label="Heldout-function ranks | ABC, tuned DE and jDE">
+<rect width="1150" height="680" fill="#f7f9fc"/>
+<text x="56" y="55" font-family="Arial" font-size="26" font-weight="700" fill="#1a2c42">Heldout-function ranks | ABC, tuned DE and jDE</text>
+<text x="56" y="84" font-family="Arial" font-size="14" fill="#64748b">25 calibration-excluded functions · 10 NEW seeds each · 750 true optimization runs</text>
+<rect x="56" y="112" width="1038" height="470" rx="14" fill="white" stroke="#e4eaf0"/>
+<text x="84.0" y="163.0" font-family="Arial" font-size="19" fill="#334155" text-anchor="start" font-weight="700">Mean error ranks across 25 functions</text>
+<text x="711.0" y="163.0" font-family="Arial" font-size="19" fill="#334155" text-anchor="start" font-weight="700">Mean-error winner count</text>
+<text x="86.0" y="228.0" font-family="Arial" font-size="18" fill="#20678d" text-anchor="start" font-weight="700">ABC</text>
+<rect x="330" y="211" width="317" height="29" rx="5" fill="#e9edf3"/>
+<rect x="330" y="211" width="126.8" height="29" rx="5" fill="#20678d"/>
+<text x="657.0" y="232.0" font-family="Arial" font-size="16" fill="#334155" text-anchor="start" font-weight="700">2.200</text>
+<rect x="813" y="211" width="165" height="29" rx="5" fill="#e9edf3"/>
+<rect x="813" y="211" width="52.8" height="29" rx="5" fill="#20678d"/>
+<text x="987.0" y="233.0" font-family="Arial" font-size="16" fill="#334155" text-anchor="start" font-weight="700">8/25</text>
+<text x="86.0" y="330.0" font-family="Arial" font-size="18" fill="#c47734" text-anchor="start" font-weight="700">DE-TUNED</text>
+<rect x="330" y="313" width="317" height="29" rx="5" fill="#e9edf3"/>
+<rect x="330" y="313" width="183.9" height="29" rx="5" fill="#c47734"/>
+<text x="657.0" y="334.0" font-family="Arial" font-size="16" fill="#334155" text-anchor="start" font-weight="700">1.840</text>
+<rect x="813" y="313" width="165" height="29" rx="5" fill="#e9edf3"/>
+<rect x="813" y="313" width="59.4" height="29" rx="5" fill="#c47734"/>
+<text x="987.0" y="335.0" font-family="Arial" font-size="16" fill="#334155" text-anchor="start" font-weight="700">9/25</text>
+<text x="86.0" y="432.0" font-family="Arial" font-size="18" fill="#348b74" text-anchor="start" font-weight="700">JDE</text>
+<rect x="330" y="415" width="317" height="29" rx="5" fill="#e9edf3"/>
+<rect x="330" y="415" width="164.8" height="29" rx="5" fill="#348b74"/>
+<text x="657.0" y="436.0" font-family="Arial" font-size="16" fill="#334155" text-anchor="start" font-weight="700">1.960</text>
+<rect x="813" y="415" width="165" height="29" rx="5" fill="#e9edf3"/>
+<rect x="813" y="415" width="52.8" height="29" rx="5" fill="#348b74"/>
+<text x="987.0" y="437.0" font-family="Arial" font-size="16" fill="#334155" text-anchor="start" font-weight="700">8/25</text>
+<text x="63.0" y="610.0" font-family="Arial" font-size="14" fill="#334155" text-anchor="start" font-weight="400">Friedman Q=1.680, permutation p=0.4508 (20k samples); descriptive function-level tests</text>
+<text x="63.0" y="650.0" font-family="Arial" font-size="12" fill="#334155" text-anchor="start" font-weight="400">Heldout only from current hyperparameter selection; all CEC functions appeared in prior BoundEvo research.</text>
+</svg>

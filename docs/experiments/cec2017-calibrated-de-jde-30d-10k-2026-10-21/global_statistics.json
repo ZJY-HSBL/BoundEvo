@@ -1,0 +1,59 @@
+{
+  "development_functions": [
+    3,
+    10,
+    20,
+    30
+  ],
+  "evaluation_functions": [
+    1,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
+  ],
+  "evaluation_function_count": 25,
+  "evaluation_trials": 750,
+  "evaluation_checkpoints": 75000,
+  "mean_function_ranks": {
+    "abc": 2.2,
+    "de_tuned": 1.84,
+    "jde": 1.96
+  },
+  "function_winner_counts": {
+    "abc": 8,
+    "de_tuned": 9,
+    "jde": 8
+  },
+  "mean_wall_seconds_per_run": {
+    "abc": 3.1338572286599993,
+    "de_tuned": 2.014078120683999,
+    "jde": 1.8322339631520008
+  },
+  "friedman_statistic": 1.6800000000000013,
+  "permutation_samples": 20000,
+  "permutation_p": 0.45077746112694367,
+  "permutation_extremes": 9015,
+  "bootstrap_samples": 10000,
+  "interpretation": "exploratory function-block inference on previously studied CEC2017 functions"
+}

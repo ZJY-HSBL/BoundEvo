@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1170" height="640" viewBox="0 0 1170 640" role="img" aria-label="Development-only DE calibration">
+<rect width="1170" height="640" fill="#f7f9fc"/>
+<text x="56" y="55" font-family="Arial" font-size="26" font-weight="700" fill="#1a2c42">Development-only DE calibration</text>
+<text x="56" y="84" font-family="Arial" font-size="14" fill="#64748b">F3/F10/F20/F30 · 3 seeds × 6 fixed candidates · 72 original trials · lower rank is better</text>
+<rect x="58" y="118" width="1053" height="456" rx="13" fill="white" stroke="#e3e8f0"/>
+<text x="85.0" y="183.0" font-family="Arial" font-size="17" fill="#5d7899" text-anchor="start" font-weight="400">rand050cr090</text>
+<rect x="333" y="165" width="580" height="27" rx="5" fill="#edf2f7"/>
+<rect x="333" y="165" width="290.0" height="27" rx="5" fill="#5d7899" fill-opacity="0.88"/>
+<text x="930.0" y="186.0" font-family="Arial" font-size="18" fill="#334155" text-anchor="start" font-weight="400">3.500</text>
+<text x="85.0" y="245.0" font-family="Arial" font-size="17" fill="#5d7899" text-anchor="start" font-weight="400">rand080cr030</text>
+<rect x="333" y="227" width="580" height="27" rx="5" fill="#edf2f7"/>
+<rect x="333" y="227" width="203.0" height="27" rx="5" fill="#5d7899" fill-opacity="0.88"/>
+<text x="930.0" y="248.0" font-family="Arial" font-size="18" fill="#334155" text-anchor="start" font-weight="400">4.250</text>
+<text x="85.0" y="307.0" font-family="Arial" font-size="17" fill="#5d7899" text-anchor="start" font-weight="400">rand080cr090</text>
+<rect x="333" y="289" width="580" height="27" rx="5" fill="#edf2f7"/>
+<rect x="333" y="289" width="29.0" height="27" rx="5" fill="#5d7899" fill-opacity="0.88"/>
+<text x="930.0" y="310.0" font-family="Arial" font-size="18" fill="#334155" text-anchor="start" font-weight="400">5.750</text>
+<text x="85.0" y="369.0" font-family="Arial" font-size="17" fill="#277d72" text-anchor="start" font-weight="700">best050cr090</text>
+<rect x="333" y="351" width="580" height="27" rx="5" fill="#edf2f7"/>
+<rect x="333" y="351" width="522.0" height="27" rx="5" fill="#277d72" fill-opacity="0.88"/>
+<text x="930.0" y="372.0" font-family="Arial" font-size="18" fill="#334155" text-anchor="start" font-weight="700">1.500</text>
+<text x="1020.0" y="372.0" font-family="Arial" font-size="12" fill="#277d72" text-anchor="start" font-weight="700">SELECTED</text>
+<text x="85.0" y="431.0" font-family="Arial" font-size="17" fill="#5d7899" text-anchor="start" font-weight="400">best080cr030</text>
+<rect x="333" y="413" width="580" height="27" rx="5" fill="#edf2f7"/>
+<rect x="333" y="413" width="319.0" height="27" rx="5" fill="#5d7899" fill-opacity="0.88"/>
+<text x="930.0" y="434.0" font-family="Arial" font-size="18" fill="#334155" text-anchor="start" font-weight="400">3.250</text>
+<text x="85.0" y="493.0" font-family="Arial" font-size="17" fill="#5d7899" text-anchor="start" font-weight="400">best080cr090</text>
+<rect x="333" y="475" width="580" height="27" rx="5" fill="#edf2f7"/>
+<rect x="333" y="475" width="377.0" height="27" rx="5" fill="#5d7899" fill-opacity="0.88"/>
+<text x="930.0" y="496.0" font-family="Arial" font-size="18" fill="#334155" text-anchor="start" font-weight="400">2.750</text>
+<text x="70.0" y="608.0" font-family="Arial" font-size="13" fill="#334155" text-anchor="start" font-weight="400">Only these four development functions determined the frozen holdout DE setting.</text>
+</svg>

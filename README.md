@@ -369,6 +369,40 @@ Function-block Friedman Q=45.3103; 20,000-label-permutation p=4.9998e-05.
 
 <!-- FULLSUITE_DE_RESULTS_END -->
 
+<!-- CALIBRATED_DE_JDE_START -->
+## New study: development-calibrated DE vs self-adaptive jDE
+
+**822 new optimizer trials**: 72 original experiments on F3/F10/F20/F30 rank six fixed DE candidates, selecting ONE configuration without evaluation-function data; 750 fresh-seed runs then compare ABC, the calibrated DE and standard self-adaptive jDE across the remaining 25 CEC functions with 10 paired seeds each. A total of 82,200 authentic convergence checkpoints is archived.
+
+Development-only selected DE configuration: **best050cr090** (best1bin, F=0.5, CR=0.9).
+
+![Calibrated DE candidate ranks on development functions](docs/figures/cec2017-tuned-de-development-ranks.svg)
+
+![All 25 heldout-function measured relative errors](docs/figures/cec2017-tuned-de-holdout-heatmap.svg)
+
+![Full evaluation function-block ranks and method winners](docs/figures/cec2017-tuned-de-holdout-ranks.svg)
+
+| Algorithm | Mean rank (lower better) | Best-mean functions | Hosted seconds/run |
+|:---|---:|---:|---:|
+| ABC | 2.200 | 8/25 | 3.134 |
+| Calibrated DE | 1.840 | 9/25 | 2.014 |
+| jDE | 1.960 | 8/25 | 1.832 |
+
+Within-evaluation function-block randomized-label Friedman: Q=1.6800, p=0.45078 (20,000 permutations).
+
+| Prespecified contrast | ABC function wins/losses/ties | Holm p |
+|:---|---:|---:|
+| ABC vs Calibrated DE | 11/14/0 | 0.69004 |
+| ABC vs jDE | 9/16/0 | 0.45905 |
+
+![Actual median and IQR convergence on four prespecified evaluation functions](docs/figures/cec2017-tuned-de-holdout-convergence.svg)
+
+**Limits:** All 25 evaluation functions are new only to this round's DE calibration; they appeared in earlier BoundEvo experiments. No never-seen-function claim is made. jDE and the limited six-candidate DE calibration do not represent all advanced SHADE/L-SHADE-class methods. FE parity is not CPU-time parity.
+
+[Original calibration/evaluation data and full report](docs/experiments/cec2017-calibrated-de-jde-30d-10k-2026-10-21/report.md) · [Frozen calibration/evaluation protocol](docs/calibrated_de_jde_protocol.md)
+
+<!-- CALIBRATED_DE_JDE_END -->
+
 ## Overview
 
 BoundEvo focuses on a bottleneck in multi-parent affine recombination: efficiently generating coefficient vectors satisfying

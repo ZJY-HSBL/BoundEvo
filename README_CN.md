@@ -369,6 +369,40 @@ ABC-Shuffle 保留原 ABC 生成的所有系数，只随机置换它们在父代
 
 <!-- FULLSUITE_DE_RESULTS_END -->
 
+<!-- CALIBRATED_DE_JDE_START -->
+## 新研究：DE 参数校准与自适应 jDE 独立种子验证
+
+**822 次新优化实验**：先在 F3/F10/F20/F30 上运行72次真实试验，用固定的六种候选配置选择一个 DE 参数组合；再在其余25个CEC2017函数上用10个全新配对种子比较 ABC、校准 DE 和自适应 jDE，共750次新试验。开发阶段和评价阶段分开，且保留82,200条真实收敛记录。
+
+仅依据开发函数选定的 DE 配置：**best050cr090** （best1bin，F=0.5，CR=0.9）。
+
+![Calibrated DE candidate ranks on development functions](docs/figures/cec2017-tuned-de-development-ranks.svg)
+
+![All 25 heldout-function measured relative errors](docs/figures/cec2017-tuned-de-holdout-heatmap.svg)
+
+![Full evaluation function-block ranks and method winners](docs/figures/cec2017-tuned-de-holdout-ranks.svg)
+
+| 方法 | 25函数平均排名（越低越好） | 平均误差最优函数数 | CI机器平均秒数/次 |
+|:---|---:|---:|---:|
+| ABC | 2.200 | 8/25 | 3.134 |
+| 校准 DE | 1.840 | 9/25 | 2.014 |
+| jDE | 1.960 | 8/25 | 1.832 |
+
+仅本轮25函数的随机标签 Friedman 检验：Q=1.6800，p=0.45078（20,000次置换）。
+
+| 预设比较 | ABC胜/负/平（按函数） | Holm p |
+|:---|---:|---:|
+| ABC vs 校准 DE | 11/14/0 | 0.69004 |
+| ABC vs jDE | 9/16/0 | 0.45905 |
+
+![Actual median and IQR convergence on four prespecified evaluation functions](docs/figures/cec2017-tuned-de-holdout-convergence.svg)
+
+**重要边界：**这里的25函数仅未参与本轮DE参数选择，它们已在早期 BoundEvo 实验中被观察过，不能称为从未见过的测试函数。仅比较一组校准 DE 和经典 jDE，不等于证明胜过 SHADE、L-SHADE等更先进的竞争基线。函数评价公平不等于计算耗时公平。
+
+[全部原始试验及报告](docs/experiments/cec2017-calibrated-de-jde-30d-10k-2026-10-21/report.md) · [预先冻结的开发-评价分割协议](docs/calibrated_de_jde_protocol.md)
+
+<!-- CALIBRATED_DE_JDE_END -->
+
 ## 项目定位
 
 BoundEvo 解决多父体仿射重组中的一个核心问题：高效生成满足下列条件的系数向量。
