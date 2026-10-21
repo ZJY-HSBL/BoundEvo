@@ -12,6 +12,7 @@ import math
 import os
 import time
 from dataclasses import asdict, fields
+from itertools import pairwise
 from pathlib import Path
 
 from boundevo.cec2017 import PAPER_FUNCTION_IDS, REFERENCE_COMMIT, make_cec2017_case
@@ -130,7 +131,7 @@ def run(shard_id: int, destination: Path) -> None:
                         raise ValueError("final best-so-far history/trial mismatch")
                     if any(
                         next_state.best_error > old_state.best_error + 1e-7
-                        for old_state, next_state in zip(history, history[1:])
+                        for old_state, next_state in pairwise(history)
                     ):
                         raise ValueError("best-so-far trace is not monotone")
                     if init_best is not None and not math.isclose(
