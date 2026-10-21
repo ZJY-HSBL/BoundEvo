@@ -52,7 +52,7 @@ def csv_write(p:Path,rows:list[dict])->None:
     if not rows:
         raise ValueError("cannot publish empty original research table")
     p.parent.mkdir(parents=True,exist_ok=True)
-    with p.open(newline="",encoding="utf-8") as stream:
+    with p.open("w",newline="",encoding="utf-8") as stream:
         writer=csv.DictWriter(stream,fieldnames=list(rows[0]),lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
