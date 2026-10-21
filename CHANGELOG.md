@@ -4,6 +4,17 @@ All notable changes to BoundEvo are documented here.
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-10-21
+
+### Complete 29-function CEC2017 cross-algorithm study and fixed-budget DE baseline
+
+- Implemented conventional generational DE/rand/1/bin (F=0.8, CR=0.9, NP=100), with exact function-evaluation budgets, one-to-one greedy replacement, forced binomial donor coordinate, domain repair, reproducible initial populations and explicit standard-baseline classification.
+- **Executed and published 435 new real optimization trials**, covering every retained official CEC2017 function F1/F3–F30, D=30, five entirely new matched initial seeds per function, 10k function evaluations per run, and ABC / ABC-Reverse / DE. All 43,500 original best-so-far checkpoints, six source manifests and 29×3×5 unique trial keys were validated before publication.
+- Function-block mean-error ranks: ABC 1.0690 (27/29 function means lowest), ABC-Reverse 2.1034 (2/29), fixed-parameter DE 2.8276 (0/29). ABC had smaller observed five-seed mean than DE on 29/29 CEC functions. The function-block randomized-label Friedman rank test had Q=45.3103 and Monte Carlo p≈0.00005 (20,000 permutations); three function-level sign comparisons were Holm-adjusted.
+- Published 87 method/function bootstrap mean summaries, 29-function mean-error heatmap, across-function rank/winner visual summary, measured median/IQR convergence panels for four prespecified functions, bilingual README findings and a complete original-evidence research report.
+- Explicitly distinguished outcome accuracy from hosted-runner time: on the sampled CI workers the DE baseline averaged approximately 1.30 s/10k-FE run versus 2.29 s for ABC. Timing is not hardware-normalized.
+- Frozen the design before computation. These findings are scoped to a small five-seed cohort on a curated benchmark with **one untuned DE configuration**, not proof of superiority over tuned differential evolution, all optimization problems, or the organizers' original C binary.
+
 ## [0.12.0] - 2026-10-20
 
 ### Deterministic ABC-Reverse mechanism study and 144 new optimizer trials
