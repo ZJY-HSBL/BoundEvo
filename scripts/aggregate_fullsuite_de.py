@@ -9,7 +9,6 @@ import csv
 import json
 import math
 import platform
-import statistics
 import sys
 from collections import defaultdict
 from datetime import datetime, timezone
@@ -372,8 +371,8 @@ def trajectory_svg(history:list[dict])->str:
                  for fe,v in lookup[(fid,m,rep)]]
         ymin=max(0.,min(allvals)-0.15)
         ymax=max(allvals)+0.15
-        fx=lambda fe: x0+width*(fe-100)/9900
-        fy=lambda z: y0+height*(ymax-z)/(ymax-ymin)
+        fx=lambda fe, x0=x0, width=width: x0+width*(fe-100)/9900
+        fy=lambda z, y0=y0, height=height, ymax=ymax, ymin=ymin: y0+height*(ymax-z)/(ymax-ymin)
         for tick in range(5):
             value=ymin+(ymax-ymin)*tick/4
             y=fy(value)
