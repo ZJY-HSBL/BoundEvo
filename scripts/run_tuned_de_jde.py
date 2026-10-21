@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import io
 import math
 import os
 import time
@@ -175,8 +176,6 @@ def run(phase: str, task: int, out: Path, selection_file: Path | None) -> None:
                         candidate = None
                     # A memory-light one-run buffer allows exact within-seed
                     # initialization equivalence checks before accepting data.
-                    import io
-
                     tmp = io.StringIO(newline="")
                     th = io.StringIO(newline="")
                     local = csv.DictWriter(
@@ -190,17 +189,13 @@ def run(phase: str, task: int, out: Path, selection_file: Path | None) -> None:
                         candidate=candidate,
                         trials=local, histories=local_hist,
                     )
-                    import csv as csv_module
-
-                    from io import StringIO
-
-                    trial_row = next(csv_module.DictReader(
-                        StringIO(",".join([f.name for f in fields(TrialRecord)]) +
-                                 "\n" + tmp.getvalue())
+                    trial_row = next(csv.DictReader(
+                        io.StringIO(",".join([f.name for f in fields(TrialRecord)]) +
+                                    "\n" + tmp.getvalue())
                     ))
-                    history_rows = list(csv_module.DictReader(
-                        StringIO(",".join([f.name for f in fields(HistoryRecord)]) +
-                                 "\n" + th.getvalue())
+                    history_rows = list(csv.DictReader(
+                        io.StringIO(",".join([f.name for f in fields(HistoryRecord)]) +
+                                    "\n" + th.getvalue())
                     ))
                     initial = float(history_rows[0]["best_error"])
                     if same_initial is not None and not math.isclose(
