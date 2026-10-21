@@ -12,10 +12,12 @@ import json
 import math
 import statistics
 from collections import defaultdict
+from itertools import pairwise
 from pathlib import Path
 
-from boundevo.cec2017 import REFERENCE_COMMIT
 from run_tuned_de_jde import CANDIDATES, DEV_FUNCTIONS, DEV_SEED
+
+from boundevo.cec2017 import REFERENCE_COMMIT
 
 LABELS = tuple(c[0] for c in CANDIDATES)
 
@@ -91,7 +93,7 @@ def calibrate(root: Path) -> tuple[dict, list[dict], list[dict]]:
         vals=[float(row["best_error"]) for row in sequence]
         if (fes!=list(range(100,10001,100))
                 or any(not math.isfinite(v) or v<0 for v in vals)
-                or any(b>a+1e-7 for a,b in zip(vals,vals[1:]))
+                or any(b>a+1e-7 for a,b in pairwise(vals))
                 or not math.isclose(vals[-1],float(indexed[key]["error"]),
                                     rel_tol=1e-10,abs_tol=1e-6)):
             raise ValueError("corrupt best-so-far calibration curve")
