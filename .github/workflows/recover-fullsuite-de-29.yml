@@ -1,0 +1,109 @@
+name: Recover and publish verified full CEC2017 DE evidence
+
+on:
+  workflow_run:
+    workflows:
+      - CEC2017 Full 29-Function ABC vs DE Replication
+    types:
+      - completed
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  recover:
+    name: Recover original six shards using latest validated main
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install scientific test and aggregation dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+      - name: Recover original completed optimizer shards, no new optimization
+        uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ github.event.workflow_run.id || 39597336431 }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: boundevo-de-full-shard*
+          merge-multiple: true
+          path: /tmp/cec-full
+      - name: Independently validate all original CEC functions and measured runs
+        run: |
+          python scripts/aggregate_fullsuite_de.py \
+            --input-dir /tmp/cec-full \
+            --output-dir docs/experiments/cec2017-fullsuite-de-30d-10k-2026-10-21 \
+            --figure-dir docs/figures
+      - name: Render and verify every bilingual original-data research figure
+        run: |
+          python scripts/update_readme_results.py
+          python scripts/research_anytime_visuals.py
+          python scripts/update_mechanism_readmes.py
+          python scripts/update_fullsuite_de_readmes.py
+          python scripts/update_readme_results.py --check
+          python scripts/research_anytime_visuals.py --check
+          python scripts/update_mechanism_readmes.py --check
+          python scripts/update_fullsuite_de_readmes.py --check
+      - name: Strict CEC2017 data integrity, provenance and regression checks
+        run: |
+          python - <<'PY'
+          import csv
+          import json
+          from pathlib import Path
+          from xml.etree import ElementTree
+          root=Path("docs/experiments/cec2017-fullsuite-de-30d-10k-2026-10-21")
+          def rows(name):
+              with (root/name).open(newline="") as f:
+                  return list(csv.DictReader(f))
+          meta=json.loads((root/"environment.json").read_text())
+          stats=json.loads((root/"global_statistics.json").read_text())
+          assert meta["trials"]==len(rows("trials.csv"))==435
+          assert meta["history_rows"]==len(rows("history.csv"))==43500
+          assert len(rows("summary.csv"))==87
+          assert len(rows("function_ranks.csv"))==87
+          assert len(rows("function_sign_tests.csv"))==3
+          assert len(meta["source_manifests"])==6
+          assert len({r["source_commit"] for r in meta["source_manifests"]})==1
+          assert stats["functions"]==29 and stats["trials"]==435
+          assert stats["permutation_iterations"]==20000
+          assert meta["reference_commit"]=="424a9fa2757914c3e4cfdd8f59a268b1aeb3197f"
+          for figure in ("cec2017-fullsuite-de-relative-heatmap.svg",
+                         "cec2017-fullsuite-de-ranks.svg",
+                         "cec2017-fullsuite-de-four-convergence.svg"):
+              file=Path("docs/figures")/figure
+              assert file.stat().st_size>6500
+              assert ElementTree.parse(file).getroot().tag.endswith("svg")
+              for name in ("README.md","README_CN.md"):
+                  assert figure in Path(name).read_text(encoding="utf-8")
+          print("Proven original 435 optimizer trials, 43,500 states, all 29 functions.")
+          PY
+          python -m pytest -q
+          python -m ruff check .
+      - name: Preserve auditable reproducibility bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: boundevo-fullsuite-de-435-verified-from-original-shards
+          path: |
+            docs/experiments/cec2017-fullsuite-de-30d-10k-2026-10-21/
+            docs/figures/cec2017-fullsuite-de-*.svg
+          retention-days: 90
+      - name: Publish only scientifically validated results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/experiments/cec2017-fullsuite-de-30d-10k-2026-10-21/
+          git add docs/figures/cec2017-fullsuite-de-*.svg README.md README_CN.md
+          git diff --cached --quiet && exit 0
+          git commit -m "research: publish source-verified 435 DE/ABC optimizer trials across all 29 functions"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
