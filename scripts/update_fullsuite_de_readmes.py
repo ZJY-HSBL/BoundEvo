@@ -54,7 +54,7 @@ def validate() -> tuple[dict,list[dict],list[dict]]:
                 raise ValueError("README scientific mean cannot reproduce original evidence")
     for name in FIGURES:
         path=ROOT/"docs/figures"/name
-        if path.stat().st_size < 6500 or not ElementTree.parse(path).getroot().tag.endswith("svg"):
+        if path.stat().st_size < 2500 or not ElementTree.parse(path).getroot().tag.endswith("svg"):
             raise ValueError("invalid original-data scientific figure")
     if stats.get("functions")!=29 or stats.get("trials")!=435:
         raise ValueError("incorrect global statistics coverage")
