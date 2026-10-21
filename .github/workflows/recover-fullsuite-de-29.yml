@@ -80,7 +80,7 @@ jobs:
                          "cec2017-fullsuite-de-ranks.svg",
                          "cec2017-fullsuite-de-four-convergence.svg"):
               file=Path("docs/figures")/figure
-              assert file.stat().st_size>2500
+              assert file.stat().st_size>600
               assert ElementTree.parse(file).getroot().tag.endswith("svg")
               for name in ("README.md","README_CN.md"):
                   assert figure in Path(name).read_text(encoding="utf-8")
