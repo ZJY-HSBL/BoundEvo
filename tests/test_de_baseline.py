@@ -1,3 +1,5 @@
+from itertools import pairwise
+
 """Check DE/rand/1/bin scientific and reproducibility contracts."""
 
 import numpy as np
@@ -78,3 +80,56 @@ def test_de_rejects_invalid_configuration(kwargs: dict) -> None:
     problem = OptimizationProblem(sphere, [-1] * 3, [1] * 3)
     with pytest.raises(ValueError):
         differential_evolution_rand1bin(problem, seed=1, **kwargs)
+
+
+def test_de_best1bin_preserves_matched_initialization_and_reproducibility() -> None:
+    problem = OptimizationProblem(sphere, [-10.0] * 4, [10.0] * 4)
+    cfg = {"strategy": "best1bin", "population_size": 20, "max_evaluations": 400, "seed": 73}
+    first = differential_evolution_rand1bin(problem, **cfg)
+    second = differential_evolution_rand1bin(problem, **cfg)
+    plain = differential_evolution_rand1bin(
+        problem, strategy="rand1bin", population_size=20,
+        max_evaluations=400, seed=73
+    )
+    assert first.history == second.history
+    assert first.history[0] == plain.history[0]
+    assert first.evaluations == plain.evaluations == 400
+    assert first.history[-1].best_objective == first.objective
+    assert first.objective <= first.history[0].best_objective
+
+
+def test_jde_exact_budget_and_reproducible_adaptation() -> None:
+    from boundevo.de_baseline import differential_evolution_jde
+
+    problem = OptimizationProblem(sphere, [-9.] * 5, [9.] * 5)
+    first = differential_evolution_jde(
+        problem, population_size=25, max_evaluations=500, seed=191
+    )
+    second = differential_evolution_jde(
+        problem, population_size=25, max_evaluations=500, seed=191
+    )
+    standard = differential_evolution_rand1bin(
+        problem, population_size=25, max_evaluations=500, seed=191
+    )
+    assert first.evaluations == 500
+    assert [r.evaluations for r in first.history] == list(range(25, 501, 25))
+    assert first.history == second.history
+    assert first.history[0] == standard.history[0]
+    assert first.objective <= first.history[0].best_objective
+    assert all(
+        a.best_objective >= b.best_objective
+        for a, b in pairwise(first.history)
+    )
+
+
+@pytest.mark.parametrize("params", [
+    {"population_size": 3}, {"max_evaluations": 199},
+    {"initial_mutation": -1}, {"initial_crossover": 2},
+    {"tau_f": float("nan")}, {"tau_cr": -1},
+])
+def test_jde_invalid_configuration(params: dict) -> None:
+    from boundevo.de_baseline import differential_evolution_jde
+
+    problem = OptimizationProblem(sphere, [-3] * 4, [3] * 4)
+    with pytest.raises(ValueError):
+        differential_evolution_jde(problem, seed=37, **params)
